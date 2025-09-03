@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Permission Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h3>Add Backend User</h3>
+        <form id="adminForm">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <div class="mb-3">
+                        <label>Name<strong class="text-danger">*</strong></label>
+                        <input type="text" class="form-control" name="name" id="adminName" placeholder="Enter Name">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <div class="mb-3">
+                        <label>Mobile<strong class="text-danger">*</strong></label>
+                        <input type="text" class="form-control" name="mobile" placeholder="Enter Mobile ">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <div class="mb-3">
+                        <label>Email<strong class="text-danger">*</strong></label>
+                        <input type="email" class="form-control" name="email" id="adminEmail" placeholder="Enter Email"
+                            autocomplete="new-email">
+
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <div class="mb-3">
+                        <label>Admin Type<strong class="text-danger">*</strong></label>
+                        <select class="form-control" name="admin_type" id="adminType1">
+                            <option value="">Select Admin Type</option>
+                            <option value="Admin">Admin</option>
+                            <option value="Sub Admin">Sub Admin</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <div class="mb-3">
+                        <label>Password<strong class="text-danger">*</strong></label>
+                        <input type="password" class="form-control" name="password" placeholder="Enter Password">
+                    </div>
+                </div>
+
+                <!-- <div class="form-group col-md-6">
+                <div class="mb-3">
+                    <input type="checkbox" name="country_access"> Enable Country Based Access Control
+                </div>
+            </div> -->
+                <!-- <div class="form-group col-md-6">
+                <div class="mb-3">
+                    <input type="checkbox" name="city_access"> Enable City Based Access Control
+                </div>
+            </div> -->
+            </div>
+
+
+            <div id="permissionsSection">
+                <h4>Permissions<strong class="text-danger">*</strong></h4>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Module</th>
+                            <th><input type="checkbox" id="selectAllAdd"> Add</th>
+                            <th><input type="checkbox" id="selectAllEdit"> Edit</th>
+                            <th><input type="checkbox" id="selectAllDelete"> Delete</th>
+                            <th><input type="checkbox" id="selectAllExport"> Export</th>
+                        </tr>
+                    </thead>
+                    <tbody id="permissionsTable">
+                        <tr>
+                            <td>Dashboard
+                                <input type="hidden" class="url" value="dashboard" url="/dashboard">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+                        <tr class="roleDiv">
+                            <td>Manage Roles
+                                <input type="hidden" class="url" value="manageRoles" url="/roles/rolesManagement">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+                        <tr class="roleDiv">
+                            <td>Backend Users
+                                <input type="hidden" class="url" value="backendUsers"
+                                    url="/roles/backendUserManagement">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+                        <tr>
+                            <td>Manage Users
+                                <input type="hidden" class="url" value="manageUsers" url="/users/userManagement">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+
+                        <tr>
+                            <td>Manage Warehouse
+                                <input type="hidden" class="url" value="manageWarehouse"
+                                    url="/warehouse/warehouseManagement">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+                        <tr>
+                            <td>App Setting
+                                <input type="hidden" class="url" value="appSetting" url="/configuration/appSetting">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+
+                        <tr>
+                            <td>Banner Management
+                                <input type="hidden" class="url" value="manageBanners" url="/banner/bannerManagement">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+                        <tr>
+                            <td>Blogs Management
+                                <input type="hidden" class="url" value="manageBlogs" url="/blogs/blogsManagement">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+                        <tr>
+                            <td>Contact Us
+                                <input type="hidden" class="url" value="manageContactUs" url="/contactUs/contactUs">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+                        <tr>
+                            <td>Testimonial Management
+                                <input type="hidden" class="url" value="manageTestimonials"
+                                    url="/testimonial/testimonialManagement">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+                        <tr>
+                            <td>Tracking Management
+                                <input type="hidden" class="url" value="manageTracking" url="/tracking/trackingPage">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+                        <tr>
+                            <td>Manage Document
+                                <input type="hidden" class="url" value="manageDocuments"
+                                    url="/document/documentManagement">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+                        <tr>
+                            <td>Manage Drivers
+                                <input type="hidden" class="url" value="manageDrivers" url="/driver/driverManagement">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+
+                        <tr>
+                            <td>Service Management
+                                <input type="hidden" class="url" value="manageServices"
+                                    url="/service/serviceManagement">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+                        <tr>
+                            <td>Manage Vehicle
+                                <input type="hidden" class="url" value="manageVehicles"
+                                    url="/vehicle/vehicleManagement">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+
+                        <tr>
+                            <td>Vendor Management
+                                <input type="hidden" class="url" value="vendorManagement"
+                                    url="/vendor/vendorManagement">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+                        <tr class="vendorDiv">
+                            <td>Vendor Management
+                                <input type="hidden" class="url" value="vendorManagement"
+                                    url="/vendor/vendorManagement">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+                        <tr>
+                            <td>PTL Management
+                                <input type="hidden" class="url" value="ptlManagement" url="/ptlPackages/ptlPackages">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+                        <tr>
+                            <td>FTL Management
+                                <input type="hidden" class="url" value="ftlManagement" url="/ftl/ftlManagement">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+                        <tr>
+                            <td>User Support
+                                <input type="hidden" class="url" value="userHelpAndSupport"
+                                    url="/helpSupport/helpAndSupport">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+                        <tr>
+                            <td>Driver Support
+                                <input type="hidden" class="url" value="driverHelpAndSupport"
+                                    url="/helpSupport/helpAndSupport">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+                        <tr>
+                            <td>FAQ Management
+                                <input type="hidden" class="url" value="faqManagement" url="/faq/faqManagement">
+                            </td>
+                            <td><input type="checkbox" class="add"></td>
+                            <td><input type="checkbox" class="edit"></td>
+                            <td><input type="checkbox" class="delete"></td>
+                            <td><input type="checkbox" class="export"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button type="submit" class="btn btn-primary float-end">Save Admin</button>
+        </form>
+    </div>
+
+    <script>
+        const isVendor = "<%= isVendor %>";
+        const admin_type2 = "<%= admin_type %>";
+
+        if ((isVendor == 0 && admin_type2 == "Admin")) {
+            $('.rolediv').removeClass('d-none')
+        }
+        if ((isVendor == 1 && admin_type2 == "Vendor") || (isVendor == 0 && admin_type2 == "Admin")) {
+            $('.vendorDiv').removeClass('d-none')
+        }
+
+        // Select All
+        function selectAll(columnClass, selectAllId) {
+            $(selectAllId).on("change", function () {
+                $("." + columnClass).prop("checked", this.checked);
+            });
+        }
+
+        selectAll("add", "#selectAllAdd");
+        selectAll("edit", "#selectAllEdit");
+        selectAll("delete", "#selectAllDelete");
+        selectAll("export", "#selectAllExport");
+
+        // Hide/show permissions based on admin type
+
+        $("#adminType1").on("change", function () {
+            if ($(this).val() === "Admin") {
+                $("#permissionsSection").slideUp(1000);
+            } else {
+                $("#permissionsSection").slideDown(1000);
+            }
+        }).trigger("change");
+
+        // Form Submission
+        $("#adminForm").on("submit", function (event) {
+            event.preventDefault();
+
+            // let name = $("input[name='name']").val();
+            let name = $("#adminName").val();
+            let email = $("#adminEmail").val();
+            let admin_type = $("#adminType1").val();
+
+            let mobile = $("input[name='mobile']").val();
+            // let email = $("input[name='email']").val();
+            // let admin_type = $("select[name='admin_type']").val();
+            let password = $("input[name='password']").val()
+            let country_access = $("input[name='country_access']").prop("checked");
+            let city_access = $("input[name='city_access']").prop("checked");
+
+            if (!name) {
+                toastr.error('Please Enter Name', 'Error');
+                return;
+            }
+            if (!mobile) {
+                toastr.error('Please Enter mobile', 'Error');
+                return;
+            }
+            if (!email) {
+                toastr.error('Please Enter Email', 'Error');
+                return;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { // Simple email regex
+                toastr.error('Enter a valid Email address.', 'Error');
+                return;
+            }
+
+            if (!admin_type) {
+                toastr.error('Please Select Admin Type', 'Error');
+                return;
+            }
+            if (!password) {
+                toastr.error('Please Enter Password', 'Error');
+                return;
+            }
+            const anyChecked = $('input[type="checkbox"]:checked').length > 0;
+
+            if (admin_type == 'Sub Admin') {
+                if (!anyChecked) {
+                    toastr.error('Please select at least one permission.', 'Error');
+                    return;
+                }
+            }
+
+
+            let formData = {
+                name: name,
+                mobile: mobile,
+                email: email,
+                admin_type: admin_type,
+                password: password,
+                country_access: country_access,
+                city_access: city_access,
+                permissions: []
+            };
+
+            if (formData.admin_type === "Sub Admin") {
+                $("#permissionsTable tr").each(function () {
+                    let module = $(this).find(".url").val(); // Correctly fetch hidden input
+                    let permission = {
+                        module: module,
+                        add: $(this).find(".add").prop("checked"),
+                        edit: $(this).find(".edit").prop("checked"),
+                        delete: $(this).find(".delete").prop("checked"),
+                        export: $(this).find(".export").prop("checked"),
+                        url: $(this).find(".url").attr("url"),
+                    };
+                    formData.permissions.push(permission);
+                });
+
+            }
+            if (formData.admin_type === "Admin") {
+                $("#permissionsTable tr").each(function () {
+                    let module = $(this).find(".url").val(); // Correctly fetch hidden input
+                    let permission = {
+                        module: module,
+                        add: true,
+                        edit: true,
+                        delete: true,
+                        export: true,
+                        url: $(this).find(".url").attr("url"),
+                    };
+                    formData.permissions.push(permission);
+                });
+
+            }
+
+            $.post("/roles/saveRoles", formData, function (response) {
+                if (response.success)
+                    toastr.success('Admin saved successfully.', 'Success');
+                else
+                    toastr.error(response.message, 'Success');
+
+
+                $("#adminForm")[0].reset();
+                $("#adminType1").trigger("change");
+            }).fail(function () {
+                alert("Error saving admin!");
+            });
+        });
+    </script>
+</body>
+
+</html>

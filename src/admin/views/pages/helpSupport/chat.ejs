@@ -1,0 +1,122 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet" href="/admin/css/template/chat.css">
+
+
+
+<div class="container chatSection p-0">
+    <!-- People List -->
+    <div class="people-list" id="people-list">
+        <h3 class="ms-2">Users</h3>
+        <ul id="userList">
+            <% users.forEach(user=> { %>
+                <li class="clearfix" data-userid="<%= user._id %>">
+                    <img src="<%= user.profilePicture || 'https://onpoint-08042025.s3.ap-south-1.amazonaws.com/uploads/5fd2490e-41b7-4784-a47a-21380f5e3562_image.jpg' %>"
+                        alt="avatar" />
+                    <div class="about">
+                        <div class="name">
+                            <%= user.fullName %>
+                        </div>
+                    </div>
+                </li>
+                <% }) %>
+        </ul>
+    </div>
+
+    <!-- Chat Window -->
+    <div class="chat">
+        <div class="chat-header clearfix">
+            <img id="chatUserImg"
+                src="https://onpoint-08042025.s3.ap-south-1.amazonaws.com/uploads/5fd2490e-41b7-4784-a47a-21380f5e3562_image.jpg"
+                alt="avatar" />
+            <div class="chat-about">
+                <div class="chat-with" id="chatWith">Select a user</div>
+            </div>
+        </div>
+
+        <div class="chat-history">
+            <ul id="chatHistory"></ul>
+        </div>
+
+        <div class="chat-message">
+            <textarea id="message-to-send" placeholder="Type your message"></textarea>
+            <button id="sendMessageBtn">Send</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let selectedUserId = null;
+
+    // Load chat messages
+    async function loadChat(userId, userName, userImg) {
+        selectedUserId = userId;
+        document.getElementById("chatWith").innerText = "Chat with " + userName;
+        document.getElementById("chatUserImg").src = userImg;
+
+        const response = await fetch("/helpSupport/history", { headers: { "userid": userId } });
+        const result = await response.json();
+
+        const chatHistory = document.getElementById("chatHistory");
+        chatHistory.innerHTML = "";
+
+        if (result.success) {
+            result.data.forEach(msg => {
+                const li = document.createElement("li");
+                const time = new Date(msg.timestamp).toLocaleTimeString();
+
+                if (msg.isUserSended) {
+                    li.innerHTML = `
+                        <li class="text-left">
+          <div class="message other-message ">${msg.message}</div>
+          <div class="message-data align-left"><span>${time}</span></div></li>`;
+                } else {
+                    li.innerHTML = `<li class="float-right">
+          <div class="message my-message">${msg.message}</div>
+          <div class="message-data"><span>${time}</span></div></li>`;
+                }
+
+                chatHistory.appendChild(li);
+            });
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+    }
+
+    // Send a new message
+    document.getElementById("sendMessageBtn").addEventListener("click", async () => {
+        const textarea = document.getElementById("message-to-send");
+        const message = textarea.value.trim();
+        if (!message || !selectedUserId) return;
+
+        const response = await fetch("/helpSupport/send", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "userid": selectedUserId
+            },
+            body: JSON.stringify({ message, isUserSended: false }) // false since admin is sending
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            textarea.value = "";
+            const audio = new Audio("/admin/message_sound.wav");
+            audio.play().catch(err => console.error("Audio play error:", err));
+            loadChat(selectedUserId, document.getElementById("chatWith").innerText.replace("Chat with ", ""), document.getElementById("chatUserImg").src);
+        }
+    });
+
+    // Attach click events on users
+    document.querySelectorAll("#userList li").forEach(li => {
+        li.addEventListener("click", () => {
+            const userId = li.getAttribute("data-userid");
+            const userName = li.querySelector(".name").innerText;
+            const userImg = li.querySelector("img").src;
+            loadChat(userId, userName, userImg);
+            document.querySelectorAll("#userList li").forEach(item => {
+                item.classList.remove("active");
+            });
+
+            li.classList.add("active");
+        });
+    });
+</script>

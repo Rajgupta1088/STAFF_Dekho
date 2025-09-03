@@ -1,0 +1,167 @@
+<link rel="stylesheet" href="/admin/css/websiteManagement/contactus.css">
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold">✨ Contact Us Management</h3>
+        <div>
+            <button class="btn btn-success me-2" id="downloadAllCsv">
+                <i class="fas fa-download me-2"></i> Download CSV
+            </button>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4" id="searchContactsCard">
+        <div class="card-body">
+            <h5 class="mb-3">Search Contacts</h5>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label for="searchName" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="searchName" placeholder="Enter Name">
+                </div>
+                <div class="col-md-3">
+                    <label for="searchEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="searchEmail" placeholder="Enter Email">
+                </div>
+                <div class="col-md-3">
+                    <label for="searchMobile" class="form-label">Mobile</label>
+                    <input type="text" class="form-control" id="searchMobile" placeholder="Enter Mobile">
+                </div>
+                <div class="col-md-3">
+                    <label for="searchStatus" class="form-label">Status</label>
+                    <select id="searchStatus" class="form-select">
+                        <option value="">All</option>
+                        <option value="1">Active</option>
+                        <option value="2">Inactive</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="searchTypeOfService" class="form-label">Type of Service</label>
+                    <input type="text" class="form-control" id="searchTypeOfService"
+                        placeholder="Enter Type of Service">
+                </div>
+                <div class="col-md-3">
+                    <label for="searchCreatedAt" class="form-label">Created At</label>
+                    <input type="date" class="form-control" id="searchCreatedAt">
+                </div>
+                <div class="col-md-3">
+                    <div class="d-flex gap-2 align-items-end">
+                        <button class="btn btn-primary" id="searchBtn">Search</button>
+                        <button class="btn btn-secondary" id="resetBtn">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="contactUsTable" class="table table-bordered table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>S.No.</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Mobile</th>
+                            <th>Type of Service</th>
+                            <th>Status</th>
+                            <th>Message</th>
+                            <th>Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Initially hide the search banner card using jQuery
+        const searchContactsCard = $('#searchContactsCard');
+        searchContactsCard.hide();
+
+        // Slide down the search banner card when the page loads
+        $(window).on('load', function () {
+            searchContactsCard.slideDown(1000); // Adjust the duration (in milliseconds) as needed
+        });
+
+        let table = $('#contactUsTable').DataTable({ // Initialize DataTable first
+            processing: true,
+            serverSide: true,
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100],
+            scrollY: "400px",
+            scrollCollapse: true,
+            searching: false, // This line disables the default DataTables search
+            ajax: {
+                url: '/contactUs/contactList', // Update the API endpoint
+                type: 'POST',
+                data: function (d) {
+                    d.name = $('#searchName').val(); // Update parameter name
+                    d.email = $('#searchEmail').val(); // Update parameter name
+                    d.mobile = $('#searchMobile').val(); // Update parameter name
+                    d.status = $('#searchStatus').val();
+                    d.typeOfService = $('#searchTypeOfService').val(); // Update parameter name
+                    d.createdAt = $('#searchCreatedAt').val(); // Add Created At for search
+                }
+            },
+            columns: [{
+                data: null,
+                orderable: false, // Disable ordering for the serial number column
+                render: (data, type, row, meta) => meta.row + meta.settings._iDisplayStart + 1
+            },
+            {
+                data: 'name' // Use the correct data field name from your API response
+            },
+            {
+                data: 'email' // Use the correct data field name from your API response
+            },
+            {
+                data: 'mobile' // Use the correct data field name from your API response
+            },
+            {
+                data: 'typeOfService' // Use the correct data field name from your API response
+            },
+            {
+                data: 'status',
+                render: (data, type, row) => {
+                    const statusText = data === 1 ? 'Active' : 'Inactive';
+                    return `<span class="badge ${data === 1 ? 'bg-success' : 'bg-secondary'}">${statusText}</span>`;
+                }
+            },
+            {
+                data: 'message', // Use the correct data field name from your API response
+                orderable: false // Make the Message column non-sortable
+            },
+            {
+                data: 'createdAt',
+                render: (data) => new Date(data).toLocaleString()
+            }
+            ],
+            columnDefs: [
+                { orderable: true, targets: [1, 2, 3, 4, 5, 7] } // Enable ordering on Name, Email, Mobile, Type of Service, Status, Created At (index 7)
+            ]
+        });
+
+        // --- Custom Search Functionality ---
+        $('#searchBtn').on('click', function () {
+            table.ajax.reload(); // Reload the DataTable, the search parameters are sent in the ajax.data function
+        });
+
+        $('#resetBtn').on('click', function () {
+            $('#searchName').val('');
+            $('#searchEmail').val('');
+            $('#searchMobile').val('');
+            $('#searchStatus').val('');
+            $('#searchTypeOfService').val('');
+            $('#searchCreatedAt').val(''); // Clear the calendar input
+            table.ajax.reload(); // Reload to clear all filters
+        });
+
+        // --- Custom Download All CSV Functionality ---
+        $('#downloadAllCsv').on('click', function () {
+            window.location.href = '/contactus/downloadAllCsv'; // Trigger a download by navigating to the URL
+        });
+    });
+</script>

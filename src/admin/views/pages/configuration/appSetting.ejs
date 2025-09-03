@@ -1,0 +1,555 @@
+<link rel="stylesheet" href="/admin/css/configuration/appSetting.css">
+
+<div class="container mt-5">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="aboutUs-tab" data-bs-toggle="tab" data-bs-target="#aboutUs"
+                type="button" role="tab">About Us</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="termCondition-tab" data-bs-toggle="tab" data-bs-target="#termCondition"
+                type="button" role="tab">Term & Condition</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="helpSupport-tab" data-bs-toggle="tab" data-bs-target="#helpSupport"
+                type="button" role="tab">Help & Support</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment" type="button"
+                role="tab">Payment Settings</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="privacyPolicy-tab" data-bs-toggle="tab" data-bs-target="#privacyPolicy"
+                type="button" role="tab">Privacy & Policy</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="refundAndPolicy-tab" data-bs-toggle="tab" data-bs-target="#refundAndPolicy"
+                type="button" role="tab">Refund & Policy</button>
+        </li>
+        <!-- <li class="nav-item" role="presentation">
+            <button class="nav-link" id="firebase-tab" data-bs-toggle="tab" data-bs-target="#firebase" type="button"
+                role="tab">Firebase Credential</button>
+        </li> -->
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="applicationLinks-tab" data-bs-toggle="tab" data-bs-target="#applicationLinks"
+                type="button" role="tab">Application Link</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="appVersion-tab" data-bs-toggle="tab" data-bs-target="#appVersion" type="button"
+                role="tab">App Version</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="smsCredentials-tab" data-bs-toggle="tab" data-bs-target="#twilioCred"
+                type="button" role="tab">SMS Credential</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="s3Credentials-tab" data-bs-toggle="tab" data-bs-target="#awsS3" type="button"
+                role="tab">S3 Credential</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="driverInstruction-tab" data-bs-toggle="tab" data-bs-target="#driverInstruction"
+                type="button" role="tab">Driver Instruction</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="firebaseCred-tab" data-bs-toggle="tab" data-bs-target="#firebaseCred"
+                type="button" role="tab">Firebase Credential</button>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-3" id="myTabContent">
+        <!-- About Us -->
+        <div class="tab-pane fade show active" id="aboutUs" role="tabpanel">
+            <form id="aboutUsForm">
+                <input type="hidden" name="aboutUs">
+                <div class="mb-3">
+                    <label class="form-label" for="aboutUsText">About Us </label>
+                    <textarea class="form-control" name="description" id="aboutUsText" rows="5"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+
+
+
+        <!-- Term & Condition -->
+        <div class="tab-pane fade" id="termCondition" role="tabpanel">
+            <form id="termConditionForm">
+                <input type="hidden" name="termCondition">
+                <div class="mb-3">
+                    <label class="form-label" for="termConditionText">Term & Condition </label>
+                    <textarea class="form-control" name="description" id="termConditionText" rows="5"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+        <div class="tab-pane fade show " id="privacyPolicy" role="tabpanel">
+            <form id="privacyAndPolicyForm">
+                <input type="hidden" name="privacyAndPolicy">
+                <div class="mb-3">
+                    <label class="form-label" for="privacyAndPolicyText">Privacy & Policy</label>
+                    <textarea class="form-control" name="description" id="privacyAndPolicyText" rows="5"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+
+        <div class="tab-pane fade show " id="refundAndPolicy" role="tabpanel">
+            <form id="refundAndPolicyForm">
+                <input type="hidden" name="refundAndPolicy">
+                <div class="mb-3">
+                    <label class="form-label" for="refundAndPolicyText">Refund & Policy</label>
+                    <textarea class="form-control" name="description" id="refundAndPolicyText" rows="5"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+        <!-- Help & Support -->
+        <div class="tab-pane fade" id="helpSupport" role="tabpanel">
+            <form id="helpSupportForm">
+                <input type="hidden" name="helpSupport">
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" name='supportEmail' id="supportEmail" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Mobile</label>
+                    <input type="tel" class="form-control" name="supportMobile" id="supportMobile" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+
+        <div class="tab-pane fade" id="payment" role="tabpanel">
+            <form id="paymentForm">
+                <input type="hidden" name="payment">
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">RATE PER KG</label>
+                        <input type="text" class="form-control" name='ratePerKG' id="ratePerKG"
+                            placeholder="Enter RATE PER KG" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Docket Charge</label>
+                        <input type="text" class="form-control" name="docketCharge" id="docketCharge"
+                            placeholder="Enter Docket Charge" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Fov %</label>
+                        <input type="text" class="form-control" name='fovPercentage' id="fovPercentage"
+                            placeholder="Enter Fov Percentage" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Fuel Surcharge %</label>
+                        <input type="text" class="form-control" name="fuelSurChargePercentage"
+                            id="fuelSurChargePercentage" placeholder="Enter Fuel Surcharge Percentage" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">ODA Charge Minimum</label>
+                        <input type="text" class="form-control" name='odaChargeMinimum' id="odaChargeMinimum"
+                            placeholder="Enter ODA Charge Minimum" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">GST %</label>
+                        <input type="text" class="form-control" name="gst" id="gst" placeholder="Enter GST %" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Shiping Cost</label>
+                        <input type="text" class="form-control" name='shippingCost' id="shippingCost"
+                            placeholder="Enter Shiping Cost" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Special Handling</label>
+                        <input type="text" class="form-control" name="specialHandling" id="specialHandling"
+                            placeholder="Enter Special Handling" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Pre Payment %</label>
+                        <input type="text" class="form-control" name='prePaymentPercentage' id="prePaymentPercentage"
+                            placeholder="Enter Pre Payment Percentage" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Loading Time</label>
+                        <input type="number" class="form-control" name='loadingTime' id="loadingTime"
+                            placeholder="Enter Loading Time" required>
+                    </div>
+
+                </div>
+                <div class="row mb-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label">Unloading Time</label>
+                        <input type="number" class="form-control" name='unloadingTime' id="unloadingTime"
+                            placeholder="Enter Unloading Time" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Driver Percentage Cut</label>
+                        <input type="text" class="form-control" name="driverPercentageCut" id="driverPercentageCut"
+                            min="0" max="100" placeholder="Enter Driver Percentage Cut" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Cash On Delivery</label>
+                        <select class="form-select" name="cod" id="cod" required>
+                            <option value="">Select Type</option>
+                            <option value="1">Enable</option>
+                            <option value="0">Disable</option>
+
+                        </select>
+                    </div>
+
+                </div>
+
+
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+
+
+        <!-- Application Links -->
+        <div class="tab-pane fade" id="applicationLinks" role="tabpanel">
+            <form id="applicationLinksForm">
+                <div class="mb-3">
+                    <label for="androidClientUrl" class="form-label">Android Client APP URL</label>
+                    <input type="url" class="form-control" id="androidClientUrl" required>
+                </div>
+                <div class="mb-3">
+                    <label for="androidDriverUrl" class="form-label">Android Driver APP URL</label>
+                    <input type="url" class="form-control" id="androidDriverUrl" required>
+                </div>
+                <div class="mb-3">
+                    <label for="iosClientUrl" class="form-label">iOS Client APP URL</label>
+                    <input type="url" class="form-control" id="iosClientUrl" required>
+                </div>
+                <div class="mb-3">
+                    <label for="iosDriverUrl" class="form-label">iOS Driver APP URL</label>
+                    <input type="url" class="form-control" id="iosDriverUrl" required>
+                </div>
+                <button type="submit" class="btn btn-info">Submit</button>
+            </form>
+        </div>
+
+        <!-- App Version -->
+        <div class="tab-pane fade" id="appVersion" role="tabpanel">
+            <form id="appVersionForm">
+                <div class="mb-3">
+                    <label for="androidClientVersion" class="form-label">Android Client APP Version</label>
+                    <input type="text" class="form-control" id="androidClientVersion" required>
+                </div>
+                <div class="mb-3">
+                    <label for="androidDriverVersion" class="form-label">Android Driver APP Version</label>
+                    <input type="text" class="form-control" id="androidDriverVersion" required>
+                </div>
+                <div class="mb-3">
+                    <label for="iosClientVersion" class="form-label">iOS Client APP Version</label>
+                    <input type="text" class="form-control" id="iosClientVersion" required>
+                </div>
+                <div class="mb-3">
+                    <label for="iosDriverVersion" class="form-label">iOS Driver APP Version</label>
+                    <input type="text" class="form-control" id="iosDriverVersion" required>
+                </div>
+                <button type="submit" class="btn btn-info">Submit</button>
+            </form>
+        </div>
+
+        <!-- Twilio Credentials -->
+        <div class="tab-pane fade" id="twilioCred" role="tabpanel">
+            <form id="twilioForm">
+                <div class="mb-3">
+                    <label for="twilioSid" class="form-label">Twilio Account SID</label>
+                    <input type="text" class="form-control" id="twilioSid" required>
+                </div>
+                <div class="mb-3">
+                    <label for="twilioToken" class="form-label">Twilio Auth Token</label>
+                    <input type="text" class="form-control" id="twilioToken" required>
+                </div>
+                <div class="mb-3">
+                    <label for="twilioNumber" class="form-label">Twilio Number</label>
+                    <input type="tel" class="form-control" id="twilioNumber" required>
+                </div>
+                <div class="mb-3">
+                    <label for="twilioCallUrl" class="form-label">Twilio Call URL</label>
+                    <input type="url" class="form-control" id="twilioCallUrl" required>
+                </div>
+                <button type="submit" class="btn btn-info">Submit</button>
+            </form>
+        </div>
+
+        <!-- AWS S3 Credential -->
+        <div class="tab-pane fade" id="awsS3" role="tabpanel">
+            <form id="s3Form">
+                <div class="mb-3">
+                    <label for="s3AccessKey" class="form-label">S3 Access Key</label>
+                    <input type="text" class="form-control" id="s3AccessKey" required>
+                </div>
+                <div class="mb-3">
+                    <label for="s3SecretKey" class="form-label">S3 Secret Key</label>
+                    <input type="text" class="form-control" id="s3SecretKey" required>
+                </div>
+                <div class="mb-3">
+                    <label for="s3Bucket" class="form-label">S3 Bucket</label>
+                    <input type="text" class="form-control" id="s3Bucket" required>
+                </div>
+                <button type="submit" class="btn btn-info">Submit</button>
+            </form>
+        </div>
+        <div class="tab-pane fade " id="driverInstruction" role="tabpanel">
+            <form id="driverInstructionForm">
+                <input type="hidden" name="driverInstruction">
+                <div class="mb-3">
+                    <label class="form-label" for="driverInstructionText">Driver Instruction </label>
+                    <textarea class="form-control" name="description" id="driverInstructionText" rows="5"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+
+        <div class="tab-pane fade" id="firebaseCred" role="tabpanel">
+            <form id="firebaseForm">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="type" class="form-label">Type</label>
+                        <input type="text" class="form-control" id="type" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="project_id" class="form-label">Project Id</label>
+                        <input type="text" class="form-control" id="project_id" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col md-6">
+                        <label for="private_key_id" class="form-label">Private Key Id</label>
+                        <input type="text" class="form-control" id="private_key_id" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="private_key" class="form-label">Private Key</label>
+                        <input type="text" class="form-control" id="private_key" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col md-6">
+                        <label for="client_email" class="form-label">Client Email</label>
+                        <input type="text" class="form-control" id="client_email" required>
+                    </div>
+                    <div class="col md-6">
+                        <label for="client_id" class="form-label">Client Id</label>
+                        <input type="text" class="form-control" id="client_id" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col md-6">
+                        <label for="auth_uri" class="form-label">Auth URI</label>
+                        <input type="text" class="form-control" id="auth_uri" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="token_uri" class="form-label">Token URI</label>
+                        <input type="text" class="form-control" id="token_uri" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col md-6">
+                        <label for="auth_provider_x509_cert_url" class="form-label">Auth Provider X509 Cert Url</label>
+                        <input type="text" class="form-control" id="auth_provider_x509_cert_url" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="client_x509_cert_url" class="form-label">Client X509 Cert Url</label>
+                        <input type="text" class="form-control" id="client_x509_cert_url" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col md-6">
+                        <label for="universe_domain" class="form-label">Universe Domain</label>
+                        <input type="text" class="form-control" id="universe_domain" required>
+                    </div>
+
+                </div>
+                <button type="submit" class="btn btn-info">Submit</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let ckEditorAboutUs; // Declare editor for aboutUsText
+        let ckEditorTerms;   // Declare editor for termConditionText
+        let driverInstructionTerms;   // Declare editor for termConditionText
+
+        ClassicEditor.create(document.querySelector('#aboutUsText'))
+            .then(editor => {
+                ckEditorAboutUs = editor;
+            })
+            .catch(error => {
+                console.error('Error initializing CKEditor for aboutUsText:', error);
+            });
+
+        ClassicEditor.create(document.querySelector('#privacyAndPolicyText'))
+            .then(editor => {
+                ckEditorprivacyAndPolicy = editor;
+            })
+            .catch(error => {
+                console.error('Error initializing CKEditor for privacyAndPolicyText:', error);
+            });
+        ClassicEditor.create(document.querySelector('#refundAndPolicyText'))
+            .then(editor => {
+                ckEditorrefundAndPolicy = editor;
+            })
+            .catch(error => {
+                console.error('Error initializing CKEditor for refundAndPolicyText:', error);
+            });
+        ClassicEditor.create(document.querySelector('#termConditionText'))
+            .then(editor => {
+                ckEditorTerms = editor;
+            })
+            .catch(error => {
+                console.error('Error initializing CKEditor for termConditionText:', error);
+            });
+        ClassicEditor.create(document.querySelector('#driverInstructionText'))
+            .then(editor => {
+                driverInstructionTerms = editor;
+            })
+            .catch(error => {
+                console.error('Error initializing CKEditor for driverInstructionText:', error);
+            });
+
+
+
+        function saveForm(formId, dataKey) {
+            const form = document.getElementById(formId);
+            if (!form) return;
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+                let formData = { [dataKey]: {} };
+                this.querySelectorAll("input, textarea , select").forEach(input => {
+                    formData[dataKey][input.id] = input.value;
+                });
+
+                fetch("/configuration/saveSetting", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // console.log(data.data);
+                        toastr.success(data.message, 'Success');
+                    })
+                    .catch(error => console.error("Error:", error));
+            });
+        }
+
+        saveForm("aboutUsForm", "aboutUs");
+        saveForm("driverInstructionForm", "driverInstruction");
+        saveForm("termConditionForm", "termCondition");
+        saveForm("privacyAndPolicyForm", "privacyAndPolicy");
+        saveForm("refundAndPolicyForm", "refundAndPolicy");
+        saveForm("helpSupportForm", "helpSupport");
+        saveForm("applicationLinksForm", "applicationLinks");
+        saveForm("appVersionForm", "appVersion");
+        saveForm("twilioForm", "twilioCred");
+        saveForm("firebaseForm", "firebase");
+        saveForm("paymentForm", "payment");
+
+        function setData() {
+            $.ajax({
+                url: "/configuration/getSettings",
+                success: function (data) {
+                    // console.log(data.data);
+                    if (data.data?.aboutUs?.content) {
+                        ckEditorAboutUs.setData(data.data.aboutUs.content);
+                    }
+                    if (data.data?.driverInstruction?.content) {
+                        driverInstructionTerms.setData(data.data.driverInstruction.content);
+                    }
+                    if (data.data?.termsAndConditions?.content) {
+                        ckEditorTerms.setData(data.data.termsAndConditions.content);
+                    }
+                    if (data.data?.privacyAndPolicy?.content) {
+                        ckEditorprivacyAndPolicy.setData(data.data.privacyAndPolicy.content);
+                    }
+                    if (data.data?.refundAndPolicy?.content) {
+                        ckEditorrefundAndPolicy.setData(data.data.refundAndPolicy.content);
+                    }
+                    $('#supportEmail').val(data.data?.helpSupport?.supportEmail);
+                    $('#supportMobile').val(data.data?.helpSupport?.supportMobile);
+
+                    $('#androidClientUrl').val(data.data?.applicationLinks?.androidClientAppUrl);
+                    $('#androidDriverUrl').val(data.data?.applicationLinks?.androidDriverAppUrl);
+                    $('#iosClientUrl').val(data.data?.applicationLinks?.iosClientAppUrl);
+                    $('#iosDriverUrl').val(data.data?.applicationLinks?.iosDriverAppUrl);
+                    $('#androidClientVersion').val(data.data?.appVersion?.androidClientAppVersion);
+                    $('#androidDriverVersion').val(data.data?.appVersion?.androidDriverAppVersion);
+                    $('#iosClientVersion').val(data.data?.appVersion?.iosClientAppVersion);
+                    $('#iosDriverVersion').val(data.data?.appVersion?.iosDriverAppVersion);
+                    $('#twilioSid').val(data.data?.smsCredentials?.twilioSid);
+                    $('#twilioToken').val(data.data?.smsCredentials?.twilioAuthToken);
+                    $('#twilioNumber').val(data.data?.smsCredentials?.twilioNumber);
+                    $('#twilioCallUrl').val(data.data?.smsCredentials?.twilioCallUrl);
+                    $('#s3AccessKey').val(data.data?.s3Credentials?.s3AccessKey);
+                    $('#s3SecretKey').val(data.data?.s3Credentials?.s3SecretKey);
+                    $('#s3Bucket').val(data.data?.s3Credentials?.s3BucketKey); // Corrected ID
+                    $('#shippingCost').val(data.data?.paymentDetails?.shippingCost); // Corrected ID
+                    $('#specialHandling').val(data.data?.paymentDetails?.specialHandling); // Corrected ID
+                    $('#prePaymentPercentage').val(data.data?.paymentDetails?.prePaymentPercentage); // Corrected ID
+                    $('#loadingTime').val(data.data?.paymentDetails?.loadingTime); // Corrected ID
+                    $('#driverPercentageCut').val(data.data?.paymentDetails?.driverPercentageCut); // Corrected ID
+                    $('#cod').val(data.data?.paymentDetails?.cod); // Corrected ID
+                    $('#unloadingTime').val(data.data?.paymentDetails?.unloadingTime); // Corrected ID
+                    $('#gst').val(data.data?.paymentDetails?.gst); // Corrected ID
+                    $('#odaChargeMinimum').val(data.data?.paymentDetails?.odaChargeMinimum); // Corrected ID
+                    $('#fuelSurChargePercentage').val(data.data?.paymentDetails?.fuelSurChargePercentage); // Corrected ID
+                    $('#fovPercentage').val(data.data?.paymentDetails?.fovPercentage); // Corrected ID
+                    $('#docketCharge').val(data.data?.paymentDetails?.docketCharge); // Corrected ID
+                    $('#ratePerKG').val(data.data?.paymentDetails?.ratePerKG); // Corrected ID
+
+                    $('#type').val(data.data?.firebase?.type);
+                    $('#project_id').val(data.data?.firebase?.project_id);
+                    $('#private_key_id').val(data.data?.firebase?.private_key_id);
+                    $('#private_key').val(data.data?.firebase?.private_key);
+                    $('#client_email').val(data.data?.firebase?.client_email);
+                    $('#client_id').val(data.data?.firebase?.client_id);
+                    $('#auth_uri').val(data.data?.firebase?.auth_uri);
+                    $('#token_uri').val(data.data?.firebase?.token_uri);
+                    $('#auth_provider_x509_cert_url').val(data.data?.firebase?.auth_provider_x509_cert_url);
+                    $('#client_x509_cert_url').val(data.data?.firebase?.client_x509_cert_url);
+                    $('#universe_domain').val(data.data?.firebase?.universe_domain);
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error loading settings:", error);
+                    // Optionally provide feedback to the user
+                }
+            });
+        }
+        setData();
+    });
+
+    $(document).ready(function () {
+        $('#driverPercentageCut, #gst ,#fuelSurChargePercentage').on('input', function () {
+            let value = parseFloat($(this).val());
+
+            if (isNaN(value)) return;
+
+            // Clamp the value between 0 and 100
+            if (value < 0) $(this).val(0);
+            if (value > 100) $(this).val(100);
+        });
+
+
+    });
+
+</script>

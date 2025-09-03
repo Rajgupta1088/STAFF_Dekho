@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>PTL Packages</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            border-color: #000;
+            margin: auto;
+        }
+
+        th,
+        td {
+            border: 1px solid #000;
+            padding: 10px;
+            font-size: 12px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #d1dbf0;
+        }
+
+        th[colspan="4"] {
+            background-color: #d1dbf0 !important;
+        }
+
+        .page-break {
+            page-break-after: always;
+        }
+
+        strong {
+            font-size: 14px;
+            color: #640b0b;
+        }
+
+        .logo {
+            height: 70px;
+        }
+
+        .header-links {
+            font-size: 14px;
+            color: #464343;
+        }
+
+        .email-text {
+            font-size: 14px;
+            color: #640b0b;
+        }
+    </style>
+</head>
+
+<body>
+    <% packages.forEach((pkg, index)=> { %>
+        <table border="1" cellpadding="10" cellspacing="0">
+            <thead>
+                <tr>
+                    <th colspan="4" style="text-align: center;">
+                        <img src="https://onadmin.onpointlogistics.in/admin/images/logo2.png" alt="Logo"
+                            class="logo"><br>
+                        <a href="http://www.onpointlogistics.in" class="header-links">www.onpointlogistics.in</a><br>
+                        <span class="email-text">Email ID: info@onpointlogistics.in</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="width: 100px; "><strong style="font-size: 14px;">PKGS. NO.</strong></td>
+                    <td>
+                        <%= index + 1 %>
+                    </td>
+                    <td><strong style="font-size: 14px;">OF</strong></td>
+                    <td>
+                        <%= packages.length %>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong style="font-size: 14px;">CON NOTE NO</strong></td>
+                    <td colspan="3">
+                        <%= order.orderId %>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong style="font-size: 14px;">ORIGIN</strong></td>
+                    <td colspan="3">
+                        <%= order.pickupAddress %>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong style="font-size: 14px;">DESTINATION</strong></td>
+                    <td colspan="3">
+                        <%= order.dropAddress %>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong style="font-size: 14px;">WEIGHT</strong></td>
+                    <td colspan="3">
+                        <%= pkg.totalWeight %> KG
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong style="font-size: 14px;">DATE</strong></td>
+                    <td colspan="3">
+                        <%= order.createdAt %>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <% if (index < packages.length - 1) { %>
+            <div class="page-break"></div>
+            <% } %>
+                <% }); %>
+</body>
+
+</html>

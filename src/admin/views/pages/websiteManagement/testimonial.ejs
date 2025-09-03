@@ -1,0 +1,467 @@
+<link rel="stylesheet" href="/admin/css/websiteManagement/testimonial.css">
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold">✨ Testimonial Management</h3>
+        <div>
+            <button class="btn btn-success me-2" id="downloadAllCsv">
+                <i class="fas fa-download me-2"></i> Download CSV
+            </button>
+            <button class="btn btn-pink" data-bs-toggle="modal" data-bs-target="#testimonialModal">
+                <i class="fas fa-plus me-2"></i> Add Testimonial
+            </button>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4" id="searchTestimonialsCard">
+        <div class="card-body">
+            <h5 class="mb-3">Search Testimonials</h5>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label for="searchName" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="searchName" placeholder="Enter Name">
+                </div>
+                <div class="col-md-3">
+                    <label for="searchDesignation" class="form-label">Designation</label>
+                    <input type="text" class="form-control" id="searchDesignation" placeholder="Enter Designation">
+                </div>
+                <div class="col-md-3">
+                    <label for="searchRating" class="form-label">Rating</label>
+                    <select id="searchRating" class="form-select">
+                        <option value="">All</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="searchStatus" class="form-label">Status</label>
+                    <select id="searchStatus" class="form-select">
+                        <option value="">All</option>
+                        <option value="1">Active</option>
+                        <option value="2">Inactive</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="searchCreatedAt" class="form-label">Created At</label>
+                    <input type="date" class="form-control" id="searchCreatedAt">
+                </div>
+                <div class="col-md-3">
+                    <div class="d-flex gap-2 align-items-end">
+                        <button class="btn btn-primary" id="searchBtn">Search</button>
+                        <button class="btn btn-secondary" id="resetBtn">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="testimonialTable" class="table table-bordered table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Designation</th>
+                            <th>Profile Image</th>
+                            <th>Rating</th>
+                            <th>Status</th>
+                            <th>Created At</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="testimonialModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg custom-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Add Testimonial</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="testimonialForm">
+                    <input type="hidden" id="testimonialId">
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="name" class="form-label">Profile Name <strong
+                                    class="text-danger">*</strong></label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                placeholder="Enter Profile Name">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="designation" class="form-label">Profile Designation <strong
+                                    class="text-danger">*</strong></label>
+                            <input type="text" class="form-control" id="designation" name="designation"
+                                placeholder="Enter Designation">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Profile Image <strong class="text-danger">*</strong></label>
+                            <input type="file" class="form-control image_view" name="image" id="profile_image"
+                                accept="image/*">
+                            <div id="imagePreviewContainer" class="mt-2" style="display: none;">
+                                <img id="imagePreview" src="#" alt="Profile Image Preview"
+                                    style="max-width: 100px; max-height: 100px;">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Rating <strong class="text-danger">*</strong></label>
+                            <select class="form-select" name="rating" id="rating">
+                                <option value="">Select Rating</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Status <strong class="text-danger">*</strong></label>
+                            <select class="form-select" name="status" id="status">
+                                <option value="">Select Status</option>
+                                <option value="1">Active</option>
+                                <option value="2">Inactive</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label" for="message">Testimonial Message <strong
+                                class="text-danger">*</strong></label>
+                        <textarea class="form-control" name="description" id="testmonial_description"
+                            rows="5"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-pink w-100">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        // Initially hide the search testimonial card using jQuery
+        const searchTestimonialsCard = $('#searchTestimonialsCard');
+        searchTestimonialsCard.hide();
+
+        // Slide down the search testimonial card when the page loads
+        $(window).on('load', function () {
+            searchTestimonialsCard.slideDown(1000); // Adjust the duration (in milliseconds) as needed
+        });
+
+        let ckEditor; // Declare editor outside the create function
+
+        ClassicEditor.create(document.querySelector('#testmonial_description'))
+            .then(editor => {
+                ckEditor = editor;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+
+        // Image Preview Functionality
+        $('.image_view').change(function () {
+            const file = this.files[0];
+            if (file.originalFilename) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#imagePreview').attr('src', e.target.result);
+                    $('#imagePreviewContainer').show();
+                }
+                reader.readAsDataURL(file);
+            } else {
+                $('#imagePreview').attr('src', '#');
+                $('#imagePreviewContainer').hide();
+            }
+        });
+
+        let table = $('#testimonialTable').DataTable({ // Initialize DataTable first
+            processing: true,
+            serverSide: true,
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100],
+            scrollY: "400px",
+            scrollCollapse: true,
+            searching: false, // This line disables the default DataTables search
+            ajax: {
+                url: '/testimonial/testimonialList',
+                type: 'POST',
+                data: function (d) {
+                    d.name = $('#searchName').val();
+                    d.designation = $('#searchDesignation').val();
+                    d.rating = $('#searchRating').val();
+                    d.status = $('#searchStatus').val();
+                    d.createdAt = $('#searchCreatedAt').val();
+                }
+            },
+            columns: [{
+                data: null,
+                orderable: false, // Disable ordering for the Profile Image column
+                render: (data, type, row, meta) => meta.row + meta.settings._iDisplayStart + 1
+            },
+            {
+                data: 'name'
+            },
+            {
+                data: 'designation'
+            },
+            {
+                data: 'profileImage',
+                orderable: false, // Disable ordering for the Profile Image column
+                render: (data) => `<img src="${data}" class="rounded-circle" width="50" height="50">`
+            },
+            {
+                data: 'rating'
+            },
+            {
+                data: 'status',
+                render: (data, type, row) => {
+                    const statusText = data === 1 ? 'Active' : 'Inactive';
+                    const newStatus = data === 1 ? 2 : 1; // Toggle status
+                    return `<span class="badge ${data === 1 ? 'bg-success' : 'bg-secondary'} changeStatus" data-id='${row._id}' data-status='${newStatus}' style="cursor: pointer;">${statusText}</span>`;
+                }
+            }, // Added badge for better visual and clickability
+            {
+                data: 'createdAt',
+                render: (data) => new Date(data).toLocaleString()
+            },
+            {
+                data: null,
+                orderable: false,
+
+                render: (data, type, row) => `
+                                            <button class="btn btn-sm btn-warning editTestimonialBtn" data-id='${row._id}'><i class="fas fa-edit"></i> Edit</button>
+                                            <button class="btn btn-sm btn-danger delTestimonialBtn" data-id='${row._id}'><i class="fas fa-trash"></i> Delete</button>
+                                        `
+            }
+            ]
+        });
+
+
+        $('#testimonialModal').on('submit', function (e) {
+            e.preventDefault();
+            const formElement = document.getElementById('testimonialForm');
+            if (formElement) {
+                let isValid = true;
+
+                const name = $('#name').val().trim();
+                if (!name) {
+                    toastr.error('Profile Name is required.', 'Error');
+                    return;
+                }
+
+                const designation = $('#designation').val().trim();
+                if (!designation) {
+                    toastr.error('Profile Designation is required.', 'Error');
+                    return;
+                }
+
+                const profileImage = $('#profile_image')[0].files[0];
+                if (!profileImage && !$('#testimonialId').val()) { // Required on add
+                    toastr.error('Profile Image is required on adding new testimonial.', 'Error');
+                    return;
+                }
+
+                const rating = $('#rating').val();
+                if (!rating) {
+                    toastr.error('Rating is required.', 'Error');
+                    return;
+                }
+
+                const status = $('#status').val();
+                if (!status) {
+                    toastr.error('Status is required.', 'Error');
+                    return;
+                }
+
+                const description = ckEditor ? ckEditor.getData().trim() : $('#testmonial_description').val().trim();
+                if (!description) {
+                    toastr.error('Testimonial Message is required.', 'Error');
+                    return;
+                }
+
+                const formData = new FormData(formElement);
+                const id = $('#testimonialId').val();
+                const actionUrl = id ? '/testimonial/editTestimonial/' + id : '/testimonial/addTestimonial';
+
+                // Update description in FormData with CKEditor content
+                if (ckEditor) {
+                    formData.set('description', ckEditor.getData());
+                }
+
+                $.ajax({
+                    url: actionUrl,
+                    type: 'post',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',
+                    success: function () {
+                        // $('#testimonialModal').modal('hide');
+                        $('.btn-close').click();
+
+                        table.ajax.reload();
+                        $('#testimonialForm')[0].reset();
+                        if (ckEditor) {
+                            ckEditor.setData('');
+                        }
+                        $('#testimonialId').val('');
+                        $('#modalTitle').text('Add Testimonial');
+                        toastr.success('Testimonial saved successfully!', 'Success');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX request failed:", status, error, xhr);
+                        toastr.error('An error occurred while saving the testimonial.', 'Error'); // Use toastr for AJAX error
+                    }
+                });
+            } else {
+                console.error("Error: The form element with ID 'testimonialForm' was not found.");
+            }
+        });
+
+        $('#testimonialModal').on('show.bs.modal', function (event) {
+            const button = $(event.relatedTarget); // Button that triggered the modal
+            const id = button.data('id'); // Extract info from data-* attributes
+            const modalTitle = $('#modalTitle');
+            const testimonialId = $('#testimonialId');
+            const form = $('#testimonialForm')[0];
+            const imagePreview = $('#imagePreview');
+            const imagePreviewContainer = $('#imagePreviewContainer');
+
+            form.reset(); // Reset the form every time the modal is shown
+            if (ckEditor) {
+                ckEditor.setData('');
+            }
+            testimonialId.val('');
+            imagePreview.attr('src', '#');
+            imagePreviewContainer.hide();
+            modalTitle.text('Add Testimonial');
+
+            if (id) {
+                modalTitle.text('Edit Testimonial');
+                testimonialId.val(id);
+                // Fetch testimonial data and populate the form for editing
+                $.ajax({
+                    url: '/testimonial/getTestimonial/' + id, // Replace with your actual route
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#name').val(data.name);
+                        $('#designation').val(data.designation);
+                        $('#rating').val(data.rating);
+                        $('#status').val(data.status);
+                        // $('#sortOrder').val(data.sortOrder); // Populate sort order - Assuming you might have this
+                        if (ckEditor) {
+                            ckEditor.setData(data.description);
+                        }
+                        if (data.profileImage) {
+                            imagePreview.attr('src', data.profileImage);
+                            imagePreviewContainer.show();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error fetching testimonial:", status, error, xhr);
+                        toastr.error('Error fetching testimonial data for editing.', 'Error');
+                    }
+                });
+            }
+        });
+
+        // Event delegation for Edit button
+        $('#testimonialTable').on('click', '.editTestimonialBtn', function () {
+            const testimonialId = $(this).data('id');
+            $('#testimonialModal').modal('show', this); // Pass the button element for context
+        });
+
+        // Event delegation for Delete button
+        $('#testimonialTable').on('click', '.delTestimonialBtn', function () {
+            const testimonialId = $(this).data('id');
+
+            swalConfirm('Are you sure you want to delete this testimonial?', function () {
+                $.ajax({
+                    url: '/testimonial/deleteTestimonial/' + testimonialId,
+                    type: 'DELETE',
+                    dataType: 'json',
+                    success: function () {
+                        table.ajax.reload();
+                        toastr.success('Testimonial deleted successfully!', 'Success');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error deleting testimonial:", status, error, xhr);
+                        toastr.error('Error deleting testimonial.', 'Error');
+                    }
+                });
+            });
+        });
+
+        $('#testimonialTable').on('click', '.changeStatus', function () {
+            const testimonialId = $(this).data('id');
+            const newStatus = $(this).data('status'); // Get the new status from the data attribute
+            const statusText = parseInt(newStatus) === 1 ? 'Active' : 'Inactive'; // For confirmation message
+
+            if (confirm(`Are you sure you want to set the status to ${statusText}?`)) {
+                $.ajax({
+                    url: '/testimonial/changeStatus/' + testimonialId,
+                    type: 'post',
+                    dataType: 'json',
+                    contentType: 'application/json', // Important for sending JSON data in the body
+                    data: JSON.stringify({ status: newStatus }), // Send the new status in the request body
+                    success: function (response) {
+                        if (response.success) {
+                            table.ajax.reload();
+                            toastr.success(response.message, 'Success');
+                        } else {
+                            toastr.error(response.message || 'Failed to change status.', 'Error');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error changing status:", status, error, xhr);
+                        toastr.error('Error changing status.', 'Error');
+                    }
+                });
+            }
+        });
+        // Prevent modal from staying open on form submission error (if any)
+        $('#testimonialModal').on('hidden.bs.modal', function () {
+            $(this).find('.is-invalid').removeClass('is-invalid');
+            $(this).find('.invalid-feedback').remove();
+        });
+
+        // --- Custom Search Functionality ---
+        $('#searchBtn').on('click', function () {
+            table.ajax.reload(); // Reload the DataTable, the search parameters are sent in the ajax.data function
+        });
+
+        $('#resetBtn').on('click', function () {
+            $('#searchName').val('');
+            $('#searchDesignation').val('');
+            $('#searchRating').val('');
+            $('#searchStatus').val('');
+            $('#searchCreatedAt').val('');
+            table.ajax.reload(); // Reload to clear all filters
+        });
+
+        // --- Custom Download All CSV Functionality ---
+        $('#downloadAllCsv').on('click', function () {
+            window.location.href = '/testimonial/downloadAllCsv'; // Trigger a download by navigating to the URL
+        });
+    });
+</script>

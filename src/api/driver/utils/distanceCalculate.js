@@ -1,0 +1,98 @@
+const axios = require('axios');
+
+const getDistanceAndDuration = async (pickupLatitude, pickupLongitude, dropLatitude, dropLongitude) => {
+    try {
+        // const origin = `28.628177771489916,77.37401796388887`;
+        // const destination = `28.740181365930166,76.57085135674956`;
+
+        const origin = `${pickupLatitude},${pickupLongitude}`;
+        const destination = `${dropLatitude},${dropLongitude}`;
+
+        const response = await axios.get('https://maps.googleapis.com/maps/api/distancematrix/json', {
+            params: {
+                origins: origin,
+                destinations: destination,
+                key: process.env.GOOGLE_MAPS_API_KEY,
+            }
+        });
+
+        const data = response.data;
+
+        if (data.status !== 'OK') {
+            throw new Error('Google Maps API error. Please try again.');
+        }
+
+        const element = data.rows?.[0]?.elements?.[0];
+
+        if (!element || element.status !== 'OK') {
+            let errorMessage = 'Unable to calculate distance.';
+
+            if (element?.status === 'NOT_FOUND') {
+                errorMessage = 'Please enter valid coordinates.';
+            } else if (element?.status === 'ZERO_RESULTS') {
+                errorMessage = 'No route could be found between the given points.';
+            }
+
+            throw new Error(errorMessage);
+        }
+
+        const distanceInMeters = element.distance.value;
+        const distanceInKm = distanceInMeters / 1000;
+        const duration = element.duration.text;
+
+        return { distanceInKm, duration };
+
+    } catch (error) {
+        console.error('Error in Google Maps API:', error);
+        throw new Error('Failed to fetch distance from Google Maps API');
+    }
+};
+function deg2rad(deg) {
+    return deg * (Math.PI / 180);
+}
+
+function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+}
+
+/**
+ * Returns TRUE if driver is OUTSIDE the radius.
+ * Returns FALSE if driver is WITHIN the radius.
+ */
+function checkRadius(pickupLat, pickupLng, driverLat, driverLng, radiusInKm = 100) {
+    const distance = getDistanceFromLatLonInKm(pickupLat, pickupLng, driverLat, driverLng);
+    return distance > radiusInKm;
+}
+
+
+function getArrivalTime(durationInText) {
+
+    const regex = /(?:(\d+)\s*hour[s]?)?\s*(?:(\d+)\s*min[s]?)?/;
+    const matches = durationInText.match(regex);
+    const hours = parseInt(matches[1]) || 0;
+    const minutes = parseInt(matches[2]) || 0;
+    const durationInSeconds = (hours * 60 + minutes) * 60; // in seconds
+
+    const now = new Date(); // Current time
+    const arrivalTime = new Date(now.getTime() + durationInSeconds * 1000);
+
+    // Format to readable IST time
+    return arrivalTime.toLocaleTimeString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    });
+}
+
+
+
+module.exports = { getDistanceAndDuration, checkRadius, getArrivalTime }

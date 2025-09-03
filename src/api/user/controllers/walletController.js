@@ -1,0 +1,606 @@
+const crypto = require('crypto');
+const razorpay = require('../utils/razorpay');
+const Wallet = require('../models/walletModal');
+const Payment = require('../models/paymentModal');
+const FTL = require('../models/ftlPaymentModal');
+const TwoWheeler = require('../models/twoWheelerModal');
+const { toFixed } = require('../utils/fixedValue');
+require('dotenv').config();
+const { sendNotificationToAllDrivers } = require('../../driver/controllers/notificationController');
+
+
+
+const RAZORPAY_WEBHOOK_SECRET = process.env.RAZORPAY_WEBHOOK_SECRET;
+
+const walletBalance = async (req, res) => {
+    const userId = req.headers['userid'];
+
+    try {
+        const wallet = await Wallet.findOne({ userId: userId });
+
+        if (wallet) {
+            res.status(200).json({ success: true, balance: wallet.balance });
+        } else {
+            res.status(404).json({ success: false, message: 'Wallet not found' });
+        }
+    } catch (error) {
+        console.error('Wallet Balance Error:', error);
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+};
+
+// Add Money to Wallet
+const addMoney = async (req, res) => {
+    const { amount } = req.body;
+    const userId = req.headers['userid'];
+
+
+    if (amount === undefined || amount === null) {
+        return res.json({ success: false, message: "Amount is required" });
+    }
+
+    if (isNaN(amount)) {
+        return res.json({ success: false, message: "Amount must be a number" });
+    }
+
+    if (amount <= 0) {
+        return res.json({ success: false, message: "Amount must be greater than zero" });
+    }
+
+    const options = {
+        amount: amount * 100, // convert to paise
+        currency: 'INR',
+        receipt: `wallet_${Date.now()}`,
+        notes: {
+            userId: userId,
+            isWalletPay: 1
+        }
+    };
+
+    try {
+        const order = await razorpay.orders.create(options);
+        res.json({ success: true, order_id: order.id, razorpay_key: razorpay.key_id, amount });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error creating Razorpay order', error });
+    }
+};
+
+const walletVerify = async (req, res) => {
+
+    const { razorPayOrderId, razorpayPaymentId, razorpaySignature, amount } = req.body;
+    const userId = req.headers['userid'];
+
+    const missingFields = [];
+
+    if (!razorPayOrderId) missingFields.push('razorPayOrderId');
+    if (!razorpayPaymentId) missingFields.push('razorpayPaymentId');
+    if (!razorpaySignature) missingFields.push('razorpaySignature');
+    if (!amount) missingFields.push('amount');
+
+    if (typeof amount === 'string') {
+        return res.status(200).json({ success: false, message: 'Amount Must Be Number' });
+    }
+
+
+    if (missingFields.length > 0) {
+        return res.status(200).json({
+            success: false,
+            message: `${missingFields.join(', ')} ${missingFields.length > 1 ? 'are' : 'is'} required`
+        });
+    }
+
+    // amount = parseFloat(amount);
+    // if (isNaN(amount)) {
+    //     return res.status(200).json({ success: false, message: 'Amount must be a valid number' });
+    // }
+
+    const generatedSignature = crypto
+        .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+        .update(`${razorPayOrderId}|${razorpayPaymentId}`)
+        .digest('hex');
+
+    if (generatedSignature !== razorpaySignature) {
+        return res.status(200).json({ success: false, message: 'Invalid Signature' });
+    }
+
+    try {
+        const payment = await razorpay.payments.fetch(razorpayPaymentId);
+        // console.log('payment', payment);
+
+        if (payment.status === 'captured' && payment.order_id === razorPayOrderId) {
+            let wallet = await Wallet.findOne({ userId: userId });
+
+            const transaction = {
+                type: "credit",
+                amount: parseFloat(amount, 2),
+                method: payment.method,
+                orderId: razorPayOrderId,
+                transactionStatus: 1
+            };
+
+            if (!wallet) {
+                wallet = new Wallet({
+                    userId,
+                    balance: parseFloat(amount, 2),
+                    transactions: [transaction]
+                });
+
+                await wallet.save();
+            } else {
+
+                const existingTransaction = wallet.transactions.find(txn =>
+                    txn.orderId === razorPayOrderId && txn.transactionStatus === 1
+                );
+
+                if (existingTransaction) {
+                    // Transaction already added
+                    return res.status(200).json({ success: false, message: 'Amount already added to wallet' });
+                }
+                existBalance = parseFloat(wallet.balance, 2)
+
+                wallet.balance = existBalance + amount;
+                wallet.transactions.push(transaction);
+                await wallet.save();
+            }
+            return res.status(200).json({ success: true, message: 'Amount Successfully Added To Wallet' });
+        } else {
+            return res.status(200).json({ success: false, message: 'Payment not captured or mismatched order ID' });
+        }
+    } catch (error) {
+        console.error('Wallet Verify Error:', error);
+        return res.status(500).json({ success: false, message: 'Error verifying payment', error: error.message });
+    }
+};
+
+// const walletUse = async (req, res) => {
+//     let { packageId, amount, isPartialPayment } = req.body;
+//     amount = Number(amount);
+
+//     if (typeof amount !== 'number') {
+//         return res.status(200).json({ success: false, message: 'Amount must be a number' });
+//     }
+
+//     if (!packageId) {
+//         return res.status(200).json({ success: false, message: 'packageId is required' });
+
+//     }
+//     const serviceType = req.headers['servicetype'];
+
+//     if (serviceType == 3 && isPartialPayment == undefined) {
+//         return res.status(200).json({ success: false, message: 'isPartialPayment is required' });
+//     }
+
+//     const userId = req.headers['userid'];
+
+//     if (!userId) {
+//         return res.status(200).json({ success: false, message: 'User ID missing in headers' });
+//     }
+
+
+//     if (!serviceType) {
+//         return res.status(200).json({ success: false, message: 'Service Type missing in headers' });
+//     }
+
+
+//     try {
+
+//         let packageDetail = null;
+//         let ftlDetail = null;
+//         let twoPackageDetail = null;
+
+//         if (serviceType == 1) {
+//             packageDetail = await Payment.findById(packageId);
+//             if (!packageDetail) {
+//                 return res.status(200).json({ success: false, message: 'Package not found' });
+//             }
+//         } else if (serviceType == 2 || serviceType == 3) {
+//             ftlDetail = await FTL.findById(packageId);
+//             if (!ftlDetail) {
+//                 return res.status(200).json({ success: false, message: 'FTL Package not found' });
+//             }
+//         }
+//         elseif(serviceType == 4)
+//         {
+//             twoPackageDetail = await TwoWheeler.findById(packageId);
+//             if (!twoPackageDetail) {
+//                 return res.status(200).json({ success: false, message: 'Two Wheeler Package not found' });
+//             }
+//         }
+
+//         const wallet = await Wallet.findOne({ userId: userId });
+//         if (!wallet) {
+//             return res.status(200).json({ success: false, message: 'Wallet not found' });
+//         }
+
+//         if (wallet.balance < amount) {
+//             return res.status(200).json({ success: false, message: 'Insufficient wallet balance' });
+//         }
+
+//         const order_id = generateWalletOrderId();
+
+//         // Deduct balance and record transaction
+//         wallet.balance -= amount;
+//         wallet.transactions.push({
+//             type: 'debit',
+//             amount,
+//             method: 'Wallet Pay',
+//             transactionStatus: 1,
+//             order_id,
+//             date: new Date()
+//         });
+//         await wallet.save();
+
+//         // Update package/payment details
+//         if (serviceType == 1) {
+//             // console.log('hj')
+//             packageDetail.transactionStatus = 1;
+//             packageDetail.preTransactionId = order_id;
+//             packageDetail.postTransactionId = order_id;
+//             packageDetail.paymentId = order_id;
+//             packageDetail.isWalletPay = 1;
+//             await packageDetail.save();
+//         }
+//         else if (serviceType == 2 || serviceType == 3) {
+//             // console.log('jjj')
+
+//             ftlDetail.transactionStatus = 1;
+//             if (isPartialPayment == 0 || isPartialPayment == 1) {
+//                 ftlDetail.preTransactionId = order_id;
+//                 ftlDetail.postTransactionId = order_id;
+//             }
+
+//             if (isPartialPayment == 2) {
+//                 ftlDetail.preTransactionId = order_id;
+//                 ftlDetail.postTransactionId = order_id;
+//             }
+
+//             ftlDetail.isWalletPay = 1;
+//             ftlDetail.isPartialPayment = isPartialPayment;
+//             ftlDetail.paymentId = order_id;
+
+//             if ((ftlDetail.isBidding == 0) && (isPartialPayment == 0)) {
+
+//                 driverPercentageCut = Number(ftlDetail.driverPercentageCut) || 0;
+//                 ftlDetail.driverEarning = toFixed((Number(ftlDetail.totalPayment) * driverPercentageCut) / 100);
+//             }
+
+//             if ((ftlDetail.isBidding == 1) && (isPartialPayment == 2)) {
+
+//                 driverPercentageCut = Number(ftlDetail.driverPercentageCut) || 0;
+//                 ftlDetail.driverEarning = toFixed((Number(ftlDetail.totalPayment) * driverPercentageCut) / 100);
+//             }
+
+
+//             await ftlDetail.save();
+//         } else if (serviceType == 4) {
+//             twoPackageDetail.transactionStatus = 1;
+//             twoPackageDetail.preTransactionId = order_id;
+//             twoPackageDetail.postTransactionId = order_id;
+//             twoPackageDetail.paymentId = order_id;
+//             twoPackageDetail.isWalletPay = 1;
+//             await twoPackageDetail.save();
+//         }
+//         return res.json({
+//             success: true,
+//             message: 'Wallet amount applied successfully',
+//             remaining_balance: wallet.balance,
+//             order_id
+//         });
+
+//     } catch (err) {
+//         console.error('Error processing wallet transaction:', err);
+//         return res.status(500).json({ success: false, message: 'Internal server error' });
+//     }
+// };
+
+const walletUse = async (req, res) => {
+    try {
+        let { packageId, amount, isPartialPayment } = req.body;
+        const serviceType = Number(req.headers['servicetype']);
+        const userId = req.headers['userid'];
+
+        amount = Number(amount);
+
+        // Basic validation
+        if (!packageId) {
+            return res.status(200).json({ success: false, message: 'packageId is required' });
+        }
+
+        if (!userId) {
+            return res.status(200).json({ success: false, message: 'User ID missing in headers' });
+        }
+
+        if (!serviceType) {
+            return res.status(200).json({ success: false, message: 'Service Type missing in headers' });
+        }
+
+        if (isNaN(amount)) {
+            return res.status(200).json({ success: false, message: 'Amount must be a valid number' });
+        }
+
+        if (serviceType === 3 && isPartialPayment === undefined) {
+            return res.status(200).json({ success: false, message: 'isPartialPayment is required for service type 3' });
+        }
+
+        // Fetch package based on service type
+        let packageDetail;
+        switch (serviceType) {
+            case 1:
+                packageDetail = await Payment.findById(packageId);
+                if (!packageDetail) {
+                    return res.status(404).json({ success: false, message: 'Package not found' });
+                }
+                break;
+            case 2:
+            case 3:
+                packageDetail = await FTL.findById(packageId);
+                if (!packageDetail) {
+                    return res.status(404).json({ success: false, message: 'FTL Package not found' });
+                }
+                break;
+            case 4:
+                packageDetail = await TwoWheeler.findById(packageId);
+                if (!packageDetail) {
+                    return res.status(404).json({ success: false, message: 'Two Wheeler Package not found' });
+                }
+                break;
+            default:
+                return res.status(200).json({ success: false, message: 'Invalid service type' });
+        }
+
+        // Wallet check
+        const wallet = await Wallet.findOne({ userId });
+        if (!wallet) {
+            return res.status(404).json({ success: false, message: 'Wallet not found' });
+        }
+
+        if (wallet.balance < amount) {
+            return res.status(200).json({ success: false, message: 'Insufficient wallet balance' });
+        }
+
+        // Process transaction
+        const order_id = generateWalletOrderId();
+        wallet.balance -= amount;
+        wallet.transactions.push({
+            type: 'debit',
+            amount,
+            method: 'Wallet Pay',
+            transactionStatus: 1,
+            order_id,
+            date: new Date()
+        });
+        await wallet.save();
+
+        // Update package info
+        packageDetail.transactionStatus = 1;
+        packageDetail.preTransactionId = order_id;
+        packageDetail.postTransactionId = order_id;
+        packageDetail.paymentId = order_id;
+        packageDetail.isWalletPay = 1;
+
+        if (serviceType === 2 || serviceType === 3) {
+            packageDetail.isPartialPayment = isPartialPayment;
+
+            const isBidding = packageDetail.isBidding;
+            const driverCut = Number(packageDetail.driverPercentageCut) || 0;
+            const total = Number(packageDetail.totalPayment);
+
+            if (
+                (isBidding === 0 && isPartialPayment === 0) ||
+                (isBidding === 1 && isPartialPayment === 2)
+            ) {
+                packageDetail.driverEarning = toFixed((total * driverCut) / 100);
+            }
+        }
+        if (serviceType == 4) {
+            const driverCut = Number(packageDetail.driverPercentageCut) || 0;
+            const totalPay = Number(packageDetail.totalPayment);
+            packageDetail.driverEarning = toFixed((totalPay * driverCut) / 100);
+
+        }
+
+        await packageDetail.save();
+
+        if (serviceType == 4)
+            (async () => {
+                try {
+                    await sendNotificationToAllDrivers(
+                        "Two Wheeler", "New Two Wheeler Request coming..", serviceType,
+                        packageId,
+                        'twoWheelerIncomingRequest',
+                        ''
+                    );
+                } catch (notifyErr) {
+                    console.error('⚠️ Notification Error (ignored):', notifyErr.message);
+                }
+            })();
+        else if (serviceType == 2 || serviceType == 3)
+            (async () => {
+                try {
+                    await sendNotificationToAllDrivers(
+                        "FTL Request", "New FTL Request coming..", serviceType,
+                        packageId,
+                        'ftlIncomingRequest',
+                        packageDetail.vehicleId
+                    );
+                } catch (notifyErr) {
+                    console.error('⚠️ Notification Error (ignored):', notifyErr.message);
+                }
+            })();
+
+
+        return res.status(200).json({
+            success: true,
+            message: 'Wallet amount applied successfully',
+            remaining_balance: Number(wallet.balance.toFixed(2)),
+            order_id
+        });
+
+    } catch (err) {
+        console.error('Error processing wallet transaction:', err);
+        return res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
+
+// Refund to Wallet
+
+const walletRefund = async (req, res) => {
+    const { order_id, amount } = req.body;
+
+    if (typeof amount === 'string') {
+        return res.status(200).json({ success: false, message: 'Amount Must Be Number' });
+    }
+
+    const userId = req.headers['userid'];
+
+    try {
+        let wallet = await Wallet.findOne({ userId: userId });
+
+        if (!wallet) {
+            return res.status(404).json({ success: false, message: 'Wallet not found' });
+        }
+
+        wallet.balance += amount;
+
+        wallet.transactions.push({ type: 'credit', amount, method: 'refund', order_id });
+
+        await wallet.save();
+
+        res.json({ success: true, message: 'Amount refunded to wallet', balance: wallet.balance });
+    } catch (err) {
+        console.error('Error processing wallet refund:', err);
+        res.status(500).json({ success: false, message: 'An error occurred while processing the wallet refund' });
+    }
+};
+
+// Transaction History
+
+const walletTransaction = async (req, res) => {
+    const userId = req.headers['userid'];
+
+    try {
+        const wallet = await Wallet.findOne({ userId: userId });
+
+        if (wallet) {
+            res.status(200).json({ success: true, balance: wallet.balance, data: wallet.transactions.reverse() });
+        } else {
+            res.status(200).json({ success: false, message: 'Wallet not found' });
+        }
+    } catch (error) {
+        console.error('Wallet Transaction Error:', error);
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+};
+
+// Razorpay Webhook Handler
+const webhookHandler = async (req, res) => {
+    const razorpaySignature = req.headers['x-razorpay-signature'];
+    const body = JSON.stringify(req.body);
+    const expectedSignature = crypto.createHmac('sha256', RAZORPAY_WEBHOOK_SECRET)
+        .update(body)
+        .digest('hex');
+
+    if (expectedSignature === razorpaySignature) {
+        const payload = req.body;
+
+        if (payload.event === 'payment.captured') {
+            const payment = payload.payload.payment.entity;
+            const { order_id, amount } = payment;
+
+            const user_id = 'user1'; // Replace with actual user identification logic
+            let wallet = await Wallet.findOne({ user_id });
+            if (!wallet) {
+                wallet = await Wallet.create({ user_id });
+            }
+
+            wallet.balance += amount / 100;
+            wallet.transactions.push({
+                type: 'credit',
+                amount: amount / 100,
+                method: 'razorpay_webhook',
+                order_id,
+                created_at: new Date()
+            });
+
+            await wallet.save();
+            return res.status(200).json({ success: true });
+        }
+
+        res.status(200).json({ success: true }); // Acknowledge other events
+    } else {
+        res.status(200).json({ success: false, message: 'Invalid webhook signature' });
+    }
+}
+
+
+const generateWalletOrderId = () => {
+    const now = new Date();
+    const timestamp = now.toISOString().replace(/[-:.TZ]/g, '').slice(0, 14); // e.g., 20250429142530
+    const randomPart = Math.random().toString(36).substr(2, 5).toUpperCase();  // e.g., 5CHAR
+    return `WALLET-${timestamp}-${randomPart}`;
+};
+
+const generateCashOrderId = () => {
+    const now = new Date();
+    const timestamp = now.toISOString().replace(/[-:.TZ]/g, '').slice(0, 14); // e.g., 20250429142530
+    const randomPart = Math.random().toString(36).substr(2, 5).toUpperCase();  // e.g., 5CHAR
+    return `CASH-${timestamp}-${randomPart}`;
+};
+
+const cashOnDelivery = async (req, res) => {
+    try {
+        let { packageId, amount, isPartialPayment } = req.body;
+        const serviceType = Number(req.headers['servicetype']);
+        const userId = req.headers['userid'];
+        amount = parseFloat(amount);
+
+        // ✅ Basic validation
+        if (!packageId) return res.status(200).json({ success: false, message: 'packageId is required' });
+        if (!userId) return res.status(200).json({ success: false, message: 'User ID missing in headers' });
+        if (!serviceType) return res.status(200).json({ success: false, message: 'Service Type missing in headers' });
+        if (amount < 0) {
+            return res.status(200).json({ success: false, message: 'Amount must be a Greater Than Zero' });
+        }
+        if (serviceType === 3 && typeof isPartialPayment !== 'boolean') {
+            return res.status(200).json({ success: false, message: 'isPartialPayment must be true or false for service type 3' });
+        }
+
+        const Model = Payment;
+        if (!Model) {
+            return res.status(200).json({ success: false, message: 'Invalid service type' });
+        }
+
+        // ✅ Fetch package
+        const packageDetail = await Model.findById(packageId);
+        if (!packageDetail) {
+            return res.status(200).json({ success: false, message: 'Package not found' });
+        }
+
+        // ✅ Generate Order ID
+        const order_id = generateCashOrderId();
+
+        // ✅ Update package
+        Object.assign(packageDetail, {
+            transactionStatus: 1,
+            preTransactionId: order_id,
+            postTransactionId: order_id,
+            paymentId: order_id,
+            isCashPayment: 1
+        });
+
+        await packageDetail.save();
+        return res.status(200).json({
+            success: true,
+            message: 'COD Done successfully',
+            order_id,
+            packageId
+        });
+
+    } catch (err) {
+        console.error('Error processing transaction:', err);
+        return res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
+
+
+module.exports = { walletBalance, addMoney, generateCashOrderId, walletTransaction, webhookHandler, walletRefund, walletVerify, walletUse, cashOnDelivery };

@@ -1,0 +1,2 @@
+trackingId,pickUpLocation,dropLocation,transportMode,status,deliveryDate,consignerName,estimateDate,currentLocation,pod,invoiceDate,connectionDate,consigneeName,mobile,consignorPincode,referenceNo,invoiceNumber,invoiceValue,boxes,ewayBillNo,connectionPartner,partnerCnNumber,actualWeight,chargedWeight,tat,add,remarks,Pickup,InTransit,OutForDelivery,Delivered,Cancelled
+124591,Delhi,Mumbai,Surface,OutForDelivery,01+AC0-08+AC0-2025,Indigo,17+AC0-09+AC0-2025,Delhi,,05+AC0-08+AC0-2025,19+AC0-06+AC0-2025,Chaurdhary Distributors,,,,,,,,,,,,,,,,,,,

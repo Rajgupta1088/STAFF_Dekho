@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <style>
+        .btn-pink {
+            background-color: #e91e63;
+            color: white;
+        }
+
+        .btn-pink:hover {
+            background-color: #c2185b;
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .modal-title {
+            font-weight: bold;
+        }
+
+        #editTabs {
+            font-size: 14px;
+        }
+
+        .aproveSwitch {
+            margin-left: 30% !important;
+        }
+
+        .custom-modal {
+            max-width: 70%;
+        }
+
+
+        .modal-backdrop.show {
+            opacity: 0.1;
+        }
+
+        .vehicleSelect ul {
+            display: flex;
+            margin: 0;
+            padding: 0;
+            gap: 18px;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .vehicleSelect ul>li {
+            list-style: none;
+            width: 48%;
+        }
+
+        .vehicleSelect ul>li>div {
+            /* border: 2px solid #ddd; */
+            padding: 10px;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0px 0px 6px 0px #2625e2;
+        }
+
+        .vehicleSelect ul>li>div label {
+            text-align: center;
+            width: 100%;
+        }
+
+        .vehicleSelect ul>li>div label img {
+            width: 100%;
+            max-width: 100%;
+            height: 200px;
+            object-fit: contain;
+        }
+
+        .selectVehicle {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold">🚛 Driver Management</h3>
+            <button class="btn btn-pink" data-bs-toggle="modal" data-bs-target="#driverModal">Add Driver</button>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body table-responsive">
+                <table id="driverTable" class="table table-bordered table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Mobile</th>
+                            <!-- <th>Alternate Mobile</th> -->
+                            <th>Service Type</th>
+                            <th>Approved Status</th>
+                            <th>Vehicle Name</th>
+                            <th>Vehicle Image</th>
+                            <th>Created At</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="driverModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg custom-modal">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Add Driver</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="driverForm2" enctype="multipart/form-data">
+                        <input type="hidden" id="driverId" name="driverId">
+                        <div class="row mb-3">
+
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">Name <strong class="text-danger">*</strong></label>
+                                <input type="text" class="form-control" id="name1" name="name" placeholder="Enter Name">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email <strong
+                                        class="text-danger">*</strong></label>
+                                <input type="email" class="form-control" id="email1" name="email"
+                                    placeholder="Enter email">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="dateOfBirth" class="form-label">Date of Birth<strong
+                                        class="text-danger">*</strong></label>
+                                <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="gender" class="form-label">Gender<strong
+                                        class="text-danger">*</strong></label>
+                                <select class="form-control" id="gender" name="gender">
+                                    <option value="">Select Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="mobileNo" class="form-label">Mobile No.<strong
+                                        class="text-danger">*</strong></label>
+                                <input type="tel" class="form-control" id="mobileNo1" name="mobileNo"
+                                    placeholder="Enter Mobile No.">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="alternateMobileNo" class="form-label">Alternate Mobile No.</label>
+                                <input type="tel" class="form-control" id="alternateMobileNo" name="alternateMobileNo"
+                                    placeholder="Alternate Mobile">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="serviceType" class="form-label">Service Type <strong
+                                        class="text-danger">*</strong></label>
+                                <select class="form-select" name="serviceType" id="serviceType">
+                                    <option value="">Select Service Type</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="profileImage" class="form-label">Profile Image</label>
+                                <input type="file" class="form-control" id="profileImage" name="profileImage">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-pink w-100">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editDriverModal" tabindex="-1" aria-labelledby="editDriverModalTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg custom-modal">
+
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-between align-items-center">
+                    <h5 class="modal-title" id="editDriverModalTitle">Edit Driver</h5>
+
+                    <div class="form-check form-switch me-3 aproveSwitch">
+                        <input class="form-check-input" type="checkbox" id="driverApprovedToggle"
+                            data-id="DRIVER_ID_HERE">
+                        <label class="form-check-label" for="driverApprovedToggle">Approved</label>
+                    </div>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="editDriverForm2" enctype="multipart/form-data">
+                        <input type="hidden" id="editDriverId" name="driverId">
+                        <ul class="nav nav-tabs mb-3" id="editTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" id="personal-tab" data-bs-toggle="tab" href="#personal"
+                                    role="tab" aria-controls="personal" aria-selected="true">Personal Detail</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address" role="tab"
+                                    aria-controls="address" aria-selected="false">Address Details</a>
+                            </li>
+                            <!-- <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="emergency-tab" data-bs-toggle="tab" href="#emergency" role="tab"
+                                    aria-controls="emergency" aria-selected="false">Emergency Detail</a>
+                            </li> -->
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="documents-tab" data-bs-toggle="tab" href="#documents" role="tab"
+                                    aria-controls="documents" aria-selected="false">Driver Documents</a>
+                            </li>
+
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="vhicledetails-tab" data-bs-toggle="tab" href="#vhicledetails"
+                                    role="tab" aria-controls="vhicledetails" aria-selected="false">Vehicle Details</a>
+                            </li>
+
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="vhicledocuments-tab" data-bs-toggle="tab"
+                                    href="#vhicledocuments" role="tab" aria-controls="vhicledocuments"
+                                    aria-selected="false">Vehicle Documents</a>
+                            </li>
+
+                        </ul>
+                        <div class="tab-content" id="editTabsContent">
+                            <div class="tab-pane fade show active" id="personal" role="tabpanel"
+                                aria-labelledby="personal-tab">
+                                <div class="mb-3">
+                                    <label for="editName" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="editName" name="name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="editEmail" name="email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editDateOfBirth" class="form-label">Date of Birth</label>
+                                    <input type="date" class="form-control" id="editDateOfBirth" name="dateOfBirth">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editGender" class="form-label">Gender</label>
+                                    <select class="form-control" id="editGender" name="gender">
+                                        <option value="">Select Gender</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editMobileNo" class="form-label">Mobile No.</label>
+                                    <input type="tel" class="form-control" id="editMobileNo" name="mobileNo" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editAlternateMobileNo" class="form-label">Alternate Mobile No.</label>
+                                    <input type="tel" class="form-control" id="editAlternateMobileNo"
+                                        name="alternateMobileNo">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="serviceType" class="form-label">Service Type <strong
+                                            class="text-danger">*</strong></label>
+                                    <select class="form-select" name="serviceType" id="editserviceType">
+                                        <option value="">Select Service Type</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="editProfileImage" class="form-label">Profile Image</label>
+                                    <input type="file" class="form-control " id="editProfileImage" name="profileImage">
+                                    <img class="img-responsive" alt="editProfile" id="editProfileImg"
+                                        style="width:100px;">
+                                    <!-- <small class="form-text text-muted">Leave blank to keep the current image.</small> -->
+                                </div>
+                            </div>
+
+
+                            <div class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents-tab">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <!-- Image preview for Aadhaar Front -->
+                                        <img src="" id="viewAadhaarFront" class="img-thumbnail w-50 mb-2">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="aadhaarFront" class="form-label">Front Side of Aadhaar Card</label>
+                                        <input type="file" class="form-control" id="aadhaarFront" name="aadhaarFront"
+                                            onchange="previewImage(this, 'viewAadhaarFront')">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <!-- Image preview for Aadhaar Back -->
+                                        <img src="" id="viewAadhaarBack" class="img-thumbnail w-50 mb-2">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="aadhaarBack" class="form-label">Back Side of Aadhaar Card</label>
+                                        <input type="file" class="form-control" id="aadhaarBack" name="aadhaarBack"
+                                            onchange="previewImage(this, 'viewAadhaarBack')">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <!-- Image preview for Pan Card -->
+                                        <img src="" id="viewPanCard" class="img-thumbnail w-50 mb-2">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="panCard" class="form-label">Pan Card</label>
+                                        <input type="file" class="form-control" id="panCard" name="panCard"
+                                            onchange="previewImage(this, 'viewPanCard')">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <!-- Image preview for Driving License -->
+                                        <img src="" id="viewDrivingLicense" class="img-thumbnail w-50 mb-2">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="drivingLicense" class="form-label">Driving License</label>
+                                        <input type="file" class="form-control" id="drivingLicense"
+                                            name="drivingLicense" onchange="previewImage(this, 'viewDrivingLicense')">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <!-- Image preview for Vehicle RC -->
+                                        <img src="" id="viewVehicleRC" class="img-thumbnail w-50 mb-2">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="vehicleRC" class="form-label">Vehicle RC</label>
+                                        <input type="file" class="form-control" id="vehicleRC" name="vehicleRC"
+                                            onchange="previewImage(this, 'viewVehicleRC')">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <!-- Image preview for Vehicle Insurance -->
+                                        <img src="" id="viewVehicleInsurance" class="img-thumbnail w-50 mb-2">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="vehicleInsurance" class="form-label">Vehicle Insurance Copy</label>
+                                        <input type="file" class="form-control" id="vehicleInsurance"
+                                            name="vehicleInsurance"
+                                            onchange="previewImage(this, 'viewVehicleInsurance')">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <!-- Image preview for Bank Passbook -->
+                                        <img src="" id="viewBankPassbook" class="img-thumbnail w-50 mb-2">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="bankPassbook" class="form-label">Bank Passbook / Cancelled
+                                            Cheque</label>
+                                        <input type="file" class="form-control" id="bankPassbook" name="bankPassbook"
+                                            onchange="previewImage(this, 'viewBankPassbook')">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="vhicledetails" role="tabpanel"
+                                aria-labelledby="vhicledetails-tab">
+                                <div class="mb-3">
+                                    <label for="vehicleName" class="form-label">Vehicle Name</label>
+                                    <input type="text" class="form-control" id="vehicleName" name="vehicleName"
+                                        placeholder="Enter Vehicle Name">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="vehicleModel" class="form-label">Vehicle Model</label>
+                                    <input type="text" class="form-control" id="vehicleModel" name="vehicleModel"
+                                        placeholder="Enter Vehicle Model">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="yearOfManufacture" class="form-label">Year of Manufacture</label>
+                                    <input type="text" class="form-control" id="yearOfManufacture"
+                                        name="yearOfManufacture" placeholder="Enter yearOfManufacture">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="plateNumber" class="form-label">Plate Number</label>
+                                    <input type="text" class="form-control" id="plateNumber" name="plateNumber"
+                                        placeholder="Enter Plate Number">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="vin" class="form-label">VIN</label>
+                                    <input type="text" class="form-control" id="vin" name="vin" placeholder="Enter VIN">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="capacity" class="form-label">Capacity</label>
+                                    <input type="text" class="form-control" id="capacity" name="capacity"
+                                        placeholder="Enter Capacity">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="fuelType" class="form-label">Fuel Type</label>
+                                    <input type="text" class="form-control" id="fuelType" name="fuelType"
+                                        placeholder="Enter Fuel Type">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="odometerReading" class="form-label">Odometer Reading</label>
+                                    <input type="text" class="form-control" id="odometerReading" name="odometerReading"
+                                        placeholder="Enter Odometer Reading">
+                                </div>
+                                <!-- <div class="mb-3">
+                                    <label for="serviceType" class="form-label">Service Type</label>
+                                    <input type="text" class="form-control" id="serviceType" name="serviceType"
+                                        placeholder="Enter Service Type">
+                                </div> -->
+                                <div class="mb-3">
+                                    <label for="vehicleId" class="form-label">Select Vehicle</label>
+                                    <div class="vehicleSelect">
+                                        <ul class="vehicleListDiv">
+                                            <li>
+                                                <div>
+                                                    <input class="selectVehicle" type="radio" name="selectVehicle" />
+                                                    <label for="vehicleTags"><img
+                                                            src="https://onpoint-08042025.s3.ap-south-1.amazonaws.com/uploads/192910c4-cc2e-48fe-b678-481c1e1df796_download%20%282%29.jpg" /></label>
+                                                </div>
+                                                <p class="text-center">Sameer, Raj Gupta Ji, Rahul Saifi</p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <div class="tab-pane fade" id="vhicledocuments" role="tabpanel"
+                                aria-labelledby="vhicledocuments-tab">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <!-- Image preview for Aadhaar Front -->
+                                        <img src="" id="viewinsuranceCertificate" class="img-thumbnail w-50 mb-2">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="insuranceCertificate" class="form-label">Insurance
+                                            Certificate</label>
+                                        <input type="file" class="form-control" id="insuranceCertificate"
+                                            name="insuranceCertificate"
+                                            onchange="previewImage(this, 'viewAadhaarFront')">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <!-- Image preview for Aadhaar Back -->
+                                        <img src="" id="viewpollutionCertificate" class="img-thumbnail w-50 mb-2">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="pollutionCertificate" class="form-label">Pollution
+                                            Certificate</label>
+                                        <input type="file" class="form-control" id="pollutionCertificate"
+                                            name="pollutionCertificate"
+                                            onchange="previewImage(this, 'viewAadhaarBack')">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <!-- Image preview for Aadhaar Back -->
+                                        <img src="" id="viewregistrationCertificate" class="img-thumbnail w-50 mb-2">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="registrationCertificate" class="form-label">Registration
+                                            Certificate</label>
+                                        <input type="file" class="form-control" id="registrationCertificate"
+                                            name="registrationCertificate"
+                                            onchange="previewImage(this, 'viewAadhaarBack')">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="fw-bold mb-3">Permanent Address</h6>
+                                        <div class="mb-3">
+                                            <label for="permanentHouseNo" class="form-label">House No./Street</label>
+                                            <input type="text" class="form-control" id="permanentHouseNo"
+                                                name="permanentHouseNo" placeholder="Enter House No.">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="permanentCity" class="form-label">City</label>
+                                            <input type="text" class="form-control" id="permanentCity"
+                                                name="permanentCity" placeholder="Enter City">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="permanentState" class="form-label">State</label>
+                                            <input type="text" class="form-control" id="permanentState"
+                                                name="permanentState" placeholder="Enter State">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="permanentPinCode" class="form-label">PIN Code</label>
+                                            <input type="text" class="form-control" id="permanentPinCode"
+                                                name="permanentPinCode" placeholder="Enter Pin Code">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="fw-bold mb-3">Current Address (if different)</h6>
+                                        <div class="mb-3">
+                                            <label for="currentHouseNo" class="form-label">House No./Street</label>
+                                            <input type="text" class="form-control" id="currentHouseNo"
+                                                name="currentHouseNo" placeholder="Enter House No.">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="currentCity" class="form-label">City</label>
+                                            <input type="text" class="form-control" id="currentCity" name="currentCity"
+                                                placeholder="Enter City">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="currentState" class="form-label">State</label>
+                                            <input type="text" class="form-control" id="currentState"
+                                                name="currentState" placeholder="Enter State">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="currentPinCode" class="form-label">PIN Code</label>
+                                            <input type="text" class="form-control" id="currentPinCode"
+                                                name="currentPinCode" placeholder="Enter Pin Code">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-pink">Update Driver</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+
+
+    <script>
+        $(document).ready(function () {
+            $('#driverForm2').on('submit', function (e) {
+
+                e.preventDefault();
+
+
+                const name = $('#name1').val().trim();
+                if (!name) {
+                    toastr.error('Driver Name is required.', 'Error');
+                    return;
+                }
+                const email = $('#email1').val().trim();
+                if (!email) {
+                    toastr.error('Email is required.', 'Error');
+                    return;
+                }
+
+                const dateOfBirth = $('#dateOfBirth').val().trim();
+                if (!dateOfBirth) {
+                    toastr.error('Date Of Birth is required.', 'Error');
+                    return;
+                }
+
+                const gender = $('#gender').val().trim();
+                if (!gender) {
+                    toastr.error('Gender is required.', 'Error');
+                    return;
+                }
+
+                const mobileNo = $('#mobileNo1').val().trim();
+                if (!mobileNo) {
+                    toastr.error('Mobile Number is required.', 'Error');
+                    return;
+                }
+
+                const serviceType = $('#serviceType').val().trim();
+                if (!serviceType) {
+                    toastr.error('Service Type is required.', 'Error');
+                    return;
+                }
+
+
+
+                const id = $('#driverId').val();
+                const formData = new FormData(this); // Use FormData to include files
+
+
+                const url = '/driver/saveDrivers'; // Updated URL to match controller
+
+                $.ajax({
+                    url,
+                    type: 'POST',
+                    data: formData,
+                    contentType: false, // Don't set content type, let browser handle it for FormData
+                    processData: false, // Don't process the data
+                    success: function (response) {
+                        if (response.success == true)
+                            Swal.fire('Created!', response.message || 'Driver created successfully.', 'success').then(() => {
+                                // location.reload(); // refresh the page
+                            });
+                        else {
+                            alert(response.message);
+                            // location.reload(); // refresh the page
+
+                        }
+
+                        $('#driverModal').modal('hide');
+                        $('#driverForm2')[0].reset();
+                        $('#modalTitle').text('Add Driver'); // Reset modal title after save
+                    },
+                    error: function () { alert('Failed to save driver'); }
+                });
+            });
+
+
+            $.ajax({
+                url: '/vehicle/getServiceData',
+                type: 'GET',
+                success: function (response) {
+                    if (response.status) {
+                        const services = response.serviceData || []; // ✅ FIX: access the 'services' array
+                        const dropdown = $('#serviceType, #editserviceType');
+                        dropdown.empty(); // Clear existing options
+                        dropdown.append('<option value="" selected readonly>Select Service Type</option>');
+
+                        // Append driver options
+                        services.forEach(service => {
+                            const name = service.serviceName || 'No Name';
+                            const id = service._id;
+                            dropdown.append(`<option value="${id}">${name}</option>`);
+                        });
+
+
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching warehouse data:", error);
+                }
+            });
+            let table = $('#driverTable').DataTable({
+                processing: true,
+                serverSide: true,
+                dom: 'lrtip', // removes the default search box
+
+                ajax: { url: '/driver/driverList', type: 'POST' },
+                columns: [
+                    { data: null, render: (data, type, row, meta) => meta.row + 1 },
+                    { data: 'personalInfo.name' },
+                    { data: 'personalInfo.email' },
+                    { data: 'personalInfo.mobile' },
+                    // { data: 'personalInfo.altMobile' },
+                    {
+                        data: 'serviceType',
+                        orderable: false,
+
+                        render: function (data) {
+                            // Status color mapping
+                            let statusColor = '';
+                            let statusText = '';
+
+                            switch (parseInt(data)) { // Ensure data is treated as an integer for comparison
+                                case 1:
+                                    statusColor = 'badge bg-warning'; // Pickup
+                                    statusText = 'PTL';
+                                    break;
+                                case 2:
+                                    statusColor = 'badge bg-info'; // Out for Delivery
+                                    statusText = 'FTL Intercity';
+                                    break;
+                                case 3:
+                                    statusColor = 'badge bg-primary'; // In Transit
+                                    statusText = 'Ftl OutStation';
+                                    break;
+                                case 4:
+                                    statusColor = 'badge bg-success'; // Delivered
+                                    statusText = 'Two Wheeler';
+                                    break;
+
+                                default:
+                                    statusColor = 'badge bg-secondary'; // Unknown
+                                    statusText = 'Unknown';
+                                    break;
+                            }
+
+                            return `<span class="${statusColor}">${statusText}</span>`;
+                        }
+                    },
+                    {
+                        data: 'approvalStatus',
+                        render: function (data) {
+                            return data === 1
+                                ? '<span class="badge bg-success">Approved</span>'
+                                : '<span class="badge bg-danger">Pending</span>';
+
+                        },
+                        orderable: false,
+
+                    },
+                    {
+                        data: 'vehicleDetail.vehicleId.name',
+                        orderable: false,
+
+                        render: function (data) {
+                            return data || '-'; // fallback if name is missing
+                        }
+                    },
+
+                    {
+                        data: 'vehicleDetail.vehicleId.vehicleImage',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            const imageUrl = data; // fallback image
+                            return imageUrl ? `<img src="${imageUrl}" class="rounded-circle" width="50" height="50">` : '-';
+                        }
+                    },
+
+                    { data: 'createdAt', render: (data) => new Date(data).toLocaleString() },
+                    {
+                        data: null,
+                        render: (data, type, row) => {
+                            return `
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                <i class="fa fa-ellipsis-v"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item editDriverBtn" href="#" data-id="${row._id}">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item delDriverBtn" href="#" data-id="${row._id}" onclick="return confirm('⚠️ Warning! Do you really want to delete?');">
+                        <i class="fas fa-trash"></i> Delete
+                    </a>
+                </li>
+                ${(data?.serviceType == 2 || data?.serviceType == 3) ? `
+                <li>
+                <a class="dropdown-item" href="driverEarning/${row._id}" data-id="${row._id}">
+                    <i class="fa-solid fa-dollar-sign me-2"></i> Earning
+                </a>
+                </li>
+                ` : ``}
+            </ul>
+        </div>
+        `;
+                        }
+                    }
+
+                ]
+            });
+
+            $('#editDriverForm2').submit(function (e) {
+                e.preventDefault();
+                const id = $('#driverId').val();
+                const formData = new FormData(this); // Use FormData to include files
+
+                const url = `/driver/updateDriver/${id}`; // Updated URL to match controller
+
+                $.ajax({
+                    url,
+                    type: 'POST',
+                    data: formData,
+                    contentType: false, // Don't set content type, let browser handle it for FormData
+                    processData: false, // Don't process the data
+                    success: function (response) {
+                        toastr.success(response.message, 'Success');
+
+                        if (table.ajax) {
+                            table.ajax.reload();
+                            $('.btn-close').click();
+
+                        }
+                        $('#editDriverForm2').modal('hide');
+                        // $('#driverForm2')[0].reset();
+                        // $('#modalTitle').text('Add Driver'); // Reset modal title after save
+                    },
+                    error: function () { alert('Failed to save driver'); }
+                });
+            });
+
+            $('#driverTable').on('click', '.editDriverBtn', function () {
+                const id = $(this).data('id');
+                $('#editDriverModal').modal('show');
+                $('#editDriverModal form')[0].reset(); // Reset form inputs
+                $('#driverApprovedToggle').prop('checked', false).removeAttr('data-id');
+                // $('#editProfileImg').attr('src', '/images/default-profile.png');
+                $('#editDriverId,#driverApprovedToggle').val('');
+
+                $.get(`/driver/getDriver/${id}`, function (data) {
+                    const driver = data.driver;
+                    const vehicle = driver.vehicleDetail;
+                    $('#driverId, #editDriverId').val(id);
+                    $('#driverApprovedToggle').prop('checked', driver.approvalStatus === 1).attr('data-id', driver._id);
+
+                    // Personal Detail Tab
+                    $('#editName').val(driver.personalInfo?.name);
+                    $('#editEmail').val(driver.personalInfo?.email);
+                    driver.personalInfo.dob ? $('#editDateOfBirth').val(moment(driver?.personalInfo.dob).format('YYYY-MM-DD')) : '';
+
+                    // $('#editDateOfBirth').val(driver.personalInfo.dob ? `${driver.personalInfo.dob.split('/')[2]}-${driver.personalInfo.dob.split('/')[1]}-${driver.personalInfo.dob.split('/')[0]}` : '');
+                    $('#editGender').val(driver.personalInfo?.gender);
+                    $('#editserviceType').val(driver?.serviceId);
+                    $('#editMobileNo').val(driver.personalInfo?.mobile);
+                    $('#editAlternateMobileNo').val(driver.personalInfo?.altMobile);
+                    $('#editProfileImg').attr('src', driver.personalInfo?.profilePicture); // Set profile image or default
+                    // alert(driver.documents?.aadhaarFront)
+
+                    // Address Details Tab - Permanent Address
+                    $('#permanentHouseNo').val(driver.addressInfo?.permanent?.street);
+                    $('#permanentCity').val(driver.addressInfo?.permanent?.city);
+                    $('#permanentState').val(driver.addressInfo?.permanent?.state);
+                    $('#permanentPinCode').val(driver.addressInfo?.permanent?.pin);
+
+                    // Address Details Tab - Current Address
+                    $('#currentHouseNo').val(driver.addressInfo?.current?.street);
+                    $('#currentCity').val(driver.addressInfo?.current?.city);
+                    $('#currentState').val(driver.addressInfo?.current?.state);
+                    $('#currentPinCode').val(driver.addressInfo?.current?.pin);
+
+                    // Emergency Detail Tab
+                    $('#emergencyName').val(driver?.emergencyName);
+                    $('#emergencyRelation').val(driver?.emergencyRelation);
+                    $('#emergencyPhone').val(driver?.emergencyPhone);
+
+                    // Upload Documents Tab
+                    $('#viewAadhaarFront').attr('src', driver?.documents?.aadhaarFront || 'https://onpoint-08042025.s3.ap-south-1.amazonaws.com/uploads/56a1459d-a9f2-453e-9c9c-90c09c1e4eb3_download.jpg'); // Set Aadhaar front image or default
+                    $('#viewAadhaarBack').attr('src', driver?.documents?.aadhaarBack || 'https://onpoint-08042025.s3.ap-south-1.amazonaws.com/uploads/56a1459d-a9f2-453e-9c9c-90c09c1e4eb3_download.jpg');   // Set Aadhaar back image or default
+                    $('#viewPanCard').attr('src', driver?.documents?.panCard || 'https://onpoint-08042025.s3.ap-south-1.amazonaws.com/uploads/56a1459d-a9f2-453e-9c9c-90c09c1e4eb3_download.jpg');           // Set Pan Card image or default
+                    $('#viewDrivingLicense').attr('src', driver?.documents?.drivingLicense || 'https://onpoint-08042025.s3.ap-south-1.amazonaws.com/uploads/56a1459d-a9f2-453e-9c9c-90c09c1e4eb3_download.jpg'); // Set Driving License image or default
+                    $('#viewVehicleRC').attr('src', driver?.documents?.vehicleRC || 'https://onpoint-08042025.s3.ap-south-1.amazonaws.com/uploads/56a1459d-a9f2-453e-9c9c-90c09c1e4eb3_download.jpg');       // Set Vehicle RC image or default
+                    $('#viewVehicleInsurance').attr('src', driver?.documents?.insuranceCopy || 'https://onpoint-08042025.s3.ap-south-1.amazonaws.com/uploads/56a1459d-a9f2-453e-9c9c-90c09c1e4eb3_download.jpg'); // Set Vehicle Insurance image or default
+                    $('#viewBankPassbook').attr('src', driver?.documents?.bankPassbook || 'https://onpoint-08042025.s3.ap-south-1.amazonaws.com/uploads/56a1459d-a9f2-453e-9c9c-90c09c1e4eb3_download.jpg');   // Set Bank Passbook image or default
+
+                    // vhicle Details Tab 
+                    $('#vehicleName').val(vehicle?.vehicleName);
+                    $('#vehicleModel').val(vehicle?.vehicleModel);
+                    $('#yearOfManufacture').val(vehicle?.yearOfManufacture);
+                    $('#plateNumber').val(vehicle?.plateNumber);
+                    $('#vin').val(vehicle?.vin);
+                    $('#capacity').val(vehicle?.capacity);
+                    $('#fuelType').val(vehicle?.fuelType);
+                    $('#odometerReading').val(vehicle?.odometerReading);
+                    $('#serviceType').val(vehicle?.serviceType);
+                    $('#vehicleId').val(vehicle?.vehicleId);
+
+                    //vhicle documents
+                    $('#viewinsuranceCertificate').attr('src', driver?.vehicleDocuments?.insuranceCertificate || 'https://onpoint-08042025.s3.ap-south-1.amazonaws.com/uploads/56a1459d-a9f2-453e-9c9c-90c09c1e4eb3_download.jpg');
+                    $('#viewpollutionCertificate').attr('src', driver?.vehicleDocuments?.pollutionCertificate || 'https://onpoint-08042025.s3.ap-south-1.amazonaws.com/uploads/56a1459d-a9f2-453e-9c9c-90c09c1e4eb3_download.jpg');
+                    $('#viewregistrationCertificate').attr('src', driver?.vehicleDocuments?.registrationCertificate || 'https://onpoint-08042025.s3.ap-south-1.amazonaws.com/uploads/56a1459d-a9f2-453e-9c9c-90c09c1e4eb3_download.jpg');
+
+                    // Additional Info Tab
+                    $('input[name="priorExperience"][value="' + driver.priorExperience + '"]').prop('checked', true);
+                    $('#preferredRegion').val(driver.preferredRegion);
+                    $('#languagesKnown').val(driver.languagesKnown);
+                    $('input[name="nightShiftWilling"][value="' + driver.nightShiftWilling + '"]').prop('checked', true);
+
+                    $('#modalTitle').text('Edit Driver');
+                    // $('#driverModal').modal('show'); // This line might be redundant as you are already showing the modal at the beginning of the function
+
+                    $.ajax({
+                        url: '/driver/truckList',
+                        type: 'GET',
+                        headers: {
+                            serviceId: driver?.serviceId || 0 // ✅ Pass custom header
+                        },
+                        success: function (response) {
+                            if (response.success) {
+                                const trucks = response.data || [];
+                                console.log('trucks', trucks)
+                                const container = $('.vehicleListDiv');
+                                container.empty();
+
+                                trucks.forEach(truck => {
+                                    const id = truck._id;
+                                    const name = truck.name || 'Unnamed';
+                                    const image = truck.vehicleImage || 'https://via.placeholder.com/150';
+                                    const truckServiceId = truck.serviceType || 'https://via.placeholder.com/150';
+
+                                    const html = `
+                    <li>
+                                                <div>
+                                                    <input class="selectVehicle" type="radio" name="vehicleId" value=${id} ${id == vehicle?.vehicleId ? 'checked' : ''}/>
+                                                    <label for=""><img
+                                                            src="${image}" /></label>
+                                                </div>
+                                                <p class="text-center">${name}</p>
+                                            </li>
+                `;
+
+                                    container.append(html);
+                                });
+
+
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error fetching warehouse data:", error);
+                        }
+                    });
+
+                });
+            });
+
+            $('#driverTable').on('click', '.delDriverBtn', function () {
+                const id = $(this).data('id');
+                swalConfirm('Are you sure you want to delete this driver?', function () {
+                    $.ajax({
+                        url: `/driver/deleteDriver/${id}`,
+                        type: 'DELETE',
+                        success: function (response) {
+                            Swal.fire('Deleted!', response.message, 'success');
+                            table.ajax.reload();
+                        },
+                        error: function () {
+                            Swal.fire('Error!', 'Failed to delete driver', 'error');
+                        }
+                    });
+                });
+            });
+
+
+            $('#driverModal').on('hidden.bs.modal', function () {
+                $('#driverForm2')[0].reset();
+                $('#modalTitle').text('Add Driver');
+                $('#driverId').val(''); // Clear driver ID on modal close
+
+            });
+            $('#editDriverModal').on('hidden.bs.modal', function () {
+                $('#driverApprovedToggle').prop('checked', false).removeAttr('data-id');
+                //location.reload(); // This will reload the page
+            });
+        });
+
+        $(document).on('change', '#driverApprovedToggle', function () {
+            const isChecked = $(this).is(':checked');
+            const driverId = $(this).data('id');
+            const status = isChecked ? 1 : 0;
+            // console.log(driverId);
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: `You are about to ${isChecked ? 'approve' : 'disable'} this driver.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, confirm it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Proceed with update
+                    $.ajax({
+                        url: '/driver/updateApproval',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ driverId, approved: status }),
+                        success: function (response) {
+                            Swal.fire('Updated!', response.message || 'Driver status updated.', 'success').then(() => {
+                                location.reload(); // refresh the page
+                            });
+                        },
+                        error: function () {
+                            Swal.fire('Error!', 'Something went wrong. Try again later.', 'error');
+                        }
+                    });
+                } else {
+                    // Revert toggle if cancelled
+                    $(this).prop('checked', !isChecked);
+                }
+            });
+        });
+
+    </script>
+</body>
+
+</html>
