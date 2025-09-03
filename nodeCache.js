@@ -8,6 +8,11 @@ const getBasePath = (url) => {
     return path.split('/').filter(Boolean).slice(0, 3).join('/'); // e.g. 'api/products'
 };
 
+
+
+
+
+
 const cacheMiddleware = (req, res, next) => {
     const method = req.method;
     const url = req.originalUrl || req.url;
