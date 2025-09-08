@@ -11,6 +11,5 @@ router.get('/logout', isAuthenticated, AuthCtrl.logout);
 router.post('/checkLogin', AuthCtrl.checkLogin);
 router.get('/createFirstBackendUser', AuthCtrl.createFirstBackendUser);
 router.get('/deleteUser', AuthCtrl.deleteUserPage);
-router.post('/delUser', AuthCtrl.deleteUser);
 
 module.exports = router;

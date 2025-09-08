@@ -1,6 +1,4 @@
 const Admin = require('../../models/login/adminModel');
-const User = require('../../../api/user/models/userModal');
-const Vendor = require('../../models/vendorManagement/vendorModel');
 const bcrypt = require('bcrypt');
 
 // Render login page (no changes needed here)
@@ -29,29 +27,6 @@ const permissionDenied = (req, res) => {
     res.render('pages/login/not_authorized');
 };
 
-const deleteUser = async (req, res) => {
-    try {
-        const { mobile } = req.body;
-
-        if (!mobile) {
-            return res.status(400).json({ message: 'Mobile number is required' });
-        }
-
-        const user = await User.findOneAndDelete(
-            { mobileNumber: mobile }
-        );
-
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        return res.json({ message: 'User deleted successfully' });
-
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ message: 'Something went wrong', error: err.message });
-    }
-};
 
 const checkLogin = async (req, res) => {
     try {
@@ -60,11 +35,9 @@ const checkLogin = async (req, res) => {
         let admin = null;
 
         // Find admin user
-        if (isVendor == 1) {
-            admin = await Vendor.findOne({ email });
-        } else {
-            admin = await Admin.findOne({ email });
-        }
+
+        admin = await Admin.findOne({ email });
+
 
         if (!admin) {
             return res.status(400).json({ success: false, message: 'Invalid email or password' });
@@ -167,6 +140,5 @@ module.exports = {
     permissionDenied,
     checkLogin,
     createFirstBackendUser,
-    deleteUserPage,
-    deleteUser
+    deleteUserPage
 };

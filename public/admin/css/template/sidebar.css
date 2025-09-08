@@ -1,6 +1,6 @@
 .sidebar {
     height: auto;
-    background: #e5e7ee;
+    background: aliceblu;
     color: #fff;
     padding: 1rem;
     min-height: 100vh;
@@ -15,14 +15,14 @@
 
 
 .sidebar a {
-    color: #2B46BD;
+    color: #2491d0;
     text-decoration: none;
     font-size: 15px;
 }
 
 .sidebar a:hover,
 .sidebar .nav-link.active {
-    background: #2B46BD;
+    background: #2491d0;
     color: #fff;
     padding-left: 10px;
     transition: 0.3s;
@@ -30,7 +30,7 @@
 }
 
 .nav-item ul {
-    background: #cdd7ea;
-    margin-top: 5px;
+    background: #fff;
+    margin-top: 3px;
     border-radius: 8px;
 }
