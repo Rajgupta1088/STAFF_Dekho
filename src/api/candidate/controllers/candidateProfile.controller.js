@@ -9,7 +9,7 @@ const createCandidateProfile = async (req, res) => {
 
         // Step 1: Personal Details
         if (step === 1) {
-            const [name, email, dob, deviceType, deviceToken, deviceId] = [req.body.name, req.body.email, req.body.dob, req.body.deviceType, req.body.deviceToken, req.body.deviceId];
+            const [name, email, dob, deviceType, deviceToken, deviceId] = req.body;
             if (name === undefined || email === undefined || dob === undefined || deviceType === undefined || deviceToken === undefined || deviceId === undefined) {
                 return res.status(200).json({
                     success: false,
