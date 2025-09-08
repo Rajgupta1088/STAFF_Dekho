@@ -9,7 +9,6 @@ COPY package*.json ./
 
 # Install dependencies
 RUN npm install
-
 # Install PM2 globally
 RUN npm install -g pm2
 
