@@ -1,34 +1,32 @@
 const Candidate = require('../modals/candidateProfile.model');
 
-
 // Save candidate data step by step
 const createCandidateProfile = async (req, res) => {
     try {
-        const { step } = req.body; // step will come from frontend (1, 2, 3, 4)
+        const { step } = req.body;
         let candidate;
 
-        // Step 1: Personal Details
+        // Step 1: Personal Details (Strict Required)
         if (step === 1) {
-            const [name, email, dob, deviceType, deviceToken, deviceId] = req.body;
-            if (name === undefined || email === undefined || dob === undefined || deviceType === undefined || deviceToken === undefined || deviceId === undefined) {
-                return res.status(200).json({
+            const { name, email, dob, deviceType, deviceToken, deviceId } = req.body;
+            
+            if (!name || !email || !dob || !deviceType || !deviceToken || !deviceId) {
+                return res.status(400).json({
                     success: false,
-                    message: "Please provide all required fields"
+                    message: "Please provide all required fields in Step 1"
                 });
             }
+
             const isCandidate = await Candidate.findOne({ email });
             if (isCandidate) {
-                return res.status(200).json({
+                return res.status(400).json({
                     success: false,
                     message: "Candidate with this email already exists"
                 });
-            };
+            }
+
             candidate = await Candidate.create({
-                personalDetails: {
-                    name,
-                    email,
-                    dob,
-                },
+                personalDetails: { name, email, dob },
                 deviceType,
                 deviceToken,
                 deviceId,
@@ -36,74 +34,87 @@ const createCandidateProfile = async (req, res) => {
             });
         }
 
-        // Step 2: Educational Details
+        // Step 2: Educational Details (Optional fields, only candidateId required)
         else if (step === 2) {
-            const { educationalDetails, candidateId } = req.body;
-            if (!educationalDetails || !candidateId) {
-                return res.status(200).json({
+            const { candidateId, education, institutionName, educationField, subjectSpecialization, passingYear } = req.body;
+            
+            if (!candidateId) {
+                return res.status(400).json({
                     success: false,
-                    message: "Please provide all required fields"
+                    message: "CandidateId is required"
                 });
             }
-            candidate = await Candidate.findByIdAndUpdate(
-                candidateId, // pass candidateId from frontend
-                {
-                    educationalDetails,
-                    step: 2,
-                },
-                { new: true }
-            );
+
+            const updateData = {};
+            if (education || institutionName || educationField || subjectSpecialization || passingYear) {
+                updateData.educationalDetails = {
+                    ...(education && { education }),
+                    ...(institutionName && { institutionName }),
+                    ...(educationField && { educationField }),
+                    ...(subjectSpecialization && { subjectSpecialization }),
+                    ...(passingYear && { passingYear }),
+                };
+            }
+            updateData.step = 2;
+
+            candidate = await Candidate.findByIdAndUpdate(candidateId, updateData, { new: true });
         }
 
-        // Step 3: Basic Details
+        // Step 3: Basic Details (Optional fields, only candidateId required)
         else if (step === 3) {
-            const { workStatus, candidateId } = req.body;
-            if (!workStatus || !candidateId) {
-                return res.status(200).json({
+            const { candidateId, workStatus, experience, currentLocation, currentSalary, avialableToJoin } = req.body;
+            
+            if (!candidateId) {
+                return res.status(400).json({
                     success: false,
-                    message: "Please provide all required fields"
+                    message: "CandidateId is required"
                 });
             }
-            candidate = await Candidate.findByIdAndUpdate(
-                candidateId,
-                {
-                    basicDetails: {
-                        workStatus,
-                    },
-                    step: 3,
-                },
-                { new: true }
-            );
+
+            const updateData = {};
+            if (workStatus || experience || currentLocation || currentSalary || avialableToJoin) {
+                updateData.basicDetails = {
+                    ...(workStatus && { workStatus }),
+                    ...(experience && { experience }),
+                    ...(currentLocation && { currentLocation }),
+                    ...(currentSalary && { currentSalary }),
+                    ...(avialableToJoin && { avialableToJoin }),
+                };
+            }
+            updateData.step = 3;
+
+            candidate = await Candidate.findByIdAndUpdate(candidateId, updateData, { new: true });
         }
 
-        // Step 4: Work Experience
+        // Step 4: Work Experience (Optional fields, only candidateId required)
         else if (step === 4) {
-            const { institutionName, subjectSpecialization, role, fromDate, toDate, gradesTaught, jobType, areYouWorking, candidateId } = req.body;
-            if (!institutionName || !subjectSpecialization || !role || !fromDate || !toDate || !gradesTaught || !jobType || areYouWorking === undefined || !candidateId) {
-                return res.status(200).json({
+            const { candidateId, institutionName, subjectSpecialization, role, fromDate, toDate, gradesTaught, jobType, areYouWorking } = req.body;
+            
+            if (!candidateId) {
+                return res.status(400).json({
                     success: false,
-                    message: "Please provide all required fields"
+                    message: "CandidateId is required"
                 });
-            } 
-            candidate = await Candidate.findByIdAndUpdate(
-                candidateId,
-                {
-                    workExperience: {
-                        institutionName,
-                        subjectSpecialization,
-                        role,
-                        duration: {
-                            fromDate,
-                            toDate,
-                        },
-                        gradesTaught,
-                        jobType,
-                        areYouWorking,
+            }
+
+            const updateData = {};
+            if (institutionName || subjectSpecialization || role || fromDate || toDate || gradesTaught || jobType || areYouWorking !== undefined) {
+                updateData.workExperience = {
+                    ...(institutionName && { institutionName }),
+                    ...(subjectSpecialization && { subjectSpecialization }),
+                    ...(role && { role }),
+                    duration: {
+                        ...(fromDate && { fromDate }),
+                        ...(toDate && { toDate }),
                     },
-                    step: 4,
-                },
-                { new: true }
-            );
+                    ...(gradesTaught && { gradesTaught }),
+                    ...(jobType && { jobType }),
+                    ...(areYouWorking !== undefined && { areYouWorking }),
+                };
+            }
+            updateData.step = 4;
+
+            candidate = await Candidate.findByIdAndUpdate(candidateId, updateData, { new: true });
         }
 
         res.status(200).json({
@@ -111,6 +122,7 @@ const createCandidateProfile = async (req, res) => {
             message: `Step ${step} data saved successfully`,
             data: candidate,
         });
+
     } catch (error) {
         console.error('Error saving candidate step:', error);
         res.status(500).json({
@@ -121,8 +133,4 @@ const createCandidateProfile = async (req, res) => {
     }
 };
 
-
-
-module.exports = {
-    createCandidateProfile
-}
+module.exports = { createCandidateProfile };
