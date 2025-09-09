@@ -1,13 +1,15 @@
-// const express = require('express');
-// const router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-// const driverRoutes = require('./src/api/driver/routes/indexRoutes');
-// const userRoutes = require('./src/api/user/routes/indexRoutes');
-// const webRoutes = require('./src/api/web/routes/indexRoutes');
+const candidateRoutes = require('./src/api/candidate/routes/indexRoutes');
 
+<<<<<<< HEAD
 router.use('/driver', driverRoutes);
 router.use('/user', userRoutes);
 router.use('/web', webRoutes);
+=======
+router.use('/candidate', candidateRoutes);
+>>>>>>> 78735803560db44155602d505f787f18f71b1dbc
 
 
-// module.exports = router;
+module.exports = router;
