@@ -1,17 +1,13 @@
-const mongoose = require('mongoose');
-
-
-// await mongoose.connect('mongodb://localhost:27017/OnPointsLogistics', {
+const mongoose = require("mongoose");
 
 const connectDB = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
+            dbName: "StaffDekho"  // 🔥 Force lowercase
         });
-        console.log('MongoDB connected');
+        console.log("✅ MongoDB connected");
     } catch (err) {
-        console.error('Connection error', err);
+        console.error("❌ MongoDB connection error:", err.message);
         process.exit(1);
     }
 };

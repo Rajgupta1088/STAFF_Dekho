@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { generateOTP } = require('../utils/generateOtp');
 const { sendSms } = require('../utils/sendOtp');
 const { isValidPhoneNumber, parsePhoneNumber } = require('libphonenumber-js');
-const User = require('../../user/models/userModal');
+const Candidate = require('../modals/candidateProfileModel');
 
 
 const accountSid = process.env.SMS_ACCOUNT_ID;
@@ -101,81 +101,76 @@ const sendOtp = async (req, res) => {
     }
 };
 
-
 const verifyOtp = async (req, res) => {
     try {
         const { countryCode, mobileNumber, otp } = req.body;
 
         if (!countryCode || !mobileNumber || !otp) {
-            return res.status(200).json({ success: false, message: 'Country code, mobile number and OTP are required.', isRegistered: false });
+            return res.status(200).json({
+                success: false,
+                message: "Country code, mobile number and OTP are required.",
+                isRegistered: false
+            });
         }
 
         const parsed = formatMobile(countryCode, mobileNumber);
 
         if (!parsed || !isValidPhoneNumber(parsed.formatted)) {
-            return res.status(200).json({ success: false, message: 'Invalid mobile number format.', isRegistered: false });
+            return res.status(200).json({ success: false, message: "Invalid mobile number format.", isRegistered: false });
         }
 
         const storedOTP = otpStorage[parsed.formatted];
 
         if (!storedOTP) {
-            return res.status(200).json({ success: false, message: 'OTP expired or not found.', isRegistered: false });
+            return res.status(200).json({ success: false, message: "OTP expired or not found.", isRegistered: false });
         }
 
-        // if (otp !== storedOTP) {
-        //     return res.status(200).json({ success: false, message: 'Invalid OTP.', isRegistered: false });
-        // }
-
-        if (otp === storedOTP || otp == '123456') {
-        } else {
-            return res.status(200).json({ success: false, message: 'Invalid OTP.', isRegistered: false });
+        // OTP validation
+        if (!(otp === storedOTP || otp === "123456")) {
+            return res.status(200).json({ success: false, message: "Invalid OTP.", isRegistered: false });
         }
-
 
         // OTP is valid, delete from storage
         delete otpStorage[parsed.formatted];
         console.log(`OTP verified for ${parsed.formatted}`);
 
-        // Now look for the user
-        const user = await User.findOne({
-            countryCode, // assuming in DB it's saved like "91"
-            mobileNumber,
+        // Look for candidate in DB
+        const candidate = await Candidate.findOne({
+            "personalDetails.countryCode": countryCode,
+            "personalDetails.mobile": mobileNumber, // ensure schema field matches
             status: { $ne: 3 }
-
         });
 
-        if (user) {
+        if (candidate) {
             const token = jwt.sign(
-                { userId: user._id, mobileNumber: user.mobileNumber },
+                { candidateId: candidate._id, mobile: candidate.personalDetails.mobile },
                 secretKey,
-                { expiresIn: '30d' }
+                { expiresIn: "30d" }
             );
-            const deviceToken = req.header('devicetoken');
 
-            await User.findByIdAndUpdate(user._id, { $set: { deviceToken } }, { new: true });
-
-
+            const deviceToken = req.header("devicetoken");
+            await Candidate.findByIdAndUpdate(candidate._id, { $set: { deviceToken } }, { new: true });
 
             return res.status(200).json({
                 success: true,
-                message: 'OTP verified and login successful.',
+                message: "OTP verified and login successful.",
                 token,
                 isRegistered: true,
-                user: user
+                data: candidate
             });
         } else {
             return res.status(200).json({
                 success: true,
-                message: 'OTP verified but mobile number is not registered.',
+                message: "OTP verified but mobile number is not registered.",
                 isRegistered: false,
+                data: {}
             });
         }
-
     } catch (error) {
-        console.error('verifyOtp Error:', error.message); // Log specific error
+        console.error("verifyOtp Error:", error.message);
         return res.status(500).json({
             success: false,
-            message: 'Unexpected error in OTP verification.',
+            message: "Unexpected error in OTP verification.",
             msg: error.message,
             isRegistered: false,
         });

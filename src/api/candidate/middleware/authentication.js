@@ -1,6 +1,6 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const User = require('../models/userModal')
+const Candidate = require('../modals/candidateProfileModel')
 
 const secretKey = process.env.JWT_SECRET;
 
@@ -8,10 +8,7 @@ const verifyToken = async (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]; // Bearer <token>
 
-    const userId = req.headers['userid'];
-
-    const serviceId = req.headers['serviceid'];
-    const serviceType = req.headers['servicetype'];
+    const candidateId = req.headers['candidateid'];
 
     const deviceToken = req.headers['devicetoken'];
 
@@ -19,34 +16,28 @@ const verifyToken = async (req, res, next) => {
         return res.status(200).json({ success: false, message: 'Device Token Is Missing' });
     }
 
-    const user = await User.findById(userId);
+    const candidate = await Candidate.findById(candidateId);
 
-    if (!user) {
-        return res.status(200).json({ success: false, message: 'User not found' });
+    if (!candidate) {
+        return res.status(200).json({ success: false, message: 'Candidate not found' });
     }
 
     // Update device token if different
-    if (user.deviceToken !== deviceToken) {
-        await User.updateOne({ _id: userId }, { $set: { deviceToken } });
+    if (candidate.deviceToken !== deviceToken) {
+        await Candidate.updateOne({ _id: candidateId }, { $set: { deviceToken } });
     }
 
 
     if (!token) {
         return res.status(200).json({ success: false, message: 'Jwt Token is missing' });
     }
-    if (!userId) {
-        return res.status(200).json({ success: false, message: 'User Id is missing' });
-    }
-    if (!serviceId) {
-        return res.status(200).json({ success: false, message: 'Service ID is missing' });
-    }
-    if (!serviceType) {
-        return res.status(200).json({ success: false, message: 'Service Type Is Missing' });
+    if (!candidateId) {
+        return res.status(200).json({ success: false, message: 'Candidate Id is missing' });
     }
 
     try {
         const decoded = jwt.verify(token, secretKey);
-        req.user = decoded; // contains userId and mobileNumber
+        req.candidate = decoded; // contains candidateId and mobileNumber
         next();
     } catch (err) {
         return res.status(200).json({ success: false, message: 'Invalid Jwt token' });
@@ -54,9 +45,13 @@ const verifyToken = async (req, res, next) => {
 };
 const headerAuth = async (req, res, next) => {
     const deviceType = req.headers['devicetype']; // headers are lowercase
+    const deviceId = req.headers['deviceid']; // headers are lowercase
 
     if (!deviceType) {
         return res.status(200).json({ success: false, message: 'DeviceType is missing' });
+    }
+    else if (!deviceId) {
+        return res.status(200).json({ success: false, message: 'Device Id is missing' });
     } else {
         next();
     }
