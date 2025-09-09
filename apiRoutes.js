@@ -1,13 +1,8 @@
-// const express = require('express');
-// const router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-// const driverRoutes = require('./src/api/driver/routes/indexRoutes');
-// const userRoutes = require('./src/api/user/routes/indexRoutes');
-// const webRoutes = require('./src/api/web/routes/indexRoutes');
-
-// router.use('/driver', driverRoutes);
-// router.use('/user', userRoutes);
-// router.use('/web', webRoutes);
+const candidateRoutes = require('./src/api/candidate/routes/indexRoutes');
+router.use('/candidate', candidateRoutes);
 
 
-// module.exports = router;
+module.exports = router;

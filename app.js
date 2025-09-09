@@ -10,6 +10,7 @@ require('dotenv').config(); // ✅ Load .env before anything else
 
 const connectDB = require('./config/db');
 const indexRoutes = require('./src/admin/routes/indexRoutes');
+const apiRoutes = require('./apiRoutes');
 const { setGlobalPermissions } = require('./src/admin/middleware/login/checkPermission');
 
 const app = express();
@@ -53,6 +54,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
+app.use('/api', apiRoutes);
 app.use('/', indexRoutes);
 
 // Server Listen
