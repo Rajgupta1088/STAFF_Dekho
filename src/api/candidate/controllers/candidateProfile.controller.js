@@ -1,5 +1,14 @@
 const Candidate = require('../modals/candidateProfile.model');
 
+async function isRequiredField(obj) {
+    for (const [key, value] of Object.entries(obj)) {
+        if (value === undefined || value === null || value === "") {
+            return key; // return the missing field
+        }
+    }
+    return true; // all good
+}
+
 // Save candidate data step by step
 const createCandidateProfile = async (req, res) => {
     try {
@@ -9,13 +18,15 @@ const createCandidateProfile = async (req, res) => {
         // Step 1: Personal Details (Strict Required)
         if (step === 1) {
             const { name, email, dob, deviceType, deviceToken, deviceId } = req.body;
-            
-            if (!name || !email || !dob || !deviceType || !deviceToken || !deviceId) {
-                return res.status(400).json({
+
+            const requiredCheck = await isRequiredField({ name, email, dob, deviceType, deviceToken, deviceId });
+            if (requiredCheck !== true) {
+                return res.status(200).json({
                     success: false,
-                    message: "Please provide all required fields in Step 1"
+                    message: `${requiredCheck} is required in Step 1`
                 });
             }
+
 
             const isCandidate = await Candidate.findOne({ email });
             if (isCandidate) {
@@ -37,7 +48,7 @@ const createCandidateProfile = async (req, res) => {
         // Step 2: Educational Details (Optional fields, only candidateId required)
         else if (step === 2) {
             const { candidateId, education, institutionName, educationField, subjectSpecialization, passingYear } = req.body;
-            
+
             if (!candidateId) {
                 return res.status(400).json({
                     success: false,
@@ -47,6 +58,13 @@ const createCandidateProfile = async (req, res) => {
 
             const updateData = {};
             if (education || institutionName || educationField || subjectSpecialization || passingYear) {
+                const requiredCheck = await isRequiredField({ education, institutionName, educationField, subjectSpecialization, passingYear });
+                if (requiredCheck !== true) {
+                    return res.status(400).json({
+                        success: false,
+                        message: `${requiredCheck} is required in Step 1`
+                    });
+                }
                 updateData.educationalDetails = {
                     ...(education && { education }),
                     ...(institutionName && { institutionName }),
@@ -63,7 +81,7 @@ const createCandidateProfile = async (req, res) => {
         // Step 3: Basic Details (Optional fields, only candidateId required)
         else if (step === 3) {
             const { candidateId, workStatus, experience, currentLocation, currentSalary, avialableToJoin } = req.body;
-            
+
             if (!candidateId) {
                 return res.status(400).json({
                     success: false,
@@ -73,6 +91,13 @@ const createCandidateProfile = async (req, res) => {
 
             const updateData = {};
             if (workStatus || experience || currentLocation || currentSalary || avialableToJoin) {
+                const requiredCheck = await isRequiredField({ workStatus, experience, currentLocation, currentSalary, avialableToJoin });
+                if (requiredCheck !== true) {
+                    return res.status(400).json({
+                        success: false,
+                        message: `${requiredCheck} is required in Step 1`
+                    });
+                }
                 updateData.basicDetails = {
                     ...(workStatus && { workStatus }),
                     ...(experience && { experience }),
@@ -89,7 +114,7 @@ const createCandidateProfile = async (req, res) => {
         // Step 4: Work Experience (Optional fields, only candidateId required)
         else if (step === 4) {
             const { candidateId, institutionName, subjectSpecialization, role, fromDate, toDate, gradesTaught, jobType, areYouWorking } = req.body;
-            
+
             if (!candidateId) {
                 return res.status(400).json({
                     success: false,
@@ -99,6 +124,13 @@ const createCandidateProfile = async (req, res) => {
 
             const updateData = {};
             if (institutionName || subjectSpecialization || role || fromDate || toDate || gradesTaught || jobType || areYouWorking !== undefined) {
+                const requiredCheck = await isRequiredField({ institutionName, subjectSpecialization, role, fromDate, toDate, gradesTaught, jobType, areYouWorking });
+                if (requiredCheck !== true) {
+                    return res.status(400).json({
+                        success: false,
+                        message: `${requiredCheck} is required in Step 1`
+                    });
+                }
                 updateData.workExperience = {
                     ...(institutionName && { institutionName }),
                     ...(subjectSpecialization && { subjectSpecialization }),
