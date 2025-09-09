@@ -1,165 +1,134 @@
 const Candidate = require('../modals/candidateProfile.model');
 
-async function isRequiredField(obj) {
-    for (const [key, value] of Object.entries(obj)) {
+// Utility: Check required fields
+function checkRequiredFields(fields, step) {
+    for (const [key, value] of Object.entries(fields)) {
         if (value === undefined || value === null || value === "") {
-            return key; // return the missing field
+            return `${key} is required in Step ${step}`;
         }
     }
-    return true; // all good
+    return null; // all good
 }
 
 // Save candidate data step by step
 const createCandidateProfile = async (req, res) => {
     try {
         const { step } = req.body;
+        if (!step) {
+            return res.status(400).json({ success: false, message: "Step is required" });
+        }
+
         let candidate;
+        const { candidateId } = req.body;
 
-        // Step 1: Personal Details (Strict Required)
-        if (step === 1) {
-            const { name, email, dob, deviceType, deviceToken, deviceId } = req.body;
+        switch (step) {
+            // Step 1: Personal Details (Strict Required)
+            case 1: {
+                const { name, email, dob, deviceType, deviceToken, deviceId } = req.body;
+                const error = checkRequiredFields({ name, email, dob, deviceType, deviceToken, deviceId }, step);
+                if (error) return res.status(400).json({ success: false, message: error });
 
-            const requiredCheck = await isRequiredField({ name, email, dob, deviceType, deviceToken, deviceId });
-            if (requiredCheck !== true) {
-                return res.status(200).json({
-                    success: false,
-                    message: `${requiredCheck} is required in Step 1`
-                });
-            }
-
-
-            const isCandidate = await Candidate.findOne({ email });
-            if (isCandidate) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Candidate with this email already exists"
-                });
-            }
-
-            candidate = await Candidate.create({
-                personalDetails: { name, email, dob },
-                deviceType,
-                deviceToken,
-                deviceId,
-                step: 1,
-            });
-        }
-
-        // Step 2: Educational Details (Optional fields, only candidateId required)
-        else if (step === 2) {
-            const { candidateId, education, institutionName, educationField, subjectSpecialization, passingYear } = req.body;
-
-            if (!candidateId) {
-                return res.status(400).json({
-                    success: false,
-                    message: "CandidateId is required"
-                });
-            }
-
-            const updateData = {};
-            if (education || institutionName || educationField || subjectSpecialization || passingYear) {
-                const requiredCheck = await isRequiredField({ education, institutionName, educationField, subjectSpecialization, passingYear });
-                if (requiredCheck !== true) {
+                const isCandidate = await Candidate.findOne({ email });
+                if (isCandidate) {
                     return res.status(400).json({
                         success: false,
-                        message: `${requiredCheck} is required in Step 1`
+                        message: "Candidate with this email already exists"
                     });
                 }
-                updateData.educationalDetails = {
-                    ...(education && { education }),
-                    ...(institutionName && { institutionName }),
-                    ...(educationField && { educationField }),
-                    ...(subjectSpecialization && { subjectSpecialization }),
-                    ...(passingYear && { passingYear }),
-                };
-            }
-            updateData.step = 2;
 
-            candidate = await Candidate.findByIdAndUpdate(candidateId, updateData, { new: true });
-        }
-
-        // Step 3: Basic Details (Optional fields, only candidateId required)
-        else if (step === 3) {
-            const { candidateId, workStatus, experience, currentLocation, currentSalary, avialableToJoin } = req.body;
-
-            if (!candidateId) {
-                return res.status(400).json({
-                    success: false,
-                    message: "CandidateId is required"
+                candidate = await Candidate.create({
+                    personalDetails: { name, email, dob },
+                    deviceType,
+                    deviceToken,
+                    deviceId,
+                    step: 1,
                 });
+                break;
             }
 
-            const updateData = {};
-            if (workStatus || experience || currentLocation || currentSalary || avialableToJoin) {
-                const requiredCheck = await isRequiredField({ workStatus, experience, currentLocation, currentSalary, avialableToJoin });
-                if (requiredCheck !== true) {
-                    return res.status(400).json({
-                        success: false,
-                        message: `${requiredCheck} is required in Step 1`
-                    });
+            // Step 2: Educational Details
+            case 2: {
+                if (!candidateId) {
+                    return res.status(400).json({ success: false, message: "CandidateId is required" });
                 }
-                updateData.basicDetails = {
-                    ...(workStatus && { workStatus }),
-                    ...(experience && { experience }),
-                    ...(currentLocation && { currentLocation }),
-                    ...(currentSalary && { currentSalary }),
-                    ...(avialableToJoin && { avialableToJoin }),
-                };
-            }
-            updateData.step = 3;
 
-            candidate = await Candidate.findByIdAndUpdate(candidateId, updateData, { new: true });
+                const { education, institutionName, educationField, subjectSpecialization, passingYear } = req.body;
+                const updateData = { step: 2 };
+
+                if (education || institutionName || educationField || subjectSpecialization || passingYear) {
+                    const error = checkRequiredFields({ education, institutionName, educationField, subjectSpecialization, passingYear }, step);
+                    if (error) return res.status(400).json({ success: false, message: error });
+
+                    updateData.educationalDetails = { education, institutionName, educationField, subjectSpecialization, passingYear };
+                }
+
+                candidate = await Candidate.findByIdAndUpdate(candidateId, updateData, { new: true });
+                break;
+            }
+
+            // Step 3: Basic Details
+            case 3: {
+                if (!candidateId) {
+                    return res.status(400).json({ success: false, message: "CandidateId is required" });
+                }
+
+                const { workStatus, experience, currentLocation, currentSalary, avialableToJoin } = req.body;
+                const updateData = { step: 3 };
+
+                if (workStatus || experience || currentLocation || currentSalary || avialableToJoin) {
+                    const error = checkRequiredFields({ workStatus, experience, currentLocation, currentSalary, avialableToJoin }, step);
+                    if (error) return res.status(400).json({ success: false, message: error });
+
+                    updateData.basicDetails = { workStatus, experience, currentLocation, currentSalary, avialableToJoin };
+                }
+
+                candidate = await Candidate.findByIdAndUpdate(candidateId, updateData, { new: true });
+                break;
+            }
+
+            // Step 4: Work Experience
+            case 4: {
+                if (!candidateId) {
+                    return res.status(400).json({ success: false, message: "CandidateId is required" });
+                }
+
+                const { institutionName, subjectSpecialization, role, fromDate, toDate, gradesTaught, jobType, areYouWorking } = req.body;
+                const updateData = { step: 4 };
+
+                if (institutionName || subjectSpecialization || role || fromDate || toDate || gradesTaught || jobType || areYouWorking !== undefined) {
+                    const error = checkRequiredFields({ institutionName, subjectSpecialization, role, fromDate, toDate, gradesTaught, jobType, areYouWorking }, step);
+                    if (error) return res.status(400).json({ success: false, message: error });
+
+                    updateData.workExperience = {
+                        institutionName,
+                        subjectSpecialization,
+                        role,
+                        duration: { fromDate, toDate },
+                        gradesTaught,
+                        jobType,
+                        areYouWorking,
+                    };
+                }
+
+                candidate = await Candidate.findByIdAndUpdate(candidateId, updateData, { new: true });
+                break;
+            }
+
+            default:
+                return res.status(400).json({ success: false, message: "Invalid step number" });
         }
 
-        // Step 4: Work Experience (Optional fields, only candidateId required)
-        else if (step === 4) {
-            const { candidateId, institutionName, subjectSpecialization, role, fromDate, toDate, gradesTaught, jobType, areYouWorking } = req.body;
-
-            if (!candidateId) {
-                return res.status(400).json({
-                    success: false,
-                    message: "CandidateId is required"
-                });
-            }
-
-            const updateData = {};
-            if (institutionName || subjectSpecialization || role || fromDate || toDate || gradesTaught || jobType || areYouWorking !== undefined) {
-                const requiredCheck = await isRequiredField({ institutionName, subjectSpecialization, role, fromDate, toDate, gradesTaught, jobType, areYouWorking });
-                if (requiredCheck !== true) {
-                    return res.status(400).json({
-                        success: false,
-                        message: `${requiredCheck} is required in Step 1`
-                    });
-                }
-                updateData.workExperience = {
-                    ...(institutionName && { institutionName }),
-                    ...(subjectSpecialization && { subjectSpecialization }),
-                    ...(role && { role }),
-                    duration: {
-                        ...(fromDate && { fromDate }),
-                        ...(toDate && { toDate }),
-                    },
-                    ...(gradesTaught && { gradesTaught }),
-                    ...(jobType && { jobType }),
-                    ...(areYouWorking !== undefined && { areYouWorking }),
-                };
-            }
-            updateData.step = 4;
-
-            candidate = await Candidate.findByIdAndUpdate(candidateId, updateData, { new: true });
-        }
-
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: `Step ${step} data saved successfully`,
             data: candidate,
         });
 
     } catch (error) {
-        console.error('Error saving candidate step:', error);
-        res.status(500).json({
+        console.error("Error saving candidate step:", error);
+        return res.status(500).json({
             success: false,
-            message: 'Something went wrong',
+            message: "Something went wrong",
             error: error.message,
         });
     }
