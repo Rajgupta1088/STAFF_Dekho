@@ -21,14 +21,38 @@ const candidateSchema = new mongoose.Schema(
             education:{
                 type: String,
                 enum: ['Class X', 'Class XII', 'Graduation', 'Post Graduation', 'Doctorate', 'Other'],
-                required: true,
+            },
+            institutionName:{
+                type: String
+            },
+            educationField : {
+                type: String
+            },
+            subjectSpecialization : {
+                type: String
+            },
+            passingYear : {
+                type: Date
             }
         },
         basicDetails: {
             workStatus: {
                 type: String,
                 enum: ['Fresher', 'Experienced'],
-                required: true,
+            },
+            experience:{
+                year:{type:Date},
+                month:{type:Date}
+            },
+            currentLocation:{
+                type: String
+            },
+            currentSalary:{
+                type: Number
+            },
+            avialableToJoin:{
+                type: String,
+                enum:['Immediately', 'In 15 days', 'In 1 month', 'In 2 months', 'In 3 months']
             }
         },
         workExperience: {

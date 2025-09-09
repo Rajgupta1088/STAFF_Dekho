@@ -16,6 +16,13 @@ const createCandidateProfile = async (req, res) => {
                     message: "Please provide all required fields"
                 });
             }
+            const isCandidate = await Candidate.findOne({ email });
+            if (isCandidate) {
+                return res.status(200).json({
+                    success: false,
+                    message: "Candidate with this email already exists"
+                });
+            };
             candidate = await Candidate.create({
                 personalDetails: {
                     name,
