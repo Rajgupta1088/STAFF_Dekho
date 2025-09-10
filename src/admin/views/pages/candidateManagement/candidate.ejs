@@ -311,7 +311,7 @@
                     render: (data, type, row) => {
                         const isActive = row.status === 1;
                         return `
-                            <button class="btn toggleStatusBtn ${isActive ? 'btn-success' : 'btn-secondary'}" 
+                            <button class="btn btn-sm toggleStatusBtn ${isActive ? 'btn-success' : 'btn-secondary'}" 
                                 data-id="${row._id}" 
                                 data-status="${row.status}">
                                 ${isActive ? 'Active' : 'Inactive'}
