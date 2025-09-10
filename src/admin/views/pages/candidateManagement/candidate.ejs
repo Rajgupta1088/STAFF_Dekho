@@ -213,6 +213,196 @@
 </div>
 <!-- End Add/Edit Sub-Admin Modal -->
 
+<!-- Edit Page -->
+<div class="modal fade" id="editCandidateModal" tabindex="-1" aria-labelledby="editCandidateModalTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg custom-modal">
+
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-between align-items-center">
+                <h5 class="modal-title" id="editCandidateModalTitle">Edit Candidate</h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="editCandidateForm2" enctype="multipart/form-data">
+                    <input type="hidden" id="editCandidateId" name="driverId">
+                    <ul class="nav nav-tabs mb-3" id="editTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" id="personal-tab" data-bs-toggle="tab" href="#personal"
+                                role="tab" aria-controls="personal" aria-selected="true">Personal Detail</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="education-tab" data-bs-toggle="tab" href="#education" role="tab"
+                                aria-controls="education" aria-selected="false">Education Details
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="basic-tab" data-bs-toggle="tab" href="#basic" role="tab"
+                                aria-controls="basic" aria-selected="false">Basic Details</a>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="experience-tab" data-bs-toggle="tab" href="#experience" role="tab"
+                                aria-controls="experience" aria-selected="false">Work Experience</a>
+                        </li>
+
+                    </ul>
+                    <div class="tab-content" id="editTabsContent">
+                        <div class="tab-pane fade show active" id="personal" role="tabpanel"
+                            aria-labelledby="personal-tab">
+                            <div class="mb-3">
+                                <label for="editName" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="editName" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="editEmail" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editDateOfBirth" class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control" id="editDateOfBirth" name="dateOfBirth">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editGender" class="form-label">Gender</label>
+                                <select class="form-control" id="editGender" name="gender">
+                                    <option value="">Select Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editMobileNo" class="form-label">Mobile No.</label>
+                                <input type="tel" class="form-control" id="editMobileNo" name="mobileNo" required>
+                            </div>
+                            <!-- <div class="mb-3">
+                                <label for="editAlternateMobileNo" class="form-label">Alternate Mobile No.</label>
+                                <input type="tel" class="form-control" id="editAlternateMobileNo"
+                                    name="alternateMobileNo">
+                            </div> -->
+
+                            <!-- <div class="mb-3">
+                                <label for="editProfileImage" class="form-label">Profile Image</label>
+                                <input type="file" class="form-control " id="editProfileImage" name="profileImage">
+                                <img class="img-responsive" alt="editProfile" id="editProfileImg" style="width:100px;">
+                            </div> -->
+                        </div>
+
+
+                        <div class="tab-pane fade" id="basic" role="tabpanel" aria-labelledby="basic-tab">
+                            <div class="mb-3">
+                                <label for="editWorkStatus" class="form-label">Work Status</label>
+                                <input type="text" class="form-control" id="editWorkStatus" name="workStatus" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Experience</label>
+                                <div class="row">
+                                    <!-- Years -->
+                                    <div class="col-md-6">
+                                        <input type="number" class="form-control" id="experienceYears"
+                                            name="experienceYears" placeholder="Years" min="0" required>
+                                    </div>
+                                    <!-- Months -->
+                                    <div class="col-md-6">
+                                        <input type="number" class="form-control" id="experienceMonths"
+                                            name="experienceMonths" placeholder="Months" min="0" max="11" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editLocation" class="form-label">Current Location</label>
+                                <input type="text" class="form-control" id="editLocation" name="location" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editSalary" class="form-label">Current/Last Salary</label>
+                                <input type="number" class="form-control" id="editSalary" name="salary" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editJoin" class="form-label">Aviable to Join</label>
+                                <input type="text" class="form-control" id="editJoin" name="join" required>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="experience" role="tabpanel" aria-labelledby="experience-tab">
+                            <div class="mb-3">
+                                <label for="editWorkStatus" class="form-label">Current/Privious Institution</label>
+                                <input type="text" class="form-control" id="editWorkStatus" name="workStatus" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editWorkStatus" class="form-label">Subject Specialization</label>
+                                <input type="text" class="form-control" id="editWorkStatus" name="workStatus" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editWorkStatus" class="form-label">Role/Designation</label>
+                                <input type="text" class="form-control" id="editWorkStatus" name="workStatus" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editWorkStatus" class="form-label">Subject Taught</label>
+                                <input type="text" class="form-control" id="editWorkStatus" name="workStatus" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editWorkStatus" class="form-label">Job Type</label>
+                                <input type="text" class="form-control" id="editWorkStatus" name="workStatus" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editWorkStatus" class="form-label">Are you working in this
+                                    institute?</label>
+                                <input type="text" class="form-control" id="editWorkStatus" name="workStatus" required>
+                            </div>
+                            <div class="mb-3">
+                                <div class="row">
+                                    <!-- Joining Date -->
+                                    <div class="col-md-6">
+                                        <label for="joiningDate" class="form-label">Joining Date</label>
+                                        <input type="date" class="form-control" id="joiningDate" name="joiningDate"
+                                            required>
+                                    </div>
+
+                                    <!-- Leaving Date -->
+                                    <div class="col-md-6">
+                                        <label for="leavingDate" class="form-label">Leaving Date</label>
+                                        <input type="date" class="form-control" id="leavingDate" name="leavingDate">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="education" role="tabpanel" aria-labelledby="education-tab">
+                            <div class="mb-3">
+                                <label for="editEducation" class="form-label">Education</label>
+                                <input type="text" class="form-control" id="editEducation" name="education" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="editDegree" class="form-label">Degree</label>
+                                <input type="text" class="form-control" id="editDegree" name="degree" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="editSubjectSpecialization" class="form-label">Subject Specialization</label>
+                                <input type="text" class="form-control" id="editSubjectSpecialization"
+                                    name="subjectSpecialization" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="editPassingOutYear" class="form-label">Passing Out Year</label>
+                                <input type="date" class="form-control" id="editPassingOutYear" name="passingOutYear">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-pink">Update Candidate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Edit page -->
+
 
 <!-- JS dependencies -->
 
@@ -349,7 +539,7 @@
             $.ajax({
                 url: '/candidate/updateCandidateStatus/' + candidateId,
                 type: 'PATCH',
-                data:{ status: newStatus },
+                data: { status: newStatus },
                 dataType: "json",
                 success: function (res) {
                     toastr.success('Status updated successfully!');
@@ -362,60 +552,63 @@
             });
         });
 
+        
+
         $('#artistTable').on('click', '.editUserBtn', function () {
-            let id = $(this).data('id'); // Get ID
+            const id = $(this).data('id');
+            $('#editCandidateModal').modal('show');
+            $('#editCandidateModal form')[0].reset(); // Reset form inputs
+            $('#driverApprovedToggle').prop('checked', false).removeAttr('data-id');
+            $('#editCandidateId').val('');
 
-            $.ajax({
-                url: "/candidate/editCandidate",
-                type: "POST",
-                data: { id: id }, // Send ID in the request body
-                dataType: "json",
-                success: function (response) {
-                    if (response.success) {
-                        let data = response.data;
+            $.get(`/candidate/getCandidateById/${id}`, function (data) {
+                const candidate = data.candidate;
 
-                        // Fill General Fields
-                        $('#user_id').val(data._id);  // Hidden field for user ID
-                        $('#adminName').val(data.name);
-                        $('#adminEmail').val(data.email);
-                        $('#mobile').val(data.mobile);
-                        $('#adminType1').val(data.admin_type).trigger('change');
+                $('#editCandidateId').val(id);
+                $('#driverApprovedToggle')
+                    .prop('checked', candidate.status === 1)
+                    .attr('data-id', candidate._id);
 
-                        // Country & City Access (ensure these checkboxes exist in modal)
-                        $('#country_access').prop('checked', !!data.country_access);
-                        $('#city_access').prop('checked', !!data.city_access);
-
-                        // Reset all permission checkboxes first (to avoid old data issues)
-                        $('#permissionsTable input[type="checkbox"]').prop('checked', false);
-
-                        // Populate Permissions Dynamically
-                        if (data.permissions && Array.isArray(data.permissions)) {
-                            data.permissions.forEach(permission => {
-                                let module = permission.module;
-
-                                // Find the correct row based on the hidden input value
-                                let row = $(`#permissionsTable tr:has(input.url[value="${module}"])`);
-
-                                if (row.length) {
-                                    row.find('.add').prop('checked', !!permission.add);
-                                    row.find('.edit').prop('checked', !!permission.edit);
-                                    row.find('.delete').prop('checked', !!permission.delete);
-                                    row.find('.export').prop('checked', !!permission.export);
-                                }
-                            });
-                        }
-
-                        // Show the modal
-                        userModal.show();
-                    } else {
-                        toastr.error('Failed to fetch user details.');
-                    }
-                },
-                error: function () {
-                    toastr.error('Error fetching user data.');
+                /** ---------------- Personal Details ---------------- */
+                $('#editName').val(candidate.personalDetails?.name);
+                $('#editEmail').val(candidate.personalDetails?.email);
+                if (candidate.personalDetails?.dob) {
+                    $('#editDateOfBirth').val(moment(candidate.personalDetails.dob).format('YYYY-MM-DD'));
                 }
+                $('#editGender').val(candidate.personalDetails?.gender);
+                $('#editMobileNo').val(candidate.personalDetails?.mobile);
+
+                /** ---------------- Basic Details ---------------- */
+                $('#editWorkStatus').val(candidate.basicDetails?.workStatus);
+                $('#experienceYears').val(candidate.basicDetails?.experience?.year);
+                $('#experienceMonths').val(candidate.basicDetails?.experience?.month);
+                $('#editLocation').val(candidate.basicDetails?.currentLocation);
+                $('#editSalary').val(candidate.basicDetails?.currentSalary);
+                $('#editJoin').val(candidate.basicDetails?.availableToJoin);
+
+                /** ---------------- Work Experience ---------------- */
+                $('#editInstitutionName').val(candidate.workExperience?.institutionName);
+                $('#editSubjectSpecialization').val(candidate.workExperience?.subjectSpecialization);
+                $('#editDesignation').val(candidate.workExperience?.designation);
+                $('#editGradesTaught').val(candidate.workExperience?.gradesTaught);
+                $('#editJobType').val(candidate.workExperience?.jobType);
+                $('#editAreYouWorking').val(candidate.workExperience?.areYouWorking);
+
+                if (candidate.workExperience?.joiningDate) {
+                    $('#joiningDate').val(moment(candidate.workExperience.joiningDate).format('YYYY-MM-DD'));
+                }
+                if (candidate.workExperience?.leavingDate) {
+                    $('#leavingDate').val(moment(candidate.workExperience.leavingDate).format('YYYY-MM-DD'));
+                }
+
+                /** ---------------- Education ---------------- */
+                $('#editEducation').val(candidate.educationalDetails?.education);
+                $('#editDegree').val(candidate.educationalDetails?.degreeName);
+                $('#editSubjectSpecialization').val(candidate.educationalDetails?.subjectSpecialization);
+                $('#editPassingOutYear').val(candidate.educationalDetails?.yearOfPassout);
             });
         });
+
 
         $("#adminForm").on("submit", function (event) {
             event.preventDefault();
@@ -519,9 +712,6 @@
                 toastr.error('Error saving admin!');
             });
         });
-
-
-
 
         $('#artistTable').on('click', '.delUserBtn', function () {
             const buId = $(this).data('id');

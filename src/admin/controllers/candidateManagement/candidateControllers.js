@@ -87,6 +87,29 @@ const getCandidateList = async (req, res) => {
   }
 };
 
+const getCandidateById = async (req, res) => {
+  try {
+    const candidateId = req.params.id;
+    if (!candidateId) {
+      return res.status(400).json({ success: false, message: "candidateId parameter is required" });
+    }
+
+    const candidate = await Candidate.findById(candidateId);
+    if (!candidate) {
+      return res.status(404).json({ success: false, message: "Candidate not found" });
+    }
+
+    res.json({
+      success: true,
+      candidate,
+    });
+  } catch (err) {
+    console.error("Error Fetching candidate:", err);
+    res.status(500).json({ success: false, error: "Something went wrong" });
+  }
+};
+
+
 const deleteCandidate = async (req, res) => {
   console.log('params', req.params);
   try {
@@ -135,6 +158,7 @@ const updateCandidateStatus = async (req, res) => {
 module.exports = {
   candidateUser,
   getCandidateList,
+  getCandidateById,
   deleteCandidate,
   updateCandidateStatus
 }
