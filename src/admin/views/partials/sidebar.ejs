@@ -1,37 +1,51 @@
 <div class="sidebar p-3">
-    <h4 class="text-center mb-2">
-        <img class="img-responsive adminLogo" src="/admin/images/logo2.png" alt="logo">
-    </h4>
+  <h4 class="text-center mb-2">
+    <img class="img-responsive adminLogo" src="/admin/images/logo2.png" alt="logo">
+  </h4>
+  <ul class="nav flex-column" id="sidebarMenu">
+
     <ul class="nav flex-column" id="sidebarMenu">
+      <!-- Dashboard -->
+      <li class="nav-item mb-2 <%= session.sidebar?.dashboard ? '' : 'd-none' %>">
+        <a href="/dashboard" class="nav-link"><span><i class="fa-solid fa-house me-2"></i> Dashboard</span></a>
+      </li>
 
-        <ul class="nav flex-column" id="sidebarMenu">
-            <!-- <li>
-                <h4 class="text-center mb-4">🚚 OnPoint</h4>
-            </li> -->
-            <!-- Dashboard -->
-            <li class="nav-item mb-2 <%= session.sidebar?.dashboard ? '' : 'd-none' %>">
-                <a href="/dashboard" class="nav-link"><span><i class="fa-solid fa-house me-2"></i> Dashboard</span></a>
-            </li>
+      <!-- Role Management -->
+      <li class="nav-item mb-2 <%= session?.sidebar?.rolesManagement ? '' : 'd-none' %>">
+        <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#roleMenu"
+          role="button" aria-expanded="false" aria-controls="roleMenu">
+          <span><i class="bi bi-person-gear me-2"></i> Role Management</span>
+          <i class="bi bi-chevron-down"></i>
+        </a>
 
-            <!-- Role Management -->
-            <li class="nav-item mb-2 <%= session?.sidebar?.rolesManagement ? '' : 'd-none' %>">
-                <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
-                    href="#roleMenu" role="button">
-                    <span><i class="bi bi-person-gear me-2"></i> Role Management</span>
-                    <i class="bi bi-chevron-down"></i>
-                </a>
-                <ul class="collapse list-unstyled ps-3" id="roleMenu">
-                    <li class="sub-item <%= session?.sidebar?.manageRoles ? '' : 'd-none' %>">
-                        <a href="/roles/rolesManagement" class="nav-link sub-link"><i
-                                class="bi bi-briefcase me-2"></i>Manage Roles</a>
-                    </li>
-                    <li class="sub-item <%= session?.sidebar?.backendUsers ? '' : 'd-none' %>">
-                        <a href="/roles/backendUserManagement" class="nav-link sub-link"><i
-                                class="bi bi-person me-2"></i>Backend Users</a>
-                    </li>
-                </ul>
-            </li>
-
-
+        <!-- data-bs-parent makes this an accordion under #sidebarMenu -->
+        <ul class="collapse list-unstyled ps-3" id="roleMenu" data-bs-parent="#sidebarMenu">
+          <li class="sub-item <%= session?.sidebar?.manageRoles ? '' : 'd-none' %>">
+            <a href="/roles/rolesManagement" class="nav-link sub-link"><i class="bi bi-briefcase me-2"></i> Manage
+              Roles</a>
+          </li>
+          <li class="sub-item <%= session?.sidebar?.backendUsers ? '' : 'd-none' %>">
+            <a href="/roles/backendUserManagement" class="nav-link sub-link"><i class="bi bi-person me-2"></i> Backend
+              Users</a>
+          </li>
         </ul>
+      </li>
+
+      <!-- Candidate Management -->
+      <li class="nav-item mb-2 <%= session?.sidebar?.candidateManagement ? '' : 'd-none' %>">
+        <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
+          href="#candidatesMenu" role="button" aria-expanded="false" aria-controls="candidatesMenu">
+          <span><i class="bi bi-people me-2"></i> Candidate Management</span>
+          <i class="bi bi-chevron-down"></i>
+        </a>
+
+        <ul class="collapse list-unstyled ps-3" id="candidatesMenu" data-bs-parent="#sidebarMenu">
+          <li class="sub-item <%= session?.sidebar?.candidateUsers ? '' : 'd-none' %>">
+            <a href="/candidate/candidatesManagement" class="nav-link sub-link"><i class="bi bi-person me-2"></i> Candidate
+              Users</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </ul>
 </div>

@@ -189,4 +189,8 @@ const createCandidateProfile = async (req, res) => {
   });
 };
 
-module.exports = { createCandidateProfile };
+
+
+module.exports = { 
+  createCandidateProfile
+};
