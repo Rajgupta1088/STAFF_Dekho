@@ -1,7 +1,7 @@
 const Candidate = require('../../../api/candidate/modals/candidateProfileModel');
 
 const candidateUser = (req, res) => {
-    res.render('pages/candidateManagement/candidate');
+  res.render('pages/candidateManagement/candidate');
 }
 
 const getCandidateList = async (req, res) => {
@@ -87,31 +87,54 @@ const getCandidateList = async (req, res) => {
   }
 };
 
-const deleteCandidate = async(req, res)=>{
-    console.log('params', req.params);
-    try{
-        const candidateId = req.params.id;
-        console.log('candidateId', candidateId);
-        if(!candidateId){
-            return res.status(400).json({success: false, message: "candidateIds parameter is required"});
-        }
-        const isCandidate= await Candidate.findOne({_id:candidateId});
-        if(!isCandidate){
-            return res.status(404).json({success: false, message: "Candidate not found"});
-        }
-        if(isCandidate.status === 3){
-            return res.status(400).json({success: false, message: "Candidate already deleted"});
-        }
-        await Candidate.updateOne({_id:candidateId}, {status: 3});
-        res.status(200).json({success: true, message: "Candidate deleted successfully"});
-    }catch(err){
-        console.error("Error deleting candidates:", err);
-        res.status(500).json({ error: "Something went wrong" });
+const deleteCandidate = async (req, res) => {
+  console.log('params', req.params);
+  try {
+    const candidateId = req.params.id;
+    console.log('candidateId', candidateId);
+    if (!candidateId) {
+      return res.status(400).json({ success: false, message: "candidateIds parameter is required" });
     }
+    const isCandidate = await Candidate.findOne({ _id: candidateId });
+    if (!isCandidate) {
+      return res.status(404).json({ success: false, message: "Candidate not found" });
+    }
+    if (isCandidate.status === 3) {
+      return res.status(400).json({ success: false, message: "Candidate already deleted" });
+    }
+    await Candidate.updateOne({ _id: candidateId }, { status: 3 });
+    res.status(200).json({ success: true, message: "Candidate deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting candidates:", err);
+    res.status(500).json({ error: "Something went wrong" });
+  }
 };
 
+const updateCandidateStatus = async (req, res) => {
+  try {
+    const candidateId = req.params.id;
+    const { status } = req.body;
+    if (!candidateId || !status) {
+      return res.status(400).json({ success: false, message: "candidateIds parameter is required" });
+    }
+
+    const isCandidate = await Candidate.findOne({ _id: candidateId });
+    if (!isCandidate) {
+      return res.status(404).json({ success: false, message: "Candidate not found" });
+    }
+
+    await Candidate.updateOne({ _id: candidateId }, { status: status });
+    res.status(200).json({ success: true, message: "Candidate deleted successfully" });
+
+  } catch (err) {
+    console.error("Error deleting candidates:", err);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+}
+
 module.exports = {
-    candidateUser,
-    getCandidateList,
-    deleteCandidate
+  candidateUser,
+  getCandidateList,
+  deleteCandidate,
+  updateCandidateStatus
 }
