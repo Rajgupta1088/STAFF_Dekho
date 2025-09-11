@@ -41,10 +41,18 @@
 
         <ul class="collapse list-unstyled ps-3" id="candidatesMenu" data-bs-parent="#sidebarMenu">
           <li class="sub-item <%= session?.sidebar?.candidateUsers ? '' : 'd-none' %>">
-            <a href="/candidate/candidatesManagement" class="nav-link sub-link"><i class="bi bi-person me-2"></i> Candidate
+            <a href="/candidate/candidatesManagement" class="nav-link sub-link"><i class="bi bi-person me-2"></i>
+              Candidate
               Users</a>
           </li>
         </ul>
+      </li>
+
+      <!-- Faq Management -->
+      <li class="nav-item mb-2 <%= session?.sidebar?.faqManagement ? '' : 'd-none' %>">
+        <a href="/faq/faqManagement" class="nav-link"><i class="bi bi-patch-question me-2"></i>Faq
+          Management
+        </a>
       </li>
     </ul>
   </ul>
