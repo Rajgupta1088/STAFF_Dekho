@@ -77,19 +77,7 @@ const saveSettings = async (req, res) => {
         }
         if (req.body.payment) {
             settings.paymentDetails = {
-                shippingCost: parseFloat(req.body.payment.shippingCost),
-                specialHandling: parseFloat(req.body.payment.specialHandling),
                 gst: parseFloat(req.body.payment.gst),
-                odaChargeMinimum: parseFloat(req.body.payment.odaChargeMinimum),
-                fuelSurChargePercentage: parseFloat(req.body.payment.fuelSurChargePercentage),
-                fovPercentage: parseFloat(req.body.payment.fovPercentage),
-                docketCharge: parseFloat(req.body.payment.docketCharge),
-                ratePerKG: parseFloat(req.body.payment.ratePerKG),
-                prePaymentPercentage: parseFloat(req.body.payment.prePaymentPercentage),
-                loadingTime: parseFloat(req.body.payment.loadingTime),
-                unloadingTime: parseFloat(req.body.payment.unloadingTime),
-                driverPercentageCut: parseFloat(req.body.payment.driverPercentageCut),
-                cod: parseInt(req.body.payment.cod),
             };
         }
 
