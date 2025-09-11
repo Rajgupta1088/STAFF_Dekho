@@ -9,6 +9,7 @@ const candidateRoutes = require('../routes/candidateManagement/candidateRoutes')
 const checkLoggedIn = require('../middleware/login/checkLoggedIn'); // Ensure correct path
 const logoutRoutes = require('../routes/login/logoutRoutes'); // Ensure correct path
 const faqRoutes = require('../routes/faqManagement/faqRoutes');
+const appSettingRoutes = require('../routes/configuration/appSettingRoutes');
 
 // Use a base path for login routes
 
@@ -20,5 +21,6 @@ router.use('/dashboard', dashboardRoutes);
 router.use('/roles', rolesRoutes);
 router.use('/candidate', candidateRoutes);
 router.use('/faq', faqRoutes);
+router.use('/configuration', appSettingRoutes);
 
 module.exports = router;

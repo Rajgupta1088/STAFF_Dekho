@@ -47,10 +47,6 @@
                 role="tab">S3 Credential</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="driverInstruction-tab" data-bs-toggle="tab" data-bs-target="#driverInstruction"
-                type="button" role="tab">Driver Instruction</button>
-        </li>
-        <li class="nav-item" role="presentation">
             <button class="nav-link" id="firebaseCred-tab" data-bs-toggle="tab" data-bs-target="#firebaseCred"
                 type="button" role="tab">Firebase Credential</button>
         </li>
@@ -306,16 +302,6 @@
                 <button type="submit" class="btn btn-info">Submit</button>
             </form>
         </div>
-        <div class="tab-pane fade " id="driverInstruction" role="tabpanel">
-            <form id="driverInstructionForm">
-                <input type="hidden" name="driverInstruction">
-                <div class="mb-3">
-                    <label class="form-label" for="driverInstructionText">Driver Instruction </label>
-                    <textarea class="form-control" name="description" id="driverInstructionText" rows="5"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Save</button>
-            </form>
-        </div>
 
         <div class="tab-pane fade" id="firebaseCred" role="tabpanel">
             <form id="firebaseForm">
@@ -388,7 +374,6 @@
     document.addEventListener("DOMContentLoaded", function () {
         let ckEditorAboutUs; // Declare editor for aboutUsText
         let ckEditorTerms;   // Declare editor for termConditionText
-        let driverInstructionTerms;   // Declare editor for termConditionText
 
         ClassicEditor.create(document.querySelector('#aboutUsText'))
             .then(editor => {
@@ -419,13 +404,6 @@
             .catch(error => {
                 console.error('Error initializing CKEditor for termConditionText:', error);
             });
-        ClassicEditor.create(document.querySelector('#driverInstructionText'))
-            .then(editor => {
-                driverInstructionTerms = editor;
-            })
-            .catch(error => {
-                console.error('Error initializing CKEditor for driverInstructionText:', error);
-            });
 
 
 
@@ -454,7 +432,6 @@
         }
 
         saveForm("aboutUsForm", "aboutUs");
-        saveForm("driverInstructionForm", "driverInstruction");
         saveForm("termConditionForm", "termCondition");
         saveForm("privacyAndPolicyForm", "privacyAndPolicy");
         saveForm("refundAndPolicyForm", "refundAndPolicy");
@@ -472,9 +449,6 @@
                     // console.log(data.data);
                     if (data.data?.aboutUs?.content) {
                         ckEditorAboutUs.setData(data.data.aboutUs.content);
-                    }
-                    if (data.data?.driverInstruction?.content) {
-                        driverInstructionTerms.setData(data.data.driverInstruction.content);
                     }
                     if (data.data?.termsAndConditions?.content) {
                         ckEditorTerms.setData(data.data.termsAndConditions.content);
