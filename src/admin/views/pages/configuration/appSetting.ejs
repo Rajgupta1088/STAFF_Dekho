@@ -137,7 +137,7 @@
                     <input type="url" class="form-control" id="androidClientUrl" required>
                 </div>
                 <div class="mb-3">
-                    <label for="androidDriverUrl" class="form-label">Android Driver APP URL</label>
+                    <label for="androidDriverUrl" class="form-label">Android Candidate APP URL</label>
                     <input type="url" class="form-control" id="androidDriverUrl" required>
                 </div>
                 <div class="mb-3">
@@ -145,7 +145,7 @@
                     <input type="url" class="form-control" id="iosClientUrl" required>
                 </div>
                 <div class="mb-3">
-                    <label for="iosDriverUrl" class="form-label">iOS Driver APP URL</label>
+                    <label for="iosDriverUrl" class="form-label">iOS Candidate APP URL</label>
                     <input type="url" class="form-control" id="iosDriverUrl" required>
                 </div>
                 <button type="submit" class="btn btn-info">Submit</button>
@@ -355,7 +355,7 @@
         saveForm("twilioForm", "twilioCred");
         saveForm("firebaseForm", "firebase");
         saveForm("paymentForm", "payment");
-        saveForm("s3Form", "s3Credentials");
+        saveForm("s3Form", "awsS3");
 
         function setData() {
             $.ajax({
