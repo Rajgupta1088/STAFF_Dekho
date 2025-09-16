@@ -48,6 +48,33 @@
         </ul>
       </li>
 
+      <!-- Website Management -->
+      <li class="nav-item mb-2 <%= session?.sidebar?.websiteManagement ? '' : 'd-none' %>">
+        <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
+          href="#websiteManagement" role="button">
+          <span><i class="bi bi-laptop me-2"></i> Website Management</span>
+          <i class="bi bi-chevron-down"></i>
+        </a>
+        <ul class="collapse list-unstyled ps-3" id="websiteManagement">
+          <li class="sub-item <%= session?.sidebar?.manageBanners ? '' : 'd-none' %>">
+            <a href="/banner/bannerManagement" class="nav-link sub-link"><i class="bi bi-image me-2"></i>Banner
+              Management</a>
+          </li>
+          <li class="sub-item <%= session?.sidebar?.manageBlogs ? '' : 'd-none' %>">
+            <a href="/blogs/blogsManagement" class="nav-link sub-link"><i class="bi bi-journal-text me-2"></i>Blogs
+              Management</a>
+          </li>
+          <li class="sub-item <%= session?.sidebar?.manageContactUs ? '' : 'd-none' %>">
+            <a href="/contactUs/contactUs" class="nav-link sub-link"><i class="bi bi-telephone me-2"></i>Contact
+              Us</a>
+          </li>
+          <li class="sub-item <%= session?.sidebar?.manageTestimonials ? '' : 'd-none' %>">
+            <a href="/testimonial/testimonialManagement" class="nav-link sub-link"><i
+                class="bi bi-chat-quote me-2"></i>Testimonial Management</a>
+          </li>
+        </ul>
+      </li>
+
       <!-- Faq Management -->
       <li class="nav-item mb-2 <%= session?.sidebar?.faqManagement ? '' : 'd-none' %>">
         <a href="/faq/faqManagement" class="nav-link"><i class="bi bi-patch-question me-2"></i>Faq
