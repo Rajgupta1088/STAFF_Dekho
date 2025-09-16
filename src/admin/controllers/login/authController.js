@@ -30,7 +30,7 @@ const permissionDenied = (req, res) => {
 
 const checkLogin = async (req, res) => {
     try {
-        const { email, password, isVendor } = req.body;
+        const { email, password } = req.body;
 
         let admin = null;
 
@@ -57,12 +57,11 @@ const checkLogin = async (req, res) => {
             email: admin.email,
             isLoggedIn: true,
             admin_type: admin.admin_type,
-            isVendor: isVendor,
             permissions: admin.permissions || [], // Default to empty array
         };
-        console.log(req.session.admin);
+        // console.log(req.session.admin);
 
-        console.log(`User ${admin.email} logged in successfully`);
+        // console.log(`User ${admin.email} logged in successfully`);
 
         return res.status(200).json({ success: true, redirectUrl: '/dashboard' });
 

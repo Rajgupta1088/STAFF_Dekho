@@ -4,7 +4,6 @@ const router = express.Router();
 const sendOtpRoutes = require('./otpRoutes');
 const candidateProfileRoutes = require('./candidateProfileRoutes');
 
-
 const { verifyToken, headerAuth } = require('../middleware/authentication');
 router.use('/otp', sendOtpRoutes);
 

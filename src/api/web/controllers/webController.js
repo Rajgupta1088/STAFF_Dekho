@@ -1,7 +1,6 @@
 const Testimonial = require('../../../admin/models/websiteManagement/testimonialModel');
 const Blog = require('../../../admin/models/websiteManagement/blogModel');
 const Banner = require('../../../admin/models/websiteManagement/bannerModel');
-const Warehouse = require('../../../admin/models/websiteManagement/warehouseModal');
 
 // Fetch Testimonials, Blogs & Contact Us Data
 const getWebsiteData = async (req, res) => {
@@ -30,33 +29,6 @@ const getWebsiteData = async (req, res) => {
     }
 };
 
-const getWareHouseAvailablity = async (req, res) => {
-    try {
-        const { pincode } = req.body;
 
-        if (!pincode) {
-            return res.status(200).json({
-                success: false,
-                message: 'Pincode is required',
-                data: []
-            });
-        }
 
-        const warehouses = await Warehouse.find({ pincode });
-
-        res.status(200).json({
-            success: true,
-            message: warehouses.length ? warehouses.warehouseMessage : 'No warehouses found',
-            data: warehouses
-        });
-    } catch (error) {
-        console.error('Error fetching warehouse data:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Server Error',
-            error: error.message
-        });
-    }
-};
-
-module.exports = { getWebsiteData, getWareHouseAvailablity };
+module.exports = { getWebsiteData };
