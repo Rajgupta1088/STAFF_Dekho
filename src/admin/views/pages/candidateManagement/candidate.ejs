@@ -104,130 +104,20 @@
         </div>
     </div>
 </div>
-<!-- Add/Edit Sub-Admin Modal -->
-<div class="modal fade" id="addUserModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <form id="adminForm" method="POST">
-                <input type="hidden" name="user_id" id="user_id" value="">
-
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title">Edit Backend User</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Name <strong class="text-danger">*</strong></label>
-                        <input type="text" class="form-control" name="name" id="adminName" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Mobile <strong class="text-danger">*</strong></label>
-                        <input type="text" class="form-control" name="mobile" id="mobile" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Email <strong class="text-danger">*</strong></label>
-                        <input type="email" class="form-control" name="email" id="adminEmail" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Admin Type <strong class="text-danger">*</strong></label>
-                        <select class="form-control" name="admin_type" id="adminType1">
-                            <option value="Admin">Admin</option>
-                            <option value="Sub Admin">Sub Admin</option>
-                        </select>
-                    </div>
-
-
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="country_access" name="country_access">
-                        <label class="form-check-label" for="country_access">Enable Country Based Access Control</label>
-                    </div>
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="city_access" name="city_access">
-                        <label class="form-check-label" for="city_access">Enable City Based Access Control</label>
-                    </div>
-
-                    <div id="permissionsSection">
-
-                        <h5>Permissions<strong class="text-danger">*</strong></h5>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Module</th>
-                                    <th><input type="checkbox" id="selectAllAdd"> Add</th>
-                                    <th><input type="checkbox" id="selectAllEdit"> Edit</th>
-                                    <th><input type="checkbox" id="selectAllDelete"> Delete</th>
-                                    <th><input type="checkbox" id="selectAllExport"> Export</th>
-                                </tr>
-                            </thead>
-                            <tbody id="permissionsTable">
-                                <tr>
-                                    <td>Dashboard
-                                        <input type="hidden" class="url" value="dashboard" url="/dashboard">
-                                    </td>
-                                    <td><input type="checkbox" class="add"></td>
-                                    <td><input type="checkbox" class="edit"></td>
-                                    <td><input type="checkbox" class="delete"></td>
-                                    <td><input type="checkbox" class="export"></td>
-                                </tr>
-                                <tr class="roleDiv">
-                                    <td>Manage Roles
-                                        <input type="hidden" class="url" value="manageRoles"
-                                            url="/roles/rolesManagement">
-                                    </td>
-                                    <td><input type="checkbox" class="add"></td>
-                                    <td><input type="checkbox" class="edit"></td>
-                                    <td><input type="checkbox" class="delete"></td>
-                                    <td><input type="checkbox" class="export"></td>
-                                </tr>
-                                <tr class="roleDiv">
-                                    <td>Backend Users
-                                        <input type="hidden" class="url" value="backendUsers"
-                                            url="/roles/backendUserManagement">
-                                    </td>
-                                    <td><input type="checkbox" class="add"></td>
-                                    <td><input type="checkbox" class="edit"></td>
-                                    <td><input type="checkbox" class="delete"></td>
-                                    <td><input type="checkbox" class="export"></td>
-                                </tr>
-                                <tr>
-                                    <td>Manage Users
-                                        <input type="hidden" class="url" value="manageUsers"
-                                            url="/users/userManagement">
-                                    </td>
-                                    <td><input type="checkbox" class="add"></td>
-                                    <td><input type="checkbox" class="edit"></td>
-                                    <td><input type="checkbox" class="delete"></td>
-                                    <td><input type="checkbox" class="export"></td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary w-100" id="submitBtn">Save Admin</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- End Add/Edit Sub-Admin Modal -->
 
 <!-- Edit Page -->
 <div class="modal fade" id="editCandidateModal" tabindex="-1" aria-labelledby="editCandidateModalTitle"
     aria-hidden="true">
     <div class="modal-dialog modal-lg custom-modal">
-
         <div class="modal-content">
             <div class="modal-header d-flex justify-content-between align-items-center">
                 <h5 class="modal-title" id="editCandidateModalTitle">Edit Candidate</h5>
-
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
-                <form id="editCandidateForm2" enctype="multipart/form-data">
-                    <input type="hidden" id="editCandidateId" name="driverId">
+                <form id="editCandidateForm" enctype="multipart/form-data">
+                    <input type="hidden" id="editCandidateId" name="candidateId">
                     <ul class="nav nav-tabs mb-3" id="editTabs" role="tablist">
                         <li class="nav-item" role="presentation">
                             <a class="nav-link active" id="personal-tab" data-bs-toggle="tab" href="#personal"
@@ -235,19 +125,16 @@
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" id="education-tab" data-bs-toggle="tab" href="#education" role="tab"
-                                aria-controls="education" aria-selected="false">Education Details
-                            </a>
+                                aria-controls="education" aria-selected="false">Education Details</a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" id="basic-tab" data-bs-toggle="tab" href="#basic" role="tab"
                                 aria-controls="basic" aria-selected="false">Basic Details</a>
                         </li>
-
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" id="experience-tab" data-bs-toggle="tab" href="#experience" role="tab"
                                 aria-controls="experience" aria-selected="false">Work Experience</a>
                         </li>
-
                     </ul>
                     <div class="tab-content" id="editTabsContent">
                         <div class="tab-pane fade show active" id="personal" role="tabpanel"
@@ -262,7 +149,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="editDateOfBirth" class="form-label">Date of Birth</label>
-                                <input type="date" class="form-control" id="editDateOfBirth" name="dateOfBirth">
+                                <input type="date" class="form-control" id="editDateOfBirth" name="dateOfBirth" required>
                             </div>
                             <div class="mb-3">
                                 <label for="editGender" class="form-label">Gender</label>
@@ -277,118 +164,117 @@
                                 <label for="editMobileNo" class="form-label">Mobile No.</label>
                                 <input type="tel" class="form-control" id="editMobileNo" name="mobileNo" required>
                             </div>
-                            <!-- <div class="mb-3">
-                                <label for="editAlternateMobileNo" class="form-label">Alternate Mobile No.</label>
-                                <input type="tel" class="form-control" id="editAlternateMobileNo"
-                                    name="alternateMobileNo">
-                            </div> -->
-
-                            <!-- <div class="mb-3">
-                                <label for="editProfileImage" class="form-label">Profile Image</label>
-                                <input type="file" class="form-control " id="editProfileImage" name="profileImage">
-                                <img class="img-responsive" alt="editProfile" id="editProfileImg" style="width:100px;">
-                            </div> -->
                         </div>
-
 
                         <div class="tab-pane fade" id="basic" role="tabpanel" aria-labelledby="basic-tab">
                             <div class="mb-3">
                                 <label for="editWorkStatus" class="form-label">Work Status</label>
-                                <input type="text" class="form-control" id="editWorkStatus" name="workStatus" required>
+                                <select class="form-control" id="editWorkStatus" name="workStatus">
+                                    <option value="">Select Work Status</option>
+                                    <option value="Fresher">Fresher</option>
+                                    <option value="Experienced">Experienced</option>
+                                </select>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Experience</label>
                                 <div class="row">
-                                    <!-- Years -->
                                     <div class="col-md-6">
-                                        <input type="number" class="form-control" id="experienceYears"
-                                            name="experienceYears" placeholder="Years" min="0" required>
+                                        <input type="text" class="form-control" id="editExperienceYears"
+                                            name="experienceYears" placeholder="Years" min="0">
                                     </div>
-                                    <!-- Months -->
                                     <div class="col-md-6">
-                                        <input type="number" class="form-control" id="experienceMonths"
-                                            name="experienceMonths" placeholder="Months" min="0" max="11" required>
+                                        <input type="text" class="form-control" id="editExperienceMonths"
+                                            name="experienceMonths" placeholder="Months" min="0" max="11">
                                     </div>
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label for="editLocation" class="form-label">Current Location</label>
-                                <input type="text" class="form-control" id="editLocation" name="location" required>
+                                <input type="text" class="form-control" id="editLocation" name="location">
                             </div>
                             <div class="mb-3">
                                 <label for="editSalary" class="form-label">Current/Last Salary</label>
-                                <input type="number" class="form-control" id="editSalary" name="salary" required>
+                                <input type="text" class="form-control" id="editSalary" name="salary">
                             </div>
                             <div class="mb-3">
-                                <label for="editJoin" class="form-label">Aviable to Join</label>
-                                <input type="text" class="form-control" id="editJoin" name="join" required>
+                                <label for="editJoin" class="form-label">Available to Join</label>
+                                <input type="text" class="form-control" id="editJoin" name="join">
                             </div>
                         </div>
 
                         <div class="tab-pane fade" id="experience" role="tabpanel" aria-labelledby="experience-tab">
                             <div class="mb-3">
-                                <label for="editWorkStatus" class="form-label">Current/Privious Institution</label>
-                                <input type="text" class="form-control" id="editWorkStatus" name="workStatus" required>
+                                <label for="editWorkInstitution" class="form-label">Current/Previous Institution</label>
+                                <input type="text" class="form-control" id="editWorkInstitution" name="workInstitution">
                             </div>
                             <div class="mb-3">
-                                <label for="editWorkStatus" class="form-label">Subject Specialization</label>
-                                <input type="text" class="form-control" id="editWorkStatus" name="workStatus" required>
+                                <label for="editWorkSubjectSpecialization" class="form-label">Subject Specialization</label>
+                                <input type="text" class="form-control" id="editWorkSubjectSpecialization" name="workSubjectSpecialization">
                             </div>
                             <div class="mb-3">
-                                <label for="editWorkStatus" class="form-label">Role/Designation</label>
-                                <input type="text" class="form-control" id="editWorkStatus" name="workStatus" required>
+                                <label for="editDesignation" class="form-label">Role/Designation</label>
+                                <input type="text" class="form-control" id="editDesignation" name="designation">
                             </div>
                             <div class="mb-3">
-                                <label for="editWorkStatus" class="form-label">Subject Taught</label>
-                                <input type="text" class="form-control" id="editWorkStatus" name="workStatus" required>
+                                <label for="editGradesTaught" class="form-label">Grades Taught</label>
+                                <input type="text" class="form-control" id="editGradesTaught" name="gradesTaught">
                             </div>
                             <div class="mb-3">
-                                <label for="editWorkStatus" class="form-label">Job Type</label>
-                                <input type="text" class="form-control" id="editWorkStatus" name="workStatus" required>
+                                <label for="editJobType" class="form-label">Job Type</label>
+                                <select class="form-control" id="editJobType" name="jobType">
+                                    <option value="">Select Job Type</option>
+                                    <option value="Full-Time">Full-Time</option>
+                                    <option value="Internship">Internship</option>
+                                </select>
                             </div>
                             <div class="mb-3">
-                                <label for="editWorkStatus" class="form-label">Are you working in this
-                                    institute?</label>
-                                <input type="text" class="form-control" id="editWorkStatus" name="workStatus" required>
+                                <label for="editAreYouWorking" class="form-label">Are you working in this institute?</label>
+                                <select class="form-control" id="editAreYouWorking" name="areYouWorking">
+                                    <option value="">Select</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
                             </div>
-                            <div class="mb-3">
-                                <div class="row">
-                                    <!-- Joining Date -->
-                                    <div class="col-md-6">
-                                        <label for="joiningDate" class="form-label">Joining Date</label>
-                                        <input type="date" class="form-control" id="joiningDate" name="joiningDate"
-                                            required>
-                                    </div>
-
-                                    <!-- Leaving Date -->
-                                    <div class="col-md-6">
-                                        <label for="leavingDate" class="form-label">Leaving Date</label>
-                                        <input type="date" class="form-control" id="leavingDate" name="leavingDate">
-                                    </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="editJoiningDate" class="form-label">Joining Date</label>
+                                    <input type="date" class="form-control" id="editJoiningDate" name="joiningDate">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="editLeavingDate" class="form-label">Leaving Date</label>
+                                    <input type="date" class="form-control" id="editLeavingDate" name="leavingDate">
                                 </div>
                             </div>
                         </div>
 
                         <div class="tab-pane fade" id="education" role="tabpanel" aria-labelledby="education-tab">
                             <div class="mb-3">
-                                <label for="editEducation" class="form-label">Education</label>
-                                <input type="text" class="form-control" id="editEducation" name="education" required>
+                                <label for="editEducationLevel" class="form-label">Education</label>
+                                <select class="form-control" id="editEducationLevel" name="education">
+                                    <option value="">Select Education</option>
+                                    <option value="Class X">Class X</option>
+                                    <option value="Class XII">Class XII</option>
+                                    <option value="Graduation">Graduation</option>
+                                    <option value="Post Graduation">Post Graduation</option>
+                                    <option value="Doctorate">Doctorate</option>
+                                    <option value="Other">Other</option>
+                                </select>
                             </div>
-
                             <div class="mb-3">
-                                <label for="editDegree" class="form-label">Degree</label>
-                                <input type="text" class="form-control" id="editDegree" name="degree" required>
+                                <label for="editInstitutionName" class="form-label">Institution Name</label>
+                                <input type="text" class="form-control" id="editInstitutionName" name="institutionName">
                             </div>
-
                             <div class="mb-3">
-                                <label for="editSubjectSpecialization" class="form-label">Subject Specialization</label>
-                                <input type="text" class="form-control" id="editSubjectSpecialization"
-                                    name="subjectSpecialization" required>
+                                <label for="editDegreeName" class="form-label">Degree Name</label>
+                                <input type="text" class="form-control" id="editDegreeName" name="degreeName">
                             </div>
-
                             <div class="mb-3">
-                                <label for="editPassingOutYear" class="form-label">Passing Out Year</label>
-                                <input type="date" class="form-control" id="editPassingOutYear" name="passingOutYear">
+                                <label for="editEduSubjectSpecialization" class="form-label">Subject Specialization</label>
+                                <input type="text" class="form-control" id="editEduSubjectSpecialization" name="eduSubjectSpecialization">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editYearOfPassout" class="form-label">Year of Passout</label>
+                                <input type="text" class="form-control" id="editYearOfPassout" name="yearOfPassout">
                             </div>
                         </div>
                     </div>
@@ -401,21 +287,19 @@
         </div>
     </div>
 </div>
-<!-- End Edit page -->
-
 
 <!-- JS dependencies -->
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 
 <script>
     $(document).ready(function () {
 
-        // helper: confirm dialog using SweetAlert2
+        // Helper: confirm dialog using SweetAlert2
         function swalConfirm(message, callback) {
             Swal.fire({
                 title: 'Confirm',
@@ -428,29 +312,7 @@
             });
         }
 
-        // Select All
-        function selectAll(columnClass, selectAllId) {
-            $(selectAllId).on("change", function () {
-                $("." + columnClass).prop("checked", this.checked);
-            });
-        }
-
-        selectAll("add", "#selectAllAdd");
-        selectAll("edit", "#selectAllEdit");
-        selectAll("delete", "#selectAllDelete");
-        selectAll("export", "#selectAllExport");
-
-        $("#adminType1").on("change", function () {
-            if ($(this).val() === "Admin") {
-                $("#permissionsSection").slideUp(200);
-            } else {
-                $("#permissionsSection").slideDown(200);
-            }
-        }).trigger("change");
-
-
-        const userModal = new bootstrap.Modal(document.getElementById('addUserModal'));
-
+        // Initialize DataTable
         let table = $('#artistTable').DataTable({
             processing: true,
             serverSide: true,
@@ -526,11 +388,12 @@
                     `
                 }
             ],
-
             columnDefs: [
-                { orderable: false, targets: [0, 7] }
+                { orderable: false, targets: [0, 8] }
             ]
         });
+
+        // Toggle Status Button Click
         $('#artistTable').on('click', '.toggleStatusBtn', function () {
             const candidateId = $(this).data('id');
             const currentStatus = $(this).data('status');
@@ -552,183 +415,76 @@
             });
         });
 
-        
-
+        // Edit Button Click
         $('#artistTable').on('click', '.editUserBtn', function () {
             const id = $(this).data('id');
             $('#editCandidateModal').modal('show');
-            $('#editCandidateModal form')[0].reset(); // Reset form inputs
-            $('#driverApprovedToggle').prop('checked', false).removeAttr('data-id');
-            $('#editCandidateId').val('');
+            $('#editCandidateForm')[0].reset(); // Reset form inputs
+            $('#editCandidateId').val(id);
 
+            // Fetch candidate data
             $.get(`/candidate/getCandidateById/${id}`, function (data) {
                 const candidate = data.candidate;
 
-                $('#editCandidateId').val(id);
-                $('#driverApprovedToggle')
-                    .prop('checked', candidate.status === 1)
-                    .attr('data-id', candidate._id);
-
-                /** ---------------- Personal Details ---------------- */
-                $('#editName').val(candidate.personalDetails?.name);
-                $('#editEmail').val(candidate.personalDetails?.email);
+                // Personal Details
+                $('#editName').val(candidate.personalDetails?.name || '');
+                $('#editEmail').val(candidate.personalDetails?.email || '');
                 if (candidate.personalDetails?.dob) {
                     $('#editDateOfBirth').val(moment(candidate.personalDetails.dob).format('YYYY-MM-DD'));
                 }
-                $('#editGender').val(candidate.personalDetails?.gender);
-                $('#editMobileNo').val(candidate.personalDetails?.mobile);
+                $('#editGender').val(candidate.personalDetails?.gender || '');
+                $('#editMobileNo').val(candidate.personalDetails?.mobile || '');
 
-                /** ---------------- Basic Details ---------------- */
-                $('#editWorkStatus').val(candidate.basicDetails?.workStatus);
-                $('#experienceYears').val(candidate.basicDetails?.experience?.year);
-                $('#experienceMonths').val(candidate.basicDetails?.experience?.month);
-                $('#editLocation').val(candidate.basicDetails?.currentLocation);
-                $('#editSalary').val(candidate.basicDetails?.currentSalary);
-                $('#editJoin').val(candidate.basicDetails?.availableToJoin);
+                // Basic Details
+                $('#editWorkStatus').val(candidate.basicDetails?.workStatus || '');
+                $('#editExperienceYears').val(candidate.basicDetails?.experience?.year || '');
+                $('#editExperienceMonths').val(candidate.basicDetails?.experience?.month || '');
+                $('#editLocation').val(candidate.basicDetails?.currentLocation || '');
+                $('#editSalary').val(candidate.basicDetails?.currentSalary || '');
+                $('#editJoin').val(candidate.basicDetails?.availableToJoin || '');
 
-                /** ---------------- Work Experience ---------------- */
-                $('#editInstitutionName').val(candidate.workExperience?.institutionName);
-                $('#editSubjectSpecialization').val(candidate.workExperience?.subjectSpecialization);
-                $('#editDesignation').val(candidate.workExperience?.designation);
-                $('#editGradesTaught').val(candidate.workExperience?.gradesTaught);
-                $('#editJobType').val(candidate.workExperience?.jobType);
-                $('#editAreYouWorking').val(candidate.workExperience?.areYouWorking);
-
+                // Work Experience
+                $('#editWorkInstitution').val(candidate.workExperience?.institutionName || '');
+                $('#editWorkSubjectSpecialization').val(candidate.workExperience?.subjectSpecialization || '');
+                $('#editDesignation').val(candidate.workExperience?.designation || '');
+                $('#editGradesTaught').val(candidate.workExperience?.gradesTaught || '');
+                $('#editJobType').val(candidate.workExperience?.jobType || '');
+                $('#editAreYouWorking').val(candidate.workExperience?.areYouWorking || '');
                 if (candidate.workExperience?.joiningDate) {
-                    $('#joiningDate').val(moment(candidate.workExperience.joiningDate).format('YYYY-MM-DD'));
+                    $('#editJoiningDate').val(moment(candidate.workExperience.joiningDate).format('YYYY-MM-DD'));
                 }
                 if (candidate.workExperience?.leavingDate) {
-                    $('#leavingDate').val(moment(candidate.workExperience.leavingDate).format('YYYY-MM-DD'));
+                    $('#editLeavingDate').val(moment(candidate.workExperience.leavingDate).format('YYYY-MM-DD'));
                 }
 
-                /** ---------------- Education ---------------- */
-                $('#editEducation').val(candidate.educationalDetails?.education);
-                $('#editDegree').val(candidate.educationalDetails?.degreeName);
-                $('#editSubjectSpecialization').val(candidate.educationalDetails?.subjectSpecialization);
-                $('#editPassingOutYear').val(candidate.educationalDetails?.yearOfPassout);
+                // Education
+                $('#editEducationLevel').val(candidate.educationalDetails?.education || '');
+                $('#editInstitutionName').val(candidate.educationalDetails?.institutionName || '');
+                $('#editDegreeName').val(candidate.educationalDetails?.degreeName || '');
+                $('#editEduSubjectSpecialization').val(candidate.educationalDetails?.subjectSpecialization || '');
+                $('#editYearOfPassout').val(candidate.educationalDetails?.yearOfPassout || '');
+            }).fail(function(xhr, status, error) {
+                console.error("Error fetching candidate data:", error);
+                toastr.error('Failed to load candidate data.', 'Error');
             });
         });
 
-
-        $("#adminForm").on("submit", function (event) {
-            event.preventDefault();
-            let name = $("#adminName").val();
-            let email = $("#adminEmail").val();
-            let admin_type = $("#adminType1").val();
-
-            let mobile = $("input[name='mobile']").val();
-            let password = $("input[name='password']").val()
-            let country_access = $("input[name='country_access']").prop("checked");
-            let city_access = $("input[name='city_access']").prop("checked");
-
-            if (!name) {
-                toastr.error('Please Enter Name', 'Error');
-                return;
-            }
-            if (!mobile) {
-                toastr.error('Please Enter mobile', 'Error');
-                return;
-            }
-            if (!email) {
-                toastr.error('Please Enter Email', 'Error');
-                return;
-            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { // Simple email regex
-                toastr.error('Enter a valid Email address.', 'Error');
-                return;
-            }
-            if (!admin_type) {
-                toastr.error('Please Select Admin Type', 'Error');
-                return;
-            }
-
-            const anyChecked = $('#permissionsTable input[type="checkbox"]:checked').length > 0;
-
-            if (admin_type == 'Sub Admin') {
-                if (!anyChecked) {
-                    toastr.error('Please select at least one permission.', 'Error');
-                    return;
-                }
-            }
-
-
-            let formData = {
-                name: name,
-                user_id: $("input[name='user_id']").val(),
-                mobile: mobile,
-                email: email,
-                admin_type: admin_type,
-                password: password,
-                country_access: country_access,
-                city_access: city_access,
-                permissions: []
-            };
-
-
-            let adminType = $('#adminType1').val();
-
-            if (adminType === "Sub Admin") {
-                $("#permissionsTable tr").each(function () {
-                    const row = $(this);
-                    const module = row.find('.url').val();
-                    const url = row.find('.url').attr('url');
-                    const permission = {
-                        module,
-                        url,
-                        add: row.find('.add').prop('checked'),
-                        edit: row.find('.edit').prop('checked'),
-                        delete: row.find('.delete').prop('checked'),
-                        export: row.find('.export').prop('checked'),
-                    };
-                    formData.permissions.push(permission);
-                });
-            }
-
-
-            if (adminType === "Admin") {
-                $("#permissionsTable tr").each(function () {
-                    let module = $(this).find(".url").val(); // Correctly fetch hidden input
-                    let permission = {
-                        module: module,
-                        add: true,
-                        edit: true,
-                        delete: true,
-                        export: true,
-                        url: $(this).find(".url").attr("url"),
-                    };
-                    formData.permissions.push(permission);
-                });
-
-            }
-
-            // Post request (Adjust URL accordingly)
-            $.post("/roles/updateRoles", formData, function (response) {
-                toastr.success('Admin saved successfully.', 'Success');
-
-                $("#adminForm")[0].reset();
-                $('.btn-close').click();
-                table.ajax.reload();
-
-            }).fail(function () {
-                toastr.error('Error saving admin!');
-            });
-        });
-
+        // Delete Button Click
         $('#artistTable').on('click', '.delUserBtn', function () {
-            const buId = $(this).data('id');
+            const candidateId = $(this).data('id');
 
             swalConfirm('Are you sure you want to delete this Candidate?', function () {
                 $.ajax({
-                    url: '/candidate/deleteCandidate/' + buId,
+                    url: '/candidate/deleteCandidate/' + candidateId,
                     type: 'PATCH',
                     dataType: 'json',
                     success: function (response) {
                         table.ajax.reload();
-
-                        if (response.success)
+                        if (response.success) {
                             toastr.success(response.message, 'Success');
-                        else
-                            toastr.error(response.message, 'error');
-
+                        } else {
+                            toastr.error(response.message, 'Error');
+                        }
                     },
                     error: function (xhr, status, error) {
                         console.error("Error deleting candidate:", status, error, xhr);
@@ -738,18 +494,110 @@
             });
         });
 
-
+        // Search Button Click
         $('#searchBtn').on('click', function () {
-            table.ajax.reload(); // Reload the DataTable, the search parameters are sent in the ajax.data function
+            table.ajax.reload();
         });
 
+        // Reset Button Click
         $('#resetBtn').on('click', function () {
             $('#searchName').val('');
             $('#searchEmail').val('');
             $('#searchGender').val('');
             $('#searchEducation').val('');
             $('#searchWorkStatus').val('');
-            table.ajax.reload(); // Reload to clear all filters
+            table.ajax.reload();
         });
+
+        // Edit Candidate Form Submit
+        $('#editCandidateForm').on('submit', function (e) {
+            e.preventDefault();
+            
+            const candidateId = $('#editCandidateId').val();
+            
+            if (!candidateId) {
+                toastr.error('Candidate ID is missing.', 'Error');
+                return;
+            }
+
+            // Prepare form data
+            const formData = {
+                candidateId: candidateId,
+                personalDetails: {
+                    name: $('#editName').val(),
+                    email: $('#editEmail').val(),
+                    dob: $('#editDateOfBirth').val(),
+                    gender: $('#editGender').val(),
+                    mobile: $('#editMobileNo').val()
+                },
+                basicDetails: {
+                    workStatus: $('#editWorkStatus').val(),
+                    experience: {
+                        year: $('#editExperienceYears').val(),
+                        month: $('#editExperienceMonths').val()
+                    },
+                    currentLocation: $('#editLocation').val(),
+                    currentSalary: $('#editSalary').val(),
+                    availableToJoin: $('#editJoin').val()
+                },
+                workExperience: {
+                    institutionName: $('#editWorkInstitution').val(),
+                    subjectSpecialization: $('#editWorkSubjectSpecialization').val(),
+                    designation: $('#editDesignation').val(),
+                    gradesTaught: $('#editGradesTaught').val(),
+                    jobType: $('#editJobType').val(),
+                    areYouWorking: $('#editAreYouWorking').val(),
+                    joiningDate: $('#editJoiningDate').val(),
+                    leavingDate: $('#editLeavingDate').val()
+                },
+                educationalDetails: {
+                    education: $('#editEducationLevel').val(),
+                    institutionName: $('#editInstitutionName').val(),
+                    degreeName: $('#editDegreeName').val(),
+                    subjectSpecialization: $('#editEduSubjectSpecialization').val(),
+                    yearOfPassout: $('#editYearOfPassout').val()
+                }
+            };
+
+            // Submit form data
+            $.ajax({
+                url: '/candidate/updateCandidateProfile',
+                type: 'PATCH',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (res) {
+                    if (res.success) {
+                        toastr.success('Candidate updated successfully!');
+                        $('#editCandidateModal').modal('hide');
+                        table.ajax.reload(null, false);
+                    } else {
+                        toastr.error(res.message || 'Failed to update candidate.');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error updating candidate:", error, xhr.responseText);
+                    toastr.error('Error updating candidate.');
+                }
+            });
+        });
+
+        // Initialize toastr options
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
     });
 </script>

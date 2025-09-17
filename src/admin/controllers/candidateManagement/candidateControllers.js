@@ -155,10 +155,146 @@ const updateCandidateStatus = async (req, res) => {
   }
 }
 
+const updateCandidateProfile = async (req, res) => {
+  try {
+    const { candidateId, personalDetails, educationalDetails, basicDetails, workExperience } = req.body;
+    
+    if (!candidateId) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Candidate ID is required" 
+      });
+    }
+
+    // Check if candidate exists
+    const candidate = await Candidate.findById(candidateId);
+    if (!candidate) {
+      return res.status(404).json({ 
+        success: false, 
+        message: "Candidate not found" 
+      });
+    }
+
+    // Prepare update data - only update fields that are explicitly sent
+    const updateData = {};
+    
+    // Only update sections that are provided in request
+    if (personalDetails && Object.keys(personalDetails).length > 0) {
+      // Filter out empty values from personalDetails
+      const filteredPersonalDetails = {};
+      Object.entries(personalDetails).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          filteredPersonalDetails[key] = value;
+        }
+      });
+      
+      if (Object.keys(filteredPersonalDetails).length > 0) {
+        Object.entries(filteredPersonalDetails).forEach(([key, value]) => {
+          updateData[`personalDetails.${key}`] = value;
+        });
+      }
+    }
+    
+    if (educationalDetails && Object.keys(educationalDetails).length > 0) {
+      const filteredEducationalDetails = {};
+      Object.entries(educationalDetails).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          filteredEducationalDetails[key] = value;
+        }
+      });
+      
+      if (Object.keys(filteredEducationalDetails).length > 0) {
+        Object.entries(filteredEducationalDetails).forEach(([key, value]) => {
+          updateData[`educationalDetails.${key}`] = value;
+        });
+      }
+    }
+    
+    if (basicDetails && Object.keys(basicDetails).length > 0) {
+      const filteredBasicDetails = {};
+      Object.entries(basicDetails).forEach(([key, value]) => {
+        if (key === 'experience' && typeof value === 'object') {
+          // Handle nested experience object
+          const filteredExperience = {};
+          Object.entries(value).forEach(([expKey, expValue]) => {
+            if (expValue !== undefined && expValue !== null && expValue !== '') {
+              filteredExperience[expKey] = expValue;
+            }
+          });
+          if (Object.keys(filteredExperience).length > 0) {
+            Object.entries(filteredExperience).forEach(([expKey, expValue]) => {
+              updateData[`basicDetails.experience.${expKey}`] = expValue;
+            });
+          }
+        } else if (value !== undefined && value !== null && value !== '') {
+          updateData[`basicDetails.${key}`] = value;
+        }
+      });
+    }
+    
+    if (workExperience && Object.keys(workExperience).length > 0) {
+      const filteredWorkExperience = {};
+      Object.entries(workExperience).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          filteredWorkExperience[key] = value;
+        }
+      });
+      
+      if (Object.keys(filteredWorkExperience).length > 0) {
+        Object.entries(filteredWorkExperience).forEach(([key, value]) => {
+          updateData[`workExperience.${key}`] = value;
+        });
+      }
+    }
+
+    console.log('Update data:', updateData); // Debug log
+
+    // Only proceed if there's something to update
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No valid data provided for update"
+      });
+    }
+
+    // Update candidate profile using dot notation
+    const updatedCandidate = await Candidate.findByIdAndUpdate(
+      candidateId,
+      { $set: updateData },
+      { new: true, runValidators: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Candidate profile updated successfully",
+      candidate: updatedCandidate
+    });
+
+  } catch (err) {
+    console.error("Error updating candidate profile:", err);
+    
+    // Handle validation errors
+    if (err.name === 'ValidationError') {
+      return res.status(400).json({
+        success: false,
+        message: "Validation error",
+        errors: Object.values(err.errors).map(e => e.message)
+      });
+    }
+    
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+      error: err.message
+    });
+  }
+}
+
 module.exports = {
   candidateUser,
   getCandidateList,
   getCandidateById,
   deleteCandidate,
-  updateCandidateStatus
+  updateCandidateStatus,
+  updateCandidateProfile
 }
