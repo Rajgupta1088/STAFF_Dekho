@@ -58,6 +58,13 @@
       </li>
 
 
+      <!-- Coupan -->
+      <li class="nav-item mb-2 <%= session?.sidebar?.couponManagement ? '' : 'd-none' %>">
+        <a href="/coupon/couponManagement" class="nav-link"><i class="bi bi-patch-question me-2"></i>Coupon Management
+        </a>
+      </li>
+
+      
       <!-- Website Management -->
       <li class="nav-item mb-2 <%= session?.sidebar?.websiteManagement ? '' : 'd-none' %>">
         <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"

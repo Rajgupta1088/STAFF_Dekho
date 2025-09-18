@@ -17,6 +17,8 @@ const contactRoutes = require('../routes/websiteManagement/contactUsRoutes'); //
 const testimonialRoutes = require('../routes/websiteManagement/testimonialRoutes');
 const subscriptionRoutes = require('../routes/subscription/subscriptionRoutes');
 
+const coupanRoutes = require('./couponManagement/couponRoutes');
+
 // Use a base path for login routes
 
 router.use('/login', loginRoutes);
@@ -34,5 +36,7 @@ router.use('/blogs', blogsRoutes);
 router.use('/contactUs', contactRoutes);
 router.use('/testimonial', testimonialRoutes);
 router.use('/subscription', subscriptionRoutes);
+
+router.use('/coupon', coupanRoutes);
 
 module.exports = router;
