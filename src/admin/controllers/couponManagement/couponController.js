@@ -7,8 +7,11 @@ const coupon = (req, res) => {
 
 // ✅ Create new coupon
 const createCoupon = async (req, res) => {
-    console.log(req.body);
   try {
+    const id = req.params.id;
+    if(id){
+      return res.status(400).json({ error: "Coupon Already present" });
+    }
     const { couponTitle, couponFor, coupanType, couponValue, validFrom, validTill } = req.body;
 
     if (coupanType == 1) {
@@ -108,7 +111,11 @@ const getCoupans = async (req, res) => {
 // ✅ Get single coupon
 const getCouponById = async (req, res) => {
   try {
-    const coupon = await Coupon.findById(req.params.id);
+    const id = req.params.id;
+    if(!id){
+      return res.status(400).json({ error: "Coupon ID is required" });
+    }
+    const coupon = await Coupon.findById(id);
     if (!coupon) return res.status(404).json({ error: "Coupon not found" });
 
     return res.status(200).json(coupon);
@@ -121,6 +128,10 @@ const getCouponById = async (req, res) => {
 // ✅ Update status
 const updateCouponStatus = async (req, res) => {
   try {
+    const id = req.params.id;
+    if(!id){
+      return res.status(400).json({ error: "Coupon ID is required" });
+    }
     const { status } = req.body;
     const coupon = await Coupon.findByIdAndUpdate(
       req.params.id,
@@ -140,6 +151,10 @@ const updateCouponStatus = async (req, res) => {
 // ✅ Update coupon
 const updateCoupon = async (req, res) => {
   try {
+    const id = req.params.id;
+    if(!id){
+      return res.status(400).json({ error: "Coupon ID is required" });
+    }
     const { couponTitle, couponFor, coupanType, couponValue, validFrom, validTill, status } = req.body;
 
     if (coupanType == 2) {
@@ -153,7 +168,7 @@ const updateCoupon = async (req, res) => {
     }
 
     const coupon = await Coupon.findByIdAndUpdate(
-      req.params.id,
+      id,
       { couponTitle, couponFor, coupanType, couponValue, validFrom, validTill, status },
       { new: true }
     );
@@ -170,6 +185,10 @@ const updateCoupon = async (req, res) => {
 // ✅ Delete coupon
 const deleteCoupon = async (req, res) => {
   try {
+    const id = req.params.id;
+    if(!id){
+      return res.status(400).json({ error: "Coupon ID is required" });
+    }
     const coupon = await Coupon.findByIdAndDelete(req.params.id);
     if (!coupon) return res.status(404).json({ error: "Coupon not found" });
 
