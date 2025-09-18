@@ -125,6 +125,14 @@
                 document.getElementById('main-content').classList.remove('d-none');
             }, 1); // 3000ms = 3 seconds
         };
+
+        $('.floatInput').on('input', function () {
+            $(this).val(function (i, val) {
+                return val
+                    .replace(/[^0-9.]/g, '')      // remove all except digits and dot
+                    .replace(/(\..*)\./g, '$1');  // allow only one dot
+            });
+        });
     </script>
 
 </body>

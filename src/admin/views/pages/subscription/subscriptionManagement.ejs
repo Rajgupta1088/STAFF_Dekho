@@ -1,0 +1,476 @@
+<link rel="stylesheet" href="/admin/css/faqManagement/faq.css">
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold">✨ Subscription Management</h3>
+        <button class="btn btn-pink" data-bs-toggle="modal" data-bs-target="#FaqModal">
+            <i class="fas fa-plus me-2"></i> Add Subscription
+        </button>
+    </div>
+
+    <div class="card shadow-sm mb-4" id="searchFaqCard">
+        <div class="card-body">
+            <h5 class="mb-3">Search Subscription</h5>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="searchFaqTitle" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="searchFaqTitle" placeholder="Enter Subscription Title">
+                </div>
+                <div class="col-md-4">
+                    <label for="searchFaqtatus" class="form-label">Status</label>
+                    <select id="searchFaqtatus" class="form-select">
+                        <option value="">All</option>
+                        <option value="1">Active</option>
+                        <option value="2">Inactive</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="searchCreatedAt" class="form-label">Created At</label>
+                    <input type="date" class="form-control" id="searchCreatedAt">
+                </div>
+                <div class="col-md-3">
+                    <div class="d-flex gap-2 align-items-end">
+                        <button class="btn btn-primary" id="searchBtn">Search</button>
+                        <button class="btn btn-secondary" id="resetBtn">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="FaqTable" class="table table-bordered table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Subscription Title</th>
+                            <th>Actual Price</th>
+                            <th>Estimate Price</th>
+                            <th>Plan Validity</th>
+                            <th>Discount</th>
+                            <th>Status</th>
+                            <th>Subscription Type</th>
+                            <th>Created At</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="FaqModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg custom-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleq">Add Subscription</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="subscriptionForm">
+                    <input type="hidden" id="subscriptionId">
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="title" class="form-label">Subscription Title <strong
+                                    class="text-danger">*</strong></label>
+                            <input type="text" class="form-control" id="title" name="title"
+                                placeholder="Enter Subscription Title">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="actualPrice" class="form-label">Actual Price <strong
+                                    class="text-danger">*</strong></label>
+                            <input type="number" class="form-control floatInput" min="0" max="10000" id="actualPrice"
+                                name="actualPrice" placeholder="Enter Plan Actual Price">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+
+                        <div class="col-md-6">
+                            <label for="estimatePrice" class="form-label">Estimate Price <strong
+                                    class="text-danger">*</strong></label>
+                            <input type="number" class="form-control floatInput" min="0" max="10000" id="estimatePrice"
+                                name="estimatePrice" placeholder="Enter Estimate Price">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="planValidity" class="form-label">Plan Validity <strong
+                                    class="text-danger">*</strong></label>
+                            <select class="form-select" name="planValidity" id="planValidity">
+                                <option value="">Select Validity</option>
+                                <option value="1 Month">1 Month</option>
+                                <option value="6 Month">6 Month</option>
+                                <option value="1 Year">1 Year</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+
+                        <div class="col-md-6">
+                            <label for="discount" class="form-label">Discount (%)<strong
+                                    class="text-danger">*</strong></label>
+                            <input type="number" class="form-control floatInput" min="0" max="100" id="discount"
+                                name="discount" placeholder="Enter Discount (%)">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="status" class="form-label">Subscription Status <strong
+                                    class="text-danger">*</strong></label>
+                            <select class="form-select" name="status" id="status">
+                                <option value="">Select Status</option>
+                                <option value="1">Active</option>
+                                <option value="2">Inactive</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="subscriptionType" class="form-label">Subscription Type<strong
+                                    class="text-danger">*</strong></label>
+                            <select class="form-select" name="subscriptionType" id="subscriptionType">
+                                <option value="">Select Type</option>
+                                <option value="1">Candidate</option>
+                                <option value="2">Intitute</option>
+
+                            </select>
+                        </div>
+                        <div id="transitDeliveryContainer">
+                            <button type="button" id="addMore" class="btn btn-success btn-sm">+</button>
+                            <button type="button" class="btn btn-danger btn-sm removeTransit">×</button>
+                            <div class="row transit-delivery-group align-items-end">
+                                <div class="col-md-12">
+                                    <label class="form-label">Feature</label>
+                                    <input type="text" class="form-control" name="features[]"
+                                        placeholder="Enter Feature">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-pink w-100">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS -->
+<script>
+    $(document).ready(function () {
+        const searchFaqCard = $('#searchFaqCard');
+        searchFaqCard.hide();
+        $(window).on('load', () => searchFaqCard.slideDown(1000));
+
+        // let ckEditor;
+        // ClassicEditor.create(document.querySelector('#FaqDescription'))
+        //     .then(editor => ckEditor = editor)
+        //     .catch(error => console.error(error));
+
+        const table = $('#FaqTable').DataTable({
+            processing: true,
+            serverSide: true,
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100],
+            scrollY: "400px",
+            scrollCollapse: true,
+            searching: false,
+            ajax: {
+                url: '/subscription/subscriptionList',
+                type: 'POST',
+                data: function (d) {
+                    d.title = $('#searchFaqTitle').val();
+                    d.status = $('#searchFaqtatus').val();
+                    d.createdAt = $('#searchCreatedAt').val();
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    orderable: false,
+                    render: (data, type, row, meta) => meta.row + meta.settings._iDisplayStart + 1
+                },
+                {
+                    data: 'title',
+                    orderable: false,
+
+                },
+                {
+                    data: 'actualPrice',
+                    orderable: false,
+                    render: (data, type, row) => {
+                        const text = `<span class="badge bg-success">` + data + ' Rs<span>';
+                        return text;
+                    }
+                },
+                {
+                    data: 'estimatePrice',
+                    orderable: false,
+
+                    render: (data, type, row) => {
+                        const text = data + ' Rs';
+                        return text;
+                    }
+                },
+                { data: 'planValidity', orderable: false },
+                {
+                    data: 'discount',
+
+                    orderable: false,
+
+                    render: (data, type, row) => {
+                        const text = data + ' %';
+                        return text;
+                    }
+                },
+                {
+                    data: 'status',
+                    orderable: false,
+                    render: (data, type, row) => {
+                        const statusText = data === 1 ? 'Active' : 'Inactive';
+                        const newStatus = data === 1 ? 2 : 1;
+                        return `<span class="badge ${data === 1 ? 'bg-success' : 'bg-secondary'} changeStatus" data-id='${row._id}' data-status='${newStatus}' style="cursor: pointer;">${statusText}</span>`;
+                    }
+                },
+                {
+                    data: 'subscriptionType',
+                    orderable: false,
+
+                    render: (data, type, row) => {
+                        const subscriptionTypeText = data === 1 ? 'Candidate' : 'Institute';
+                        const subscriptionType = data === 1 ? 2 : 1;
+                        return `<span class="badge ${data === 1 ? 'bg-success' : 'bg-secondary'}  style="cursor: pointer;">${subscriptionTypeText}</span>`;
+                    }
+                },
+                {
+                    data: 'createdAt',
+
+                    render: data => moment(data).format('YYYY-MM-DD HH:mm:ss')
+                },
+                {
+                    data: null,
+                    orderable: false,
+                    render: row => `
+                        <button class="btn btn-sm btn-warning editFaqBtn" data-id='${row._id}'><i class="fas fa-edit"></i> Edit</button>
+                        <button class="btn btn-sm btn-danger delFaqBtn" data-id='${row._id}'><i class="fas fa-trash"></i> Delete</button>
+                    `
+                }
+            ]
+        });
+
+        $('#searchBtn').on('click', () => table.ajax.reload());
+        $('#resetBtn').on('click', function () {
+            $('#searchFaqTitle, #searchFaqtatus, #searchCreatedAt').val('');
+            table.ajax.reload();
+        });
+
+        $('#FaqTable').on('click', '.editFaqBtn', function () {
+            $('#FaqModal').modal('show', this); // Pass the button element for context
+        });
+
+
+
+        $('#subscriptionForm').on('submit', function (e) {
+            e.preventDefault();
+
+            const id = $('#subscriptionId').val();
+            const title = $('#title').val().trim();
+            const actualPrice = $('#actualPrice').val();
+            const estimatePrice = $('#estimatePrice').val();
+            const planValidity = $('#planValidity').val();
+            const discount = $('#discount').val();
+            const status = $('#status').val();
+            const subscriptionType = $('#subscriptionType').val();
+
+            const features = [];
+            $(".transit-delivery-group").each(function () {
+                const feature = $(this).find('input[name="features[]"]').val();
+
+                if (feature) {
+                    features.push(feature);
+                }
+            });
+
+            if (!title) return toastr.error('Subscription Title is required.', 'Error');
+            if (!actualPrice) return toastr.error('Actual Price is required.', 'Error');
+            if (!estimatePrice) return toastr.error('Estimate Price is required.', 'Error');
+            if (!planValidity) return toastr.error('Plan Validity is required.', 'Error');
+            if (!discount) return toastr.error('Discount is required.', 'Error');
+            if (!status) return toastr.error('Status is required.', 'Error');
+            if (!subscriptionType) return toastr.error('Subscription Type is required.', 'Error');
+            if (!features) return toastr.error('Feature is required.', 'Error');
+
+            const payloadData = { title: title, 'actualPrice': actualPrice, 'estimatePrice': estimatePrice, 'planValidity': planValidity, 'discount': discount, 'status': status, 'subscriptionType': subscriptionType, 'features': features };
+
+            const url = id ? `/subscription/updateSubscription/${id}` : '/subscription/createSubscription';
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: JSON.stringify(payloadData),
+                processData: false,
+                dataType: 'json',
+                contentType: 'application/json',
+
+                success: function () {
+                    $('.btn-close').click();
+                    table.ajax.reload();
+                    $('#subscriptionForm')[0].reset();
+                    // if (ckEditor) ckEditor.setData('');
+                    $('#subscriptionId').val('');
+                    $('#modalTitleq').text('Add Subscription');
+                    toastr.success('Subscription saved successfully!', 'Success');
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr, status, error);
+                    toastr.error('An error occurred while saving the Subscription.', 'Error');
+                }
+            });
+        });
+
+        $('#FaqModal').on('show.bs.modal', function (event) {
+            const button = $(event.relatedTarget);
+            const id = button.data('id');
+            const form = $('#subscriptionForm')[0];
+            form.reset();
+            // if (ckEditor) ckEditor.setData('');
+            $('#subscriptionId').val('');
+            $('#modalTitleq').text('Add Subscription');
+
+            if (id) {
+                $('#modalTitleq').text('Edit Subscription');
+                $('#subscriptionId').val(id);
+                $.ajax({
+                    url: '/subscription/getSubscription/' + id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+
+                        $('#title').val(data.title);
+                        $('#actualPrice').val(data.actualPrice);
+                        $('#estimatePrice').val(data.estimatePrice);
+                        $('#planValidity').val(data.planValidity);
+                        $('#discount').val(data.discount);
+                        $('#status').val(data.status);
+                        $('#subscriptionType').val(data.subscriptionType);
+
+                        if (Array.isArray(data.features)) {
+                            $('.transit-delivery-group').remove();
+
+                            data.features.forEach(item => {
+
+                                $('#transitDeliveryContainer').append(`
+                <div class="row transit-delivery-group mt-2">
+            <div class="col-md-12">
+                <label class="form-label">Feature</label>
+                <input type="text" class="form-control" id="features" name="features[]" placeholder="Enter Feature" value=${item}>
+            </div>
+           
+        </div>
+            `);
+                            });
+                            $('#transitDeliveryContainer').removeClass('d-none');
+
+                        } else {
+                            console.error('Invalid transitData format or missing data');
+                        }
+                        // if (ckEditor) ckEditor.setData(data.description);
+                    },
+                    error: () => toastr.error('Failed to fetch Subscription details.', 'Error')
+                });
+            }
+        });
+
+        // Placeholder for handling status change and delete logic
+        $(document).on('click', '.changeStatus', function () {
+            const id = $(this).data('id');
+            const status = $(this).data('status');
+            const statusText = parseInt(status) === 1 ? 'Active' : 'Inactive'; // For confirmation message
+
+
+            if (confirm(`Are you sure you want to set the status to ${statusText}?`)) {
+                $.ajax({
+                    url: '/subscription/changeStatus/' + id, // Replace with your actual route
+                    type: 'post',
+                    dataType: 'json',
+                    contentType: 'application/json', // Important for sending JSON data in the body
+                    data: JSON.stringify({ status: status }), // Send the new status in the request body
+                    success: function (response) {
+                        if (response.success) {
+                            table.ajax.reload();
+                            toastr.success(response.message, 'Success');
+                        } else {
+                            toastr.error(response.message || 'Failed to change status.', 'Error');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error changing status:", status, error, xhr);
+                        toastr.error('Error changing status.', 'Error');
+                    }
+                });
+            }
+
+        });
+
+        $(document).on('click', '.delFaqBtn', function () {
+            const id = $(this).data('id');
+
+            swalConfirm('Are you sure you want to delete this Subscription?', function () {
+                $.ajax({
+                    url: '/subscription/deleteSubscription/' + id,
+                    type: 'DELETE',
+                    dataType: 'json',
+                    success: function () {
+                        table.ajax.reload();
+                        toastr.success('Subscription deleted successfully!', 'Success');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error deleting Subscription:", status, error, xhr);
+                        toastr.error('Error deleting Subscription.', 'Error');
+                    }
+                });
+            });
+        });
+
+    });
+</script>
+
+<script>
+    $('#addMore').click(function () {
+        const newFields = `
+        <div class="row transit-delivery-group mt-2">
+            <div class="col-md-12">
+                <label class="form-label">Feature</label>
+                <input type="text" class="form-control" id="features" name="features[]" placeholder="Enter Feature">
+            </div>
+           
+        </div>`;
+
+        $(newFields).hide().appendTo('#transitDeliveryContainer').slideDown(300);
+
+
+        // Add click event to the cross button to remove the group
+
+
+
+    });
+    $('.removeTransit').click(function () {
+        let $groups = $('#transitDeliveryContainer').find('.transit-delivery-group');
+        if ($groups.length > 1) {
+            $groups.last().slideUp(300, function () {
+                $(this).remove();
+            });
+        }
+    });
+
+
+
+</script>

@@ -14,7 +14,8 @@ const appSettingRoutes = require('../routes/configuration/appSettingRoutes');
 const bannerRoutes = require('../routes/websiteManagement/bannerRoutes'); // Ensure correct path
 const blogsRoutes = require('../routes/websiteManagement/blogsRoutes'); // Ensure correct path
 const contactRoutes = require('../routes/websiteManagement/contactUsRoutes'); // Ensure correct path
-const testimonialRoutes = require('../routes/websiteManagement/testimonialRoutes'); 
+const testimonialRoutes = require('../routes/websiteManagement/testimonialRoutes');
+const subscriptionRoutes = require('../routes/subscription/subscriptionRoutes');
 
 // Use a base path for login routes
 
@@ -32,5 +33,6 @@ router.use('/banner', bannerRoutes);
 router.use('/blogs', blogsRoutes);
 router.use('/contactUs', contactRoutes);
 router.use('/testimonial', testimonialRoutes);
+router.use('/subscription', subscriptionRoutes);
 
 module.exports = router;

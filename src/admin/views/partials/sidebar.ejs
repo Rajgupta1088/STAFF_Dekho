@@ -39,6 +39,8 @@
           <i class="bi bi-chevron-down"></i>
         </a>
 
+
+
         <ul class="collapse list-unstyled ps-3" id="candidatesMenu" data-bs-parent="#sidebarMenu">
           <li class="sub-item <%= session?.sidebar?.candidateUsers ? '' : 'd-none' %>">
             <a href="/candidate/candidatesManagement" class="nav-link sub-link"><i class="bi bi-person me-2"></i>
@@ -47,6 +49,14 @@
           </li>
         </ul>
       </li>
+
+      <li class="nav-item mb-2 <%= session?.sidebar?.subscriptionManagement ? '' : 'd-none' %>">
+        <a href="/subscription/subscriptionManagement" class="nav-link"><i
+            class="bi bi-currency-dollar me-2"></i>Subscription
+          Management
+        </a>
+      </li>
+
 
       <!-- Website Management -->
       <li class="nav-item mb-2 <%= session?.sidebar?.websiteManagement ? '' : 'd-none' %>">
