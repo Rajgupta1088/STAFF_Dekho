@@ -1,0 +1,271 @@
+<link rel="stylesheet" href="/admin/css/faqManagement/faq.css">
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold">Coupon Management</h3>
+        <button class="btn btn-pink" data-bs-toggle="modal" data-bs-target="#CouponModal">
+            <i class="fas fa-plus me-2"></i> Add Coupon
+        </button>
+    </div>
+
+    <!-- Search Section -->
+    <div class="card shadow-sm mb-4" id="searchCouponCard">
+        <div class="card-body">
+            <h5 class="mb-3">Search Coupon</h5>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="searchCouponTitle" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="searchCouponTitle" placeholder="Enter Coupon Title">
+                </div>
+                <div class="col-md-4">
+                    <label for="searchCouponStatus" class="form-label">Status</label>
+                    <select id="searchCouponStatus" class="form-select">
+                        <option value="">All</option>
+                        <option value="1">Active</option>
+                        <option value="2">Inactive</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="searchCouponType" class="form-label">Coupon Type</label>
+                    <select id="searchCouponType" class="form-select">
+                        <option value="">All</option>
+                        <option value="1">By Value</option>
+                        <option value="2">By Percentage</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="searchCouponUser" class="form-label">Coupon User</label>
+                    <select id="searchCouponUser" class="form-select">
+                        <option value="">All</option>
+                        <option value="1">Institute</option>
+                        <option value="2">Candidate</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="searchCreatedAt" class="form-label">Created At</label>
+                    <input type="date" class="form-control" id="searchCreatedAt">
+                </div>
+                <div class="col-md-3">
+                    <div class="d-flex gap-2 align-items-end">
+                        <button class="btn btn-primary" id="searchBtn">Search</button>
+                        <button class="btn btn-secondary" id="resetBtn">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Coupon Table -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="CouponTable" class="table table-bordered table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Coupon Title</th>
+                            <th>Coupon Type</th>
+                            <th>Coupon User</th>
+                            <th>Value</th>
+                            <th>Status</th>
+                            <th>Valid From</th>
+                            <th>Valid Till</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="CouponModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg custom-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Add Coupon</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="CouponForm">
+                    <input type="hidden" id="CouponId">
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="CouponTitle" class="form-label">Coupon Title <strong class="text-danger">*</strong></label>
+                            <input type="text" class="form-control" id="CouponTitle" name="couponTitle" placeholder="Enter Coupon Title" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="couponUser" class="form-label">Coupon For<strong class="text-danger">*</strong></label>
+                            <select class="form-select" id="couponUser" name="couponFor">
+                                <option value="">Select</option>
+                                <option value="1">Institute</option>
+                                <option value="2">Candidate</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="couponType" class="form-label">Coupon Type <strong class="text-danger">*</strong></label>
+                            <select class="form-select" id="couponType" name="coupanType">
+                                <option value="">Select Type</option>
+                                <option value="1">By Value</option>
+                                <option value="2">By Percentage</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 couponValueDiv d-none">
+                            <label for="couponValue" class="form-label">Coupon Value/Percentage <strong class="text-danger">*</strong></label>
+                            <input type="number" class="form-control" id="couponValue" name="couponValue" placeholder="Enter Value" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="couponValidFrom" class="form-label">Coupon Valid From <strong class="text-danger">*</strong></label>
+                            <input type="date" class="form-control" id="couponValidFrom" name="validFrom" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="couponValidTill" class="form-label">Coupon Valid Till <strong class="text-danger">*</strong></label>
+                            <input type="date" class="form-control" id="couponValidTill" name="validTill" required />
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-pink w-100">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ✅ Toastify -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+<!-- ✅ Script -->
+<script>
+$(document).ready(function () {
+
+    // ✅ DataTable
+    const table = $('#CouponTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '/coupon/allCoupons',
+            type: 'POST',
+            data: function (d) {
+                d.couponTitle = $('#searchCouponTitle').val();
+                d.status = $('#searchCouponStatus').val();
+                d.coupanType = $('#searchCouponType').val();
+                d.couponFor = $('#searchCouponUser').val();
+                d.createdAt = $('#searchCreatedAt').val();
+            }
+        },
+        columns: [
+            { data: null, render: (d,t,r,m) => m.row + m.settings._iDisplayStart + 1 },
+            { data: 'couponTitle' },
+            { data: 'coupanType', render: d => d === 1 ? "Value" : "Percentage" },
+            { data: 'couponFor', render: d => d === 1 ? "Institute" : "Candidate" },
+            { data: 'couponValue' },
+            { data: 'status', render: (d,t,r) => {
+                const txt = d === 1 ? 'Active' : 'Inactive';
+                const newSt = d === 1 ? 2 : 1;
+                return `<span class="badge ${d===1?'bg-success':'bg-secondary'} changeStatus" data-id="${r._id}" data-status="${newSt}" style="cursor:pointer;">${txt}</span>`;
+            }},
+            { data: 'validFrom', render: d => moment(d).format('YYYY-MM-DD') },
+            { data: 'validTill', render: d => moment(d).format('YYYY-MM-DD') },
+            { data: null, render: r => `
+                <button class="btn btn-sm btn-warning editCouponBtn" data-id="${r._id}"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-sm btn-danger delCouponBtn" data-id="${r._id}"><i class="fas fa-trash"></i></button>
+            `}
+        ]
+    });
+
+    // ✅ Search + Reset
+    $('#searchBtn').on('click', () => table.ajax.reload());
+    $('#resetBtn').on('click', () => {
+        $('#searchCouponTitle, #searchCouponStatus, #searchCouponType, #searchCouponUser, #searchCreatedAt').val('');
+        table.ajax.reload();
+    });
+
+    // ✅ Show/Hide Value
+    $('#couponType').on('change', function () {
+        const val = $(this).val();
+        if(val === "1" || val === "2"){
+            $('.couponValueDiv').removeClass('d-none').slideDown(200);
+            $('#couponValue').attr('required', true);
+        } else {
+            $('.couponValueDiv').slideUp(200).addClass('d-none');
+            $('#couponValue').val('').attr('required', false);
+        }
+    });
+
+    // ✅ Save Coupon
+    $('#CouponForm').on('submit', function (e) {
+        e.preventDefault();
+        const data = {
+            couponTitle: $('#CouponTitle').val(),
+            couponFor: $('#couponUser').val(),
+            coupanType: $('#couponType').val(),
+            couponValue: $('#couponValue').val(),
+            validFrom: $('#couponValidFrom').val(),
+            validTill: $('#couponValidTill').val(),
+        };
+        $.ajax({
+            url: '/coupon/createCoupon',
+            type:'POST',
+            data: JSON.stringify(data),
+            contentType:'application/json',
+            success: () => {
+                $('.btn-close').click();
+                table.ajax.reload();
+                $('#CouponForm')[0].reset();
+                Toastify({ text:"Coupon saved!", backgroundColor:"green" }).showToast();
+            },
+            error: xhr => Toastify({ text:xhr.responseJSON?.error || 'Error saving', backgroundColor:"red" }).showToast()
+        });
+    });
+
+    // ✅ Edit Coupon
+    $('#CouponTable').on('click','.editCouponBtn', function(){
+        const id=$(this).data('id');
+        $.get(`/coupon/getCoupon/${id}`, function(data){
+            $('#CouponModal').modal('show');
+            $('#CouponId').val(id);
+            $('#CouponTitle').val(data.couponTitle);
+            $('#couponUser').val(data.couponFor);
+            $('#couponType').val(data.coupanType).trigger('change');
+            $('#couponValue').val(data.couponValue);
+            $('#couponValidFrom').val(moment(data.validFrom).format('YYYY-MM-DD'));
+            $('#couponValidTill').val(moment(data.validTill).format('YYYY-MM-DD'));
+        });
+    });
+
+    // ✅ Change Status
+    $(document).on('click','.changeStatus', function(){
+        const id=$(this).data('id'), status=$(this).data('status');
+        $.ajax({
+            url:'/coupon/updateCoupanStatus/' + id,
+            type:'PATCH',
+            contentType:'application/json',
+            data:JSON.stringify({id,status}),
+            success:res=>{ table.ajax.reload(); Toastify({ text:res.message||"Updated", backgroundColor:"green"}).showToast(); }
+        });
+    });
+
+    // ✅ Delete
+    $(document).on('click','.delCouponBtn', function(){
+        const id=$(this).data('id');
+        if(confirm("Delete this coupon?")){
+            $.ajax({
+                url:'/coupon/deleteCoupon/'+id,
+                type:'DELETE',
+                success:()=>{ table.ajax.reload(); Toastify({ text:"Deleted", backgroundColor:"green"}).showToast(); }
+            });
+        }
+    });
+
+});
+</script>

@@ -16,6 +16,8 @@ const blogsRoutes = require('../routes/websiteManagement/blogsRoutes'); // Ensur
 const contactRoutes = require('../routes/websiteManagement/contactUsRoutes'); // Ensure correct path
 const testimonialRoutes = require('../routes/websiteManagement/testimonialRoutes'); 
 
+const coupanRoutes = require('./couponManagement/couponRoutes');
+
 // Use a base path for login routes
 
 router.use('/login', loginRoutes);
@@ -32,5 +34,7 @@ router.use('/banner', bannerRoutes);
 router.use('/blogs', blogsRoutes);
 router.use('/contactUs', contactRoutes);
 router.use('/testimonial', testimonialRoutes);
+
+router.use('/coupon', coupanRoutes);
 
 module.exports = router;
